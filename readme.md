@@ -1,6 +1,6 @@
-# Quarx Trading
+# Quarx Trading. Client for the Stellar DEX.
 
-Quarx Trading is a client for the Stellar Descentralized Exchange
+[Quarx Trading](http://quarx.space) is an [open source](https://github.com/etale-cohomology/quarx-trading) client for the [[Stellar](https://www.stellar.org/) Descentralized Exchange. It features various markets, real-time updates, and a wealth of technical indicators.
 
 ## Capabilities
 
@@ -14,11 +14,22 @@ Quarx Trading is a client for the Stellar Descentralized Exchange
 - RSI
 - Stochastic oscillator
 - Bollinger bands
-- VaR / CVaR
 
 ## Roadmap
 
-- Custom asset/issuer search
-- Mass markets
+- Search custom asset/issuer
+- Add mass markets
 
 Trading capabilities to be added soon.
+It operates on the testnet until further testing is complete.
+
+## Screenshots
+
+![](/screenshots/00.png)
+![](/screenshots/01.png)
+![](/screenshots/02.png)
+![](/screenshots/03.png)
+![](/screenshots/04.png)
+![](/screenshots/05.png)
+![](/screenshots/06.png)
+![](/screenshots/07.png)
