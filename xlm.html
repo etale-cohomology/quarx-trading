@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang='en'>
+
+  <head>
+    <title>Title!</title>
+
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>  <!-- Key for responsiveness! -->
+
+    <link rel='shortcut icon' href='favicon.png'>
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Montserrat|Material+Icons'>
+    <link rel='stylesheet' href='material.blue-red.min.css'>
+    <link rel='stylesheet' href='style.css'>
+
+    <style>
+      /*html{ background:rgb(19,23,34); }*/
+      html,body,div,h1,h2,h3,h4,h5,h6,p{ margin:0; padding:0; }
+      body{ margin:0 auto; }
+
+      .margin_top{ margin-top:16px; }
+      .margin_right{ margin-right:16px; }
+      .margin_bottom{ margin-bottom:16px; }
+      .margin_left{ margin-left:16px; }
+      .align_right{ text-align:right!important; }
+
+      .montserrat{ font-family:Montserrat; }
+      .capitalize{ text-transform:capitalize; }
+      .uppercase{ text-transform:uppercase; }
+
+      .flex_space_between{ display:flex; justify-content:space-between; }
+
+      .mdl-button{ min-width:84px; }
+
+      .mdl-card{ width:95%; margin:0px 0 8px 0; min-height:64px; }
+      .mdl-card__title{ padding:4px 4px 4px 16px; }
+      .mdl-card__title-text{ font-size:16px }
+      .mdl-card__supporting-text{ font-size:10px; padding:4px 4px 4px 16px; }
+
+      .chart{ height:50vh; }
+    </style>
+
+    <script src='https://s3.tradingview.com/tv.js'></script>
+    <script>
+      let INDICATORS = {
+        macd: 'MACD@tv-basicstudies',
+        bb: 'BB@tv-basicstudies',
+        stochastic_rsi: 'StochasticRSI@tv-basicstudies',
+        momentum: 'MOM@tv-basicstudies',
+      }
+
+      let TICKERS = ['POLONIEX:STRUSD', 'BITTREX:XLMUSD', 'POLONIEX:STRBTC', 'BITTREX:XLMBTC', 'BITTREX:XLMETH', 'KRAKEN:XLMXBT']
+
+      function tv_config(symbol){
+        return {'symbol':symbol, 'width':'100%', 'height':'100%', 'studies':[INDICATORS.macd, INDICATORS.bb, INDICATORS.stochastic_rsi, INDICATORS.momentum], 'interval':'60', 'toolbar_bg':'rgb(19,23,34)', 'timezone':'Etc/UTC', 'theme':'Dark', 'style':'1', 'locale':'en', 'enable_publishing':false, 'allow_symbol_change':true, 'hideideas':true, 'save_image':false, 'calendar':false, 'hotlist':false, 'hide_top_toolbar':true }
+      }
+    </script>
+  </head>
+
+<!-- 
+ 1   160    90
+ 2   320   180
+ 3   480   270
+ 4   640   360
+ 5   800   450
+ 6   960   540
+ 7  1120   630
+ 8  1280   720
+ 9  1440   810
+10  1600   900
+11  1760   990
+12  1920  1080
+ -->
+  <body>
+
+    <div class='mdl-layout mdl-js-layout mdl-layout--fixed-header'>
+
+      <!-- ---------------------------------------------------------------------- -->
+      <header class='mdl-layout__header bg_dark'>
+        <div class='mdl-layout__header-row'>
+          <h1 id='title0' class='mdl-typography--title montserrat'>Quarx</h1>
+        </div>
+      </header>
+
+      <!-- ---------------------------------------------------------------------- -->
+      <div class='mdl-layout__drawer bg_dark'> <!-- 1.2 mdl-layout__drawer! -->
+
+        <div class='drawer_header'></div>
+
+        <nav class='mdl-navigation'>
+          <a class='mdl-navigation__link' href='dex.html'><div class='material-icons'>accessibility</div>Stellar DEX</a>-
+          <a class='mdl-navigation__link' href='xlm.html'><div class='material-icons'>view_week</div>Stellar Markets</a>
+        </nav>
+
+      </div>
+
+      <!-- ---------------------------------------------------------------------- --> <!-- Content! -->
+      <main class='mdl-layout__content mdl-color--grey-900'>
+
+        <div class='mdl-grid mdl-grid--no-spacing'>
+
+          <div class='mdl-cell mdl-cell--12-col'>
+            <h1 class='mdl-color-text--white mdl-typography--headline montserrat margin_top margin_bottom'>Stellar markets</h1>
+          </div>
+    
+          <div class='mdl-cell mdl-cell--4-col'>
+            <div class='chart'><script>let tv_chart0 = new TradingView.widget(tv_config(TICKERS[0]))</script></div>
+          </div>
+
+          <div class='mdl-cell mdl-cell--4-col'>
+            <div class='chart'><script>let tv_chart1 = new TradingView.widget(tv_config(TICKERS[1]))</script></div>
+          </div>
+
+          <div class='mdl-cell mdl-cell--4-col'>
+            <div class='chart'><script>let tv_chart2 = new TradingView.widget(tv_config(TICKERS[2]))</script></div>
+          </div>
+
+          <div class='mdl-cell mdl-cell--4-col'>
+            <div class='chart'><script>let tv_chart3 = new TradingView.widget(tv_config(TICKERS[3]))</script></div>
+          </div>
+
+          <div class='mdl-cell mdl-cell--4-col'>
+            <div class='chart'><script>let tv_chart4 = new TradingView.widget(tv_config(TICKERS[4]))</script></div>
+          </div>
+
+          <div class='mdl-cell mdl-cell--4-col'>
+            <div class='chart'><script>let tv_chart5 = new TradingView.widget(tv_config(TICKERS[5]))</script></div>
+          </div>
+
+        </div>  <!-- END mdl-grid -->
+
+      </main>  <!-- END mdl-layout__content -->
+
+    </div>
+
+  </body>
+
+  <script src='material.min.js'></script>

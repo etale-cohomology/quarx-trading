@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang='en'>
+
+  <head>
+    <title>Title!</title>
+
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>  <!-- Key for responsiveness! -->
+
+    <link rel='shortcut icon' href='favicon.png'>
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Material+Icons|Montserrat'>
+    <link rel='stylesheet' href='material.blue-red.min.css'>
+    <link rel='stylesheet' href='style.css'>
+    <style>
+      /*----------------------------------------------------------------------*/
+      .axis text{ fill:#ffffff; font:10px 'Montserrat'; }
+      text.ticker{ fill:#ffffff; font:10px 'Montserrat'; }
+      path.candle{ stroke:#000000; }
+      path.candle.body{ stroke-width:0; }
+      path.candle.up{ fill:#00aa00; stroke:#00aa00; }
+      path.candle.down{ fill:#ff0000; stroke:#ff0000; }
+
+      path.volume{ fill:#444444; opacity:0.5; }
+      path.volume.up{ fill:#00aa00; }
+      path.volume.down{ fill:#ff0000; }
+
+      rect.pane{ cursor:move; fill:none; pointer-events:all; }
+
+      /*---------------------*/
+      .indicator path.line{ fill:none; stroke-width:1; }
+      .ma-0 path.line{ stroke:#1f77b4; }
+      .ma-1 path.line{ stroke:#aec7e8; }
+      .ma-2 path.line{ stroke:#ff7f0e; }
+
+      /*----------------------------------------------------------------------*/
+      .rsi path{ fill:none; stroke-width:1; }
+      .rsi{ stroke:#ffffff; }
+      .rsi path.overbought, .rsi path.oversold{ stroke:#ff9999; stroke-dasharray:5, 5; }
+      .rsi path.middle, path.zero{ stroke:#bbbbbb; stroke-dasharray:5, 5; }
+
+      /*----------------------------------------------------------------------*/
+      .stochastic path { fill: none; stroke-width: 1; }
+      .stochastic.up { stroke: #00aa00; }
+      .stochastic.down { stroke: #ff0000; }
+      .stochastic path.overbought, .stochastic path.oversold { stroke: #ff9999; stroke-dasharray: 5, 5; }
+      
+      /*----------------------------------------------------------------------*/
+      .williams path { fill: none; stroke-width: 1; }
+      .williams.up { stroke: #ffffff; stroke-width: 1.5; }
+
+    </style>
+  </head>
+
+  <body>
+
+    <!-- --------------------------------------------------------------------------------------------------- -->
+    <div class='mdl-layout mdl-js-layout mdl-layout--fixed-header'>
+
+      <!-- ---------------------------------------------------------------------- -->
+      <header class='mdl-layout__header bg_dark'>
+        <div class='mdl-layout__header-row'>
+
+          <h1 id='title0' class='mdl-typography--title montserrat'>Quarx</h1>
+
+          <!-- <div class='mdl-layout-spacer'></div>
+          <button id='btn_horizon' class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--white'>testnet</button> -->
+
+        </div>
+      </header>
+
+      <!-- ---------------------------------------------------------------------- -->
+      <div class='mdl-layout__drawer bg_dark'> <!-- 1.2 mdl-layout__drawer! -->
+
+        <div class='drawer_header'></div>
+
+        <nav class='mdl-navigation'>
+          <a class='mdl-navigation__link' href='dex.html'><div class='material-icons'>accessibility</div>Stellar DEX</a>
+          <a class='mdl-navigation__link' href='xlm.html'><div class='material-icons'>view_week</div>Stellar Markets</a>
+        </nav>
+
+      </div>
+
+      <!-- ---------------------------------------------------------------------- --> <!-- Content! -->
+      <main class='mdl-layout__content mdl-color--grey-900'>
+
+        <!-- ------------------------------------------------- -->
+        <div class='mdl-grid mdl-grid--no-spacing mdl-color-text--white margin_top'>
+
+          <!-- --------------------- -->
+          <div class='mdl-cell mdl-cell--12-col'><h1 id='exchange' class='montserrat margin_left_32'>Exchange</h1></div>
+
+          <!-- --------------------- -->
+          <div class='mdl-cell mdl-cell--9-col'>
+
+            <!-- ------- -->
+            <div class='mdl-grid flex_justify_center'>
+              <div class='mdl-card mdl-shadow--4dp mdl-color--grey-900'><div id='chart0' class='mdl-cell mdl-cell--12-col'></div></div>
+              <div class='mdl-card mdl-shadow--4dp mdl-color--grey-900'><div id='chart1' class='mdl-cell mdl-cell--12-col'></div></div>
+              <div class='mdl-card mdl-shadow--4dp mdl-color--grey-900'><div id='chart2' class='mdl-cell mdl-cell--12-col'></div></div>
+              <div class='mdl-card mdl-shadow--4dp mdl-color--grey-900'><div id='chart3' class='mdl-cell mdl-cell--12-col'></div></div>
+            </div>
+
+          </div>
+
+          <!-- --------------------- -->
+          <div class='mdl-cell mdl-cell--2-col'>
+
+            <div class='mdl-grid mdl-grid--no-spacing flex_justify_center'>
+
+              <div class='mdl-cell mdl-cell--12-col'>
+                <h1 id='orderbook_date' class='montserrat text_center'>Orderbook updated</h1>
+                <h2 id='ledger_sequence' class='montserrat text_center margin_bottom'>Ledger</h2>
+              </div>
+              
+              <div class='mdl-cell mdl-cell--6-col'>
+
+                <h2 id='bids_title' class='montserrat'>Bids</h2>
+                <table id='bids_table' class='mdl-data-table mdl-js-data-table mdl-shadow--2dp mdl-color--grey-900 bids_table'>
+                  <thead><tr><th>Market size</th><th>Price</th></tr></thead>
+                  <tbody></tbody>
+                </table>
+
+                <div class='mdl-card mdl-shadow--2dp mdl-color--grey-900'>
+                  <div class='mdl-card__supporting-text mdl-color-text--white montserrat'>Spread (CNY)</div>
+                  <div class='mdl-card__title'>
+                    <div id='spread_absolute' class='mdl-card__title-text mdl-color-text--white montserrat'></div>
+                  </div>
+                </div>
+
+                <div class='mdl-card mdl-shadow--2dp mdl-color--grey-900'>
+                  <div class='mdl-card__supporting-text mdl-color-text--white montserrat'>Spread (%)</div>
+                  <div class='mdl-card__title'>
+                    <div id='spread_relative' class='mdl-card__title-text mdl-color-text--white montserrat'></div>
+                  </div>
+                </div>
+
+                <h2 id='asks_title' class='montserrat'>Asks</h2>
+                <table id='asks_table' class='mdl-data-table mdl-js-data-table mdl-shadow--2dp mdl-color--grey-900 asks_table'>
+                  <thead><tr><th>Market size</th><th>Price</th></tr></thead>
+                  <tbody></tbody>
+                </table>
+
+              </div>
+
+              <div class='mdl-cell mdl-cell--6-col'>
+                <h1 id='trades_last'>Last trades</h1>
+                <table id='trades_table' class='mdl-data-table mdl-js-data-table mdl-shadow--2dp mdl-color--grey-900'>
+                  <thead><tr><th>Trade size</th><th>Price</th><th>Time</th></tr></thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- --------------------- -->
+          <div class='mdl-cell mdl-cell--6-col'>
+
+            <h2 class='mdl-typography--subhead montserrat text_center margin_top'>Market components</h2>
+            <table id='market_components_table' class='mdl-data-table mdl-js-data-table mdl-shadow--2dp mdl-color--grey-900 hcenter'>
+              <tbody></tbody>
+            </table>
+
+          </div>
+
+          <!-- --------------------- -->
+          <div class='mdl-cell mdl-cell--6-col'>
+
+            <h2 class='mdl-typography--subhead montserrat text_center margin_top'>Trade</h2>
+            <!-- <table id='market_components_table' class='mdl-data-table mdl-js-data-table mdl-shadow--2dp mdl-color--grey-900 hcenter'> -->
+              <!-- <tbody></tbody> -->
+            <!-- </table> -->
+
+
+            <div class='mdl-card mdl-shadow--2dp width_100 mdl-color--grey-800'>
+              <div class='mdl-card__supporting-text mdl-color-text--white'>
+
+                <div class='mdl-textfield mdl-js-textfield width_100'>
+                  <input class='mdl-textfield__input' type='text' id=''/>
+                  <label class='mdl-textfield__label mdl-color-text--grey-400'>Asset</label>
+                </div>
+                <div class='mdl-textfield mdl-js-textfield width_100'>
+                  <input class='mdl-textfield__input' type='text' id=''/>
+                  <label class='mdl-textfield__label mdl-color-text--grey-400'>Amount</label>
+                </div>
+                <div class='mdl-textfield mdl-js-textfield width_100'>
+                  <input class='mdl-textfield__input' type='password' id=''/>
+                  <label class='mdl-textfield__label mdl-color-text--grey-400'>Issuer</label>
+                </div>
+                <div class='mdl-textfield mdl-js-textfield width_100'>
+                  <input class='mdl-textfield__input' type='password' id=''/>
+                  <label class='mdl-textfield__label mdl-color-text--grey-400'>Secret seed</label>
+                </div>
+
+              </div>
+
+              <div class='mdl-card__actions mdl-card--border'>
+                <button id='' class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised mdl-button--accent mdl-button--disabled'>Coming soon!</button>
+                <div id='' class='mdl-spinner mdl-js-spinner'></div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </main>
+
+    </div>
+
+  </body>
+
+  <script src='material.min.js'></script>
+  <script src='stellar-sdk.min.js'></script>
+  <script src='http://d3js.org/d3.v4.min.js'></script>
+  <script src='http://techanjs.org/techan.min.js'></script>
+  <script src='main.js'></script>
+  <script>
+    let MARKETS = {
+      CNY: ['GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX',],
+      JPY: ['GBVAOIACNSB7OVUXJYC5UE2D4YK2F7A24T7EE5YOMN4CE6GCHUTOUQXM'],
+      BTC: ['GDXTJEK4JZNSTNQAWA53RZNS2GIKTDRPEUWDXELFMKU52XNECNVDVXDI', 'GAUTUYY2THLF7SGITDFMXJVYH3LHDSMGEAKSBU267M2K7A3W543CKUEF', 'GBSTRH4QOTWNSVA6E4HFERETX4ZLSR3CIUBLK7AXYII277PFJC4BBYOG'],
+      XRP: ['GA7FCCMTTSUIC37PODEL6EOOSPDRILP6OQI5FWCWDDVDBLJV72W6RINZ'],
+    }
+
+    // ---------------------------------------------------------------------------------------------------
+    let asset0_code = url_get('asset0_code')
+    let asset1_code = url_get('asset1_code')
+
+    let asset0 = new StellarSdk.Asset.native()
+    let asset1 = new StellarSdk.Asset(asset1_code, MARKETS[asset1_code][0])
+
+    orderbook_get(asset0, asset1)
+    trades_get(asset0, asset1)
+
+    exchange_title(asset0_code, asset1_code)
+    bidask_title(asset0_code, asset1_code)
+    market_components(MARKETS[asset1_code])
+  </script>
+
+</html>

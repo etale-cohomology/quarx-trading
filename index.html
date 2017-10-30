@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang='en'>
+
+  <head>
+    <title>Title!</title>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>  <!-- Key for responsiveness! -->
+
+    <link rel='icon' href='favicon.png'>
+
+    <link rel='stylesheet' href='https://fonts.googleapis.com/icon?family=Montserrat'>
+    <link rel='stylesheet' href='material.blue-red.min.css'>
+    <style>
+      html,body,div,span,a,h1,h2,h3,h4,h5,h6,p,code,ol,ul,li,form,canvas,embed,header,footer{ margin:0; padding:0; border:0; font-family:sans-serif; -webkit-text-size-adjust:100%; }
+      *, *:before, *:after{ box-sizing:border-box; box-sizing:inherit; }
+
+      .text_center{ text-align:center; }
+      .hcenter{ margin:0 auto; }
+      .vcenter_parent{ display:flex; }
+      .vcenter_child{ align-self:center; }
+
+      .margin_top{ margin-top:32px; }
+      .margin_bottom{ margin-bottom:128px; }
+
+      .montserrat{ font-family:'Montserrat'; }
+
+      .height_25vh{ height:25vh; }
+      .height_33vh{ height:33vh; }
+      .height_66vh{ height:66vh; }
+      .height_75vh{ height:75vh; }
+      .height_80vh{ height:80vh; }
+      .height_100vh{ height:100vh; }
+
+      .bg_dark{ background:rgb(6%, 6%, 6%); }
+      .bg_blue{ background:rgb(0%, 50%, 100%); }
+
+      .font_light{ color:#eee; }
+
+      /*----------------------------------------------------------------------*/
+      @font-face { font-family:'NeueHaasMedium'; src:url(NeueHaasGroteskMedium.ttf); }
+      .neuehaas{ font-family:'NeueHaasMedium'; }
+
+      canvas{ background:rgb(6%, 6%, 6%); }
+      .box_main{ position:absolute; z-index:1; color:#fff; width:100%; }
+    </style>
+  </head>
+
+  <body>
+
+    <div class='mdl-layout mdl-js-layout'>
+
+      <main class='mdl-layout__content'>
+
+        <!-- --------------------- -->
+        <div class='box_main height_100vh font_light vcenter_parent'>
+          <div class='vcenter_child hcenter text_center'>
+            <h1 class='mdl-typography--display-4 neuehaas'>Quarx Trading</h1>
+            <h2 class='mdl-typography--title montserrat'>A <i>smart</i> client for the Stellar Descentralized Exchange</h2>
+            <a href='dex.html'><button class='mdl-button mfedl-js-button mdl-js-ripple-effect mdl-button--accent mdl-button--raised margin_top margin_bottom'>Go to dashboard</button></a>
+          </div>
+        </div>
+        <canvas id='canvas0'></canvas>
+
+        <!-- --------------------- -->
+        <!-- <div class='height_75vh mdl-grid mdl-color--red mdl-color-text--white'>
+          <div class='mdl-cell mdl-cell--4-col mdl-cell--2-offset-desktop mdl-cell--middle'>
+            <h1 class='mdl-typography--display-2 montserrat'>The power of the Stellar DEX</h1>
+            <p class='mdl-typography--title montserrat'>The Stellar DEX is the network's descentralized exchange</p>
+            <p class='mdl-typography--title montserrat'>Quarx allows you to trade any asset that can be traded on the Stellar DEX</p>
+          </div>
+          <div class='mdl-cell mdl-cell--4-col mdl-cell--2-offset-desktop mdl-cell--middle'><img src='logo_xlm.png'></div>
+        </div> -->
+
+        <!-- --------------------- -->
+        <!-- <div class='height_75vh mdl-grid mdl-color--deep-purple mdl-color-text--white'>
+          <div class='mdl-cell mdl-cell--4-col mdl-cell--2-offset-desktop mdl-cell--middle'>img</div>
+          <div class='mdl-cell mdl-cell--4-col mdl-cell--middle'>
+            <h1 class='mdl-typography--display-2 montserrat'>Simple interface</h1>
+            <p class='mdl-typography--title montserrat'>Browse through the pre-defined markets, or find your own</p>
+            <p class='mdl-typography--title montserrat'>Place an order</p>
+          </div>
+        </div> -->
+
+        <!-- --------------------- -->
+        <!-- <div class='height_75vh mdl-grid mdl-color--blue mdl-color-text--white'>
+          <div class='mdl-cell mdl-cell--4-col mdl-cell--2-offset-desktop mdl-cell--middle'>
+            <h1 class='mdl-typography--display-2 montserrat'>Smart data</h1>
+            <p class='mdl-typography--title montserrat'>Quarx features a wealth of technical indicators</p>
+          </div>
+          <div class='mdl-cell mdl-cell--4-col mdl-cell--2-offset-desktop mdl-cell--middle'>img</div>
+        </div> -->
+
+      </main>
+
+    </div>
+
+  </body>
+
+  <script src='material.min.js'></script>
+  <script>
+    // ---------------------------------------------------------------------------------------------------
+    doc = document
+    print = console.log
+
+    function type(x){
+      return typeof(x)
+    }
+
+    function error_show(){
+      print('Error occurred!')
+      return null
+    }
+
+    function undefined2na(object){
+      return typeof(object) === 'undefined' ? 'NA' : object
+    }
+
+    const average = (array) => array.reduce((a, b) => a + b) / array.length
+
+    function rand(){
+      return Math.random()
+    }
+
+
+    // ---------------------------------------------------------------------------------------------------
+    let canvas = doc.querySelector('#canvas0')
+    let ctx = canvas.getContext('2d')
+
+    let PI = Math.PI
+    let TAU = 2 * PI
+
+    let radius = 12
+
+    // ----------------------------------------------------------------------
+    /*
+    Internally, paths are stored as a list of sub-paths (lines, arcs, etc) which together form a shape
+    When you call fill(), any open shapes are closed automagically, so you don't have to call closePath(). This is not the case when you call stroke().
+
+    ctx.beginPath()
+    ctx.closePath()
+    ctx.stroke()
+    ctx.fill()
+
+    ctx.fillRect()
+    ctx.strokeRect()
+    ctx.clearRect()
+
+    ctx.moveTo()
+    ctx.lineTo()
+    ctx.arc()
+
+    ctx.rotate()
+    */
+
+    // Map an RGB triple in [0; 1]^3 to an RGB triple in [0, 255]^3, and turn it into a string that `canvas.fillStyle` likes!
+    function rgb(r, g, b){
+      return `rgb(${Math.floor(255 * r)}, ${Math.floor(255 * g)}, ${Math.floor(255 * b)})`
+    }
+
+    function rgba(r, g, b, a){
+      return `rgba(${Math.floor(255 * r)}, ${Math.floor(255 * g)}, ${Math.floor(255 * b)}, ${a})`
+    }
+
+    if(!window.requestAnimationFrame ){
+      window.requestAnimationFrame = (function(){
+        return window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame ||
+          function(callback, element){
+            window.setTimeout(callback, 1000 / 30)
+          }
+      })()
+    }
+
+    // ----------------------------------------------------------------------
+    function canvas_init(){
+      window.onresize = canvas_draw
+      window.requestAnimationFrame(canvas_draw)
+    }
+
+    // TODO. Currently this uses the `canvas` variable from the global context, because I don't know how to pass arguments to a callback. FIX THIS!
+    function canvas_resize(){
+      canvas.width = window.innerWidth
+      canvas.height = window.innerHeight
+    }
+
+    // Original demo by Kevin Roast, http://www.kevs3d.co.uk/dev/
+    function canvas_draw(){
+      canvas_resize()
+
+      let width = canvas.width
+      let height = canvas.height
+
+
+      let time = Date.now() / (1<<16)
+
+      ctx.fillStyle = rgb(.1, .1, .1)
+      ctx.fillRect(0, 0, width, height)
+
+      ctx.strokeStyle = '#f44336'
+      ctx.lineWidth = 4
+
+      ctx.translate(width / 2, height / 2)
+      ctx.rotate(time % (2 * TAU))
+
+      ctx.beginPath()
+      for(let i=1; i<=2; ++i){
+        for(let t = 0; t < 2 * TAU; t += TAU / 360){
+          xy = mix(f1(t), f2(t), Math.sin(time*i))
+          ctx.lineTo(i * xy.x * radius, i * xy.y * radius)
+        }
+      }
+      ctx.closePath()
+      ctx.stroke()
+
+      window.requestAnimationFrame(canvas_draw)
+    }
+
+    function mix(xy1, xy2, param){
+      return {x: xy1.x * param + xy2.x * (1 - param), y: xy1.y * param + xy2.y * (1 - param)}
+    }
+
+    function f1(t){
+      return {x: 11 * Math.cos(t) - 7 * Math.cos(11 * t), y: 11 * Math.sin(t) - 7 * Math.sin(11 * t)}
+    }
+
+    function f2(t){
+      return {x: (3 * Math.sin(t)) * (Math.cos(5 * t)), y: (3 * Math.cos(t)) * (5 * Math.sin(t))}
+    }
+
+    // ----------------------------------------------------------------------
+    canvas_init()
+  </script>
+</html>

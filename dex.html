@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang='en'>
+
+  <head>
+    <title>Title!</title>
+
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>  <!-- Key for responsiveness! -->
+
+    <link rel='shortcut icon' href='favicon.png'>
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Material+Icons|Montserrat'>
+    <link rel='stylesheet' href='material.blue-red.min.css'>
+    <link rel='stylesheet' href='style.css'>
+    <style>
+      .mdl-button{ height:25vh; min-height:256px; width:95%; min-width:360px; }
+
+      .market0{
+        background-image: url(logo_xlm.png), url(logo_cny.png);
+        background-repeat: no-repeat, no-repeat;
+        background-position: left, right;
+        background-size:20%;
+      }
+      .market1{
+        background-image: url(logo_xlm.png), url(logo_jpy.png);
+        background-repeat: no-repeat, no-repeat;
+        background-position: left, right;
+        background-size:20%;
+      }
+      .market2{
+        background-image: url(logo_xlm.png), url(logo_xrp.png);
+        background-repeat: no-repeat, no-repeat;
+        background-position: left, right;
+        background-size:20%;
+      }
+      .market3{
+        background-image: url(logo_xlm.png), url(logo_btc.png);
+        background-repeat: no-repeat, no-repeat;
+        background-position: left, right;
+        background-size:20%;
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <!-- --------------------------------------------------------------------------------------------------- -->
+    <div class='mdl-layout mdl-js-layout mdl-layout--fixed-header'>
+
+      <!-- ---------------------------------------------------------------------- -->
+      <header class='mdl-layout__header bg_dark'>
+        <div class='mdl-layout__header-row'>
+
+          <h1 id='title0' class='mdl-typography--title montserrat'>Quarx</h1>
+
+          <!-- <div class='mdl-layout-spacer'></div>
+          <button id='btn_horizon' class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--white'>testnet</button> -->
+
+        </div>
+      </header>
+
+      <!-- ---------------------------------------------------------------------- -->
+      <div class='mdl-layout__drawer bg_dark'> <!-- 1.2 mdl-layout__drawer! -->
+
+        <div class='drawer_header'></div>
+
+        <nav class='mdl-navigation'>
+          <a class='mdl-navigation__link' href='dex.html'><div class='material-icons'>accessibility</div>Stellar DEX</a>
+          <a class='mdl-navigation__link' href='xlm.html'><div class='material-icons'>view_week</div>Stellar Markets</a>
+        </nav>
+
+      </div>
+
+      <!-- ---------------------------------------------------------------------- --> <!-- Content! -->
+      <main class='mdl-layout__content mdl-color--grey-900'>
+
+        <div class='mdl-grid mdl-color-text--white margin_top'>
+
+          <div class='mdl-cell mdl-cell--12-col'>
+            <h1 class='mdl-typography--title montserrat'>Stellar Descentralized Exchange</h1>
+          </div>
+
+          <div class='mdl-cell mdl-cell--4-col'>
+            <a href='exchange.html?asset0_code=XLM&asset1_code=CNY'>
+              <button class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised mdl-color--grey-800 market0'>
+                <h1 class='mdl-color-text--white mdl-typography--display-3'>XLM / CNY</h1>
+              </button>
+            </a>
+          </div>
+
+          <div class='mdl-cell mdl-cell--4-col'>
+            <a href='exchange.html?asset0_code=XLM&asset1_code=JPY'>
+              <button class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised mdl-color--grey-800 market1'>
+                <h1 class='mdl-color-text--white mdl-typography--display-3'>XLM / JPY</h1>
+              </button>
+            </a>
+          </div>
+
+          <div class='mdl-cell mdl-cell--4-col'>
+            <a href='exchange.html?asset0_code=XLM&asset1_code=XRP'>
+              <button class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised mdl-color--grey-800 market2'>
+                <h1 class='mdl-color-text--white mdl-typography--display-3'>XLM / XRP</h1>
+              </button>
+            </a>
+          </div>
+
+          <div class='mdl-cell mdl-cell--4-col'>
+            <a href='exchange.html?asset0_code=XLM&asset1_code=BTC'>
+              <button class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised mdl-color--grey-800 market3'>
+                <h1 class='mdl-color-text--white mdl-typography--display-3'>XLM / BTC</h1>
+              </button>
+            </a>
+          </div>
+
+        </div>
+
+      </main>
+
+    </div>
+
+  </body>
+
+  <script src='material.min.js'></script>
+  <script src='stellar-sdk.min.js'></script>
+
+</html>
