@@ -2,13 +2,13 @@
 <html lang='en'>
 
   <head>
-    <title>Title!</title>
+    <title>Quarx | Stellar network trading client</title>
 
     <meta charset='utf-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1'>  <!-- Key for responsiveness! -->
 
     <link rel='shortcut icon' href='favicon.png'>
-    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Montserrat|Material+Icons'>
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Montserrat:500|Material+Icons'>
     <link rel='stylesheet' href='material.blue-red.min.css'>
     <link rel='stylesheet' href='style.css'>
 
@@ -84,11 +84,12 @@
       <!-- ---------------------------------------------------------------------- -->
       <div class='mdl-layout__drawer bg_dark'> <!-- 1.2 mdl-layout__drawer! -->
 
-        <div class='drawer_header'></div>
+        <a href='/'><div class='drawer_header'></div></a>
 
         <nav class='mdl-navigation'>
-          <a class='mdl-navigation__link' href='dex.html'><div class='material-icons'>accessibility</div>Stellar DEX</a>-
-          <a class='mdl-navigation__link' href='xlm.html'><div class='material-icons'>view_week</div>Stellar Markets</a>
+          <a class='mdl-navigation__link' href='mass.html'><div class='material-icons'>extension</div>Mass markets</a>
+          <!-- <a class='mdl-navigation__link' href='single.html'><div class='material-icons'>accessibility</div>Single markets</a> -->
+          <a class='mdl-navigation__link' href='xlm.html'><div class='material-icons'>view_week</div>External markets</a>
         </nav>
 
       </div>
@@ -96,12 +97,14 @@
       <!-- ---------------------------------------------------------------------- --> <!-- Content! -->
       <main class='mdl-layout__content mdl-color--grey-900'>
 
+        <div class='mdl-grid margin_top'>
+          <div class='mdl-cell mdl-cell--12-col margin_bottom'>
+            <h1 class='mdl-typography--display-1 montserrat inline margin_right'>External markets</h1>
+          </div>
+        </div>
+
         <div class='mdl-grid mdl-grid--no-spacing'>
 
-          <div class='mdl-cell mdl-cell--12-col'>
-            <h1 class='mdl-color-text--white mdl-typography--headline montserrat margin_top margin_bottom'>Stellar markets</h1>
-          </div>
-    
           <div class='mdl-cell mdl-cell--4-col'>
             <div class='chart'><script>let tv_chart0 = new TradingView.widget(tv_config(TICKERS[0]))</script></div>
           </div>

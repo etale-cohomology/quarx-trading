@@ -355,7 +355,7 @@ function market_components(market){
 // ---------------------------------------------------------------------------------------------------
 function charts_draw(candlesticks){
   let chart_width = doc.querySelector('#chart0').clientWidth
-  candlestick_draw('chart0', candlesticks, 'Price', 'data1', chart_width, 480)
+  candlestick_draw('chart0', candlesticks, 'Price', chart_width, 480)
   rsi_draw('chart1', candlesticks, chart_width, 240)
   stochastic_draw('chart2', candlesticks, chart_width, 240)
   williams_draw('chart3', candlesticks, chart_width, 240)
@@ -363,7 +363,7 @@ function charts_draw(candlesticks){
 }
 
 // chart0
-function candlestick_draw(div_id, candlesticks, name, ticker, width_box, height_box){
+function candlestick_draw(div_id, candlesticks, name, width_box, height_box){
   let margin = {top: 16, right: 88, bottom: 24, left: 56}
   let width = width_box - margin.left - margin.right
   let height = height_box - margin.top - margin.bottom
@@ -476,18 +476,16 @@ function rsi_draw(div_id, candlesticks, width_box, height_box){
               .append('svg').attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom)
               .append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
 
-  d3.csv('data1.csv', function(error, data){
-    var accessor = rsi.accessor()
+  var accessor = rsi.accessor()
 
-    data = candlesticks
+  data = candlesticks
 
-    svg.append('g').attr('class', 'rsi')
-    svg.append('g').attr('class', 'x axis').attr('transform', 'translate(0,' + height + ')')
-    svg.append('g').attr('class', 'y axis').append('text').attr('transform', 'rotate(-90)').attr('y', 6).attr('dy', '.71em').style('text-anchor', 'end').text('RSI')
+  svg.append('g').attr('class', 'rsi')
+  svg.append('g').attr('class', 'x axis').attr('transform', 'translate(0,' + height + ')')
+  svg.append('g').attr('class', 'y axis').append('text').attr('transform', 'rotate(-90)').attr('y', 6).attr('dy', '.71em').style('text-anchor', 'end').text('RSI')
 
-    draw(data)  // Data to display initially
-    // d3.select('button').on('click', function(){ draw(data) }).style('display', 'inline')  // Only want this button to be active if the data has loaded
-  })
+  draw(data)  // Data to display initially
+  // d3.select('button').on('click', function(){ draw(data) }).style('display', 'inline')  // Only want this button to be active if the data has loaded
 
   function draw(data){
     var rsiData = techan.indicator.rsi()(data)
@@ -584,3 +582,9 @@ function williams_draw(div_id, candlesticks, width_box, height_box){
       svg.selectAll('g.y.axis').call(yAxis)
   }
 }
+
+/*
+GAECJVZ55YDSVO7KYNWSTFFTGF4AJ7DJH6O6WTTR33KCA2UBT4KOKBLY SAUI2E4EM7UW6PZ6FWXNRZC7GOTTHQHECXMQFWYVY43XCN7CLGRGEXWG
+GDRTRNSP7T33KH3UYXX4I6I42ZVCKVYJ5P2W3KIJCYFK7IPLHOU7HZYJ SCHNDPDUBW44G4BJCGORKR7LJCN77EMZZOFYLRGZUHTABNFP7XOZ5J5M
+GAPFRGD6WLIS3INGOFCFQFYZF3ESLXFGYZONZIKVCVBYXIYUEKZZD4CG SB6K6MC6LD3FCZ4VSXGYB2IT7MJACQ4SHVUQ74VWQLMJEAGACI5JOCQU
+*/

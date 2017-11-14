@@ -10,10 +10,15 @@
 .montserrat{ font-family:'Montserrat'; }
 .capitalize{ text-transform:capitalize; }
 
-.margin_top{ margin-top:64px; }
-.margin_bottom{ margin-bottom:64px; }
-.margin_left{ margin-left:8px }
-.margin_right{ margin-right:8px }
+.margin_top{ margin-top:16px; }
+.margin_right{ margin-right:16px; }
+.margin_bottom{ margin-bottom:16px; }
+.margin_left{ margin-left:16px; }
+
+.margin_top_32{ margin-top:32px; }
+.margin_right_32{ margin-right:32px; }
+.margin_bottom_32{ margin-bottom:32px; }
+.margin_left_32{ margin-left:32px; }
 
 .margin_top0{ margin-top:1px; }
 .margin_top1{ margin-top:2px; }
@@ -56,9 +61,8 @@ html,body,div,h1,h2,h3,h4,h5,h6,p{ font-family:'Montserrat'; }
 .demo-drawer-header{ padding:16px; height:144px; box-sizing:border-box; display:-webkit-box; display:-webkit-flex; display:-ms-flexbox; display:flex; -webkit-box-orient:vertical; -webkit-box-direction:normal; -webkit-flex-direction:column; -ms-flex-direction:column; flex-direction:column; -webkit-box-pack:end; -webkit-justify-content:flex-end; -ms-flex-pack:end; justify-content:flex-end; }
 .demo-avatar-dropdown{ width:100%; display:flex; position:relative; align-items:center; display:-webkit-box; display:-webkit-flex; display:-ms-flexbox; -webkit-box-orient:horizontal; -webkit-box-direction:normal; -webkit-flex-direction:row; -ms-flex-direction:row; flex-direction:row; -webkit-box-align:center; -webkit-align-items:center; -ms-flex-align:center; }
 
-.mdl-navigation{ -webkit-box-flex:1; -webkit-flex-grow:1; -ms-flex-positive:1; flex-grow:1; }
-.mdl-navigation__link .material-icons{ margin-right:32px; } /*menu icons!*/
-.mdl-navigation__link{ color:#fff!important; font-weight:300; display:-webkit-box!important; display:-webkit-flex!important; display:-ms-flexbox!important; display:flex!important; -webkit-box-orient:horizontal; -webkit-box-direction:normal; -webkit-flex-direction:row; -ms-flex-direction:row; flex-direction:row; -webkit-box-align:center; -webkit-align-items:center; -ms-flex-align:center; align-items:center; }
+.mdl-navigation__link .material-icons{ margin-right:24px; } /*menu icons!*/
+.mdl-navigation__link{ padding-left:24px!important; color:#fff!important; font-weight:300; display:-webkit-box!important; display:-webkit-flex!important; display:-ms-flexbox!important; display:flex!important; -webkit-box-orient:horizontal; -webkit-box-direction:normal; -webkit-flex-direction:row; -ms-flex-direction:row; flex-direction:row; -webkit-box-align:center; -webkit-align-items:center; -ms-flex-align:center; align-items:center; }
 .mdl-navigation__link:hover{ background:#222!important; } /*menu hover!!*/
 
 /*A dirty hack so that placeholder text shows in expandable labels...!*/
@@ -77,21 +81,11 @@ h1,h2,h3,h4,h5,h6,p{ margin:0; padding:0; line-height:1; color:#ffffff; }
 
 .mdl-textfield__expandable-holder .mdl-textfield__label{ top:3px; }  /*Enable default text for the expandable-holder!*/
 
-.montserrat{ font-family:'Montserrat'; }
-.margin_top{ margin-top:16px; }
-.margin_right{ margin-right:16px; }
-.margin_bottom{ margin-bottom:16px; }
-.margin_left{ margin-left:16px; }
-
-.margin_top_32{ margin-top:32px; }
-.margin_right_32{ margin-right:32px; }
-.margin_bottom_32{ margin-bottom:32px; }
-.margin_left_32{ margin-left:32px; }
-
 .text_center{ text-align:center; }
 .hcenter{ margin:0 auto; }
 .justify_center{ justify-content:center; }
 .flex_justify_center{ display:flex; justify-content:center; }
+.flex_align_center{ display:flex; align-items:center; }
 
 h1{ font-size:16px; }
 h2{ font-size:14px; }

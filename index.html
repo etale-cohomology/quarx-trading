@@ -2,13 +2,13 @@
 <html lang='en'>
 
   <head>
-    <title>Title!</title>
+    <title>Quarx | Stellar network trading client</title>
     <meta charset='utf-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1'>  <!-- Key for responsiveness! -->
 
     <link rel='icon' href='favicon.png'>
 
-    <link rel='stylesheet' href='https://fonts.googleapis.com/icon?family=Montserrat'>
+    <link rel='stylesheet' href='https://fonts.googleapis.com/icon?family=Montserrat:500,900'>
     <link rel='stylesheet' href='material.blue-red.min.css'>
     <style>
       html,body,div,span,a,h1,h2,h3,h4,h5,h6,p,code,ol,ul,li,form,canvas,embed,header,footer{ margin:0; padding:0; border:0; font-family:sans-serif; -webkit-text-size-adjust:100%; }
@@ -35,11 +35,9 @@
       .bg_blue{ background:rgb(0%, 50%, 100%); }
 
       .font_light{ color:#eee; }
+      .bold{ font-weight:900; }
 
       /*----------------------------------------------------------------------*/
-      @font-face { font-family:'NeueHaasMedium'; src:url(NeueHaasGroteskMedium.ttf); }
-      .neuehaas{ font-family:'NeueHaasMedium'; }
-
       canvas{ background:rgb(6%, 6%, 6%); }
       .box_main{ position:absolute; z-index:1; color:#fff; width:100%; }
     </style>
@@ -54,9 +52,9 @@
         <!-- --------------------- -->
         <div class='box_main height_100vh font_light vcenter_parent'>
           <div class='vcenter_child hcenter text_center'>
-            <h1 class='mdl-typography--display-4 neuehaas'>Quarx Trading</h1>
+            <h1 class='mdl-typography--display-4 montserrat bold'>Quarx Trading</h1>
             <h2 class='mdl-typography--title montserrat'>A <i>smart</i> client for the Stellar Descentralized Exchange</h2>
-            <a href='dex.html'><button class='mdl-button mfedl-js-button mdl-js-ripple-effect mdl-button--accent mdl-button--raised margin_top margin_bottom'>Go to dashboard</button></a>
+            <a href='mass.html' class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent mdl-button--raised margin_top margin_bottom'>Go to dashboard</a>
           </div>
         </div>
         <canvas id='canvas0'></canvas>
@@ -102,34 +100,15 @@
     doc = document
     print = console.log
 
-    function type(x){
-      return typeof(x)
-    }
-
-    function error_show(){
-      print('Error occurred!')
-      return null
-    }
-
-    function undefined2na(object){
-      return typeof(object) === 'undefined' ? 'NA' : object
-    }
-
-    const average = (array) => array.reduce((a, b) => a + b) / array.length
-
-    function rand(){
-      return Math.random()
-    }
-
 
     // ---------------------------------------------------------------------------------------------------
+    // Global variables!
+
     let canvas = doc.querySelector('#canvas0')
     let ctx = canvas.getContext('2d')
 
     let PI = Math.PI
     let TAU = 2 * PI
-
-    let radius = 12
 
     // ----------------------------------------------------------------------
     /*
@@ -170,7 +149,8 @@
       })()
     }
 
-    // ----------------------------------------------------------------------
+
+    // ---------------------------------------------------------------------------------------------------
     function canvas_init(){
       window.onresize = canvas_draw
       window.requestAnimationFrame(canvas_draw)
@@ -186,11 +166,9 @@
     function canvas_draw(){
       canvas_resize()
 
+      let time = Date.now() / (1<<16)
       let width = canvas.width
       let height = canvas.height
-
-
-      let time = Date.now() / (1<<16)
 
       ctx.fillStyle = rgb(.1, .1, .1)
       ctx.fillRect(0, 0, width, height)
@@ -200,6 +178,8 @@
 
       ctx.translate(width / 2, height / 2)
       ctx.rotate(time % (2 * TAU))
+
+      let radius = 12
 
       ctx.beginPath()
       for(let i=1; i<=2; ++i){
@@ -226,7 +206,8 @@
       return {x: (3 * Math.sin(t)) * (Math.cos(5 * t)), y: (3 * Math.cos(t)) * (5 * Math.sin(t))}
     }
 
-    // ----------------------------------------------------------------------
+
+    // ---------------------------------------------------------------------------------------------------
     canvas_init()
   </script>
 </html>

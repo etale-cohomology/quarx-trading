@@ -2,13 +2,13 @@
 <html lang='en'>
 
   <head>
-    <title>Title!</title>
+    <title>Quarx | Stellar network trading client</title>
 
     <meta charset='utf-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1'>  <!-- Key for responsiveness! -->
 
     <link rel='shortcut icon' href='favicon.png'>
-    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Material+Icons|Montserrat'>
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Montserrat:500|Material+Icons'>
     <link rel='stylesheet' href='material.blue-red.min.css'>
     <link rel='stylesheet' href='style.css'>
     <style>
@@ -71,11 +71,12 @@
       <!-- ---------------------------------------------------------------------- -->
       <div class='mdl-layout__drawer bg_dark'> <!-- 1.2 mdl-layout__drawer! -->
 
-        <div class='drawer_header'></div>
+        <a href='/'><div class='drawer_header'></div></a>
 
         <nav class='mdl-navigation'>
-          <a class='mdl-navigation__link' href='dex.html'><div class='material-icons'>accessibility</div>Stellar DEX</a>
-          <a class='mdl-navigation__link' href='xlm.html'><div class='material-icons'>view_week</div>Stellar Markets</a>
+          <a class='mdl-navigation__link' href='mass.html'><div class='material-icons'>extension</div>Mass markets</a>
+          <!-- <a class='mdl-navigation__link' href='single.html'><div class='material-icons'>accessibility</div>Single markets</a> -->
+          <a class='mdl-navigation__link' href='xlm.html'><div class='material-icons'>view_week</div>External markets</a>
         </nav>
 
       </div>
@@ -84,16 +85,16 @@
       <main class='mdl-layout__content mdl-color--grey-900'>
 
         <!-- ------------------------------------------------- -->
-        <div class='mdl-grid mdl-grid--no-spacing mdl-color-text--white margin_top'>
+        <div class='mdl-grid mdl-grid--no-spacing mdl-color-text--white margin_top flex_justify_center'>
 
           <!-- --------------------- -->
-          <div class='mdl-cell mdl-cell--12-col'><h1 id='exchange' class='montserrat margin_left_32'>Exchange</h1></div>
+          <div class='mdl-cell mdl-cell--12-col'><h1 id='exchange' class='mdl-typography--headline montserrat margin_left'>Exchange</h1></div>
 
           <!-- --------------------- -->
           <div class='mdl-cell mdl-cell--9-col'>
 
             <!-- ------- -->
-            <div class='mdl-grid flex_justify_center'>
+            <div class='mdl-grid'>
               <div class='mdl-card mdl-shadow--4dp mdl-color--grey-900'><div id='chart0' class='mdl-cell mdl-cell--12-col'></div></div>
               <div class='mdl-card mdl-shadow--4dp mdl-color--grey-900'><div id='chart1' class='mdl-cell mdl-cell--12-col'></div></div>
               <div class='mdl-card mdl-shadow--4dp mdl-color--grey-900'><div id='chart2' class='mdl-cell mdl-cell--12-col'></div></div>
@@ -181,12 +182,12 @@
                   <label class='mdl-textfield__label mdl-color-text--grey-400'>Asset</label>
                 </div>
                 <div class='mdl-textfield mdl-js-textfield width_100'>
-                  <input class='mdl-textfield__input' type='text' id=''/>
-                  <label class='mdl-textfield__label mdl-color-text--grey-400'>Amount</label>
-                </div>
-                <div class='mdl-textfield mdl-js-textfield width_100'>
                   <input class='mdl-textfield__input' type='password' id=''/>
                   <label class='mdl-textfield__label mdl-color-text--grey-400'>Issuer</label>
+                </div>
+                <div class='mdl-textfield mdl-js-textfield width_100'>
+                  <input class='mdl-textfield__input' type='text' id=''/>
+                  <label class='mdl-textfield__label mdl-color-text--grey-400'>Amount</label>
                 </div>
                 <div class='mdl-textfield mdl-js-textfield width_100'>
                   <input class='mdl-textfield__input' type='password' id=''/>
@@ -214,8 +215,8 @@
 
   <script src='material.min.js'></script>
   <script src='stellar-sdk.min.js'></script>
-  <script src='http://d3js.org/d3.v4.min.js'></script>
-  <script src='http://techanjs.org/techan.min.js'></script>
+  <script src='d3.v4.min.js'></script>
+  <script src='techan.min.js'></script>
   <script src='main.js'></script>
   <script>
     let MARKETS = {
