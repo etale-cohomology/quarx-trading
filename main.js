@@ -144,8 +144,8 @@ let HORIZON = new StellarSdk.Server('https://horizon.stellar.org')
 
 
 // ---------------------------------------------------------------------------------------------------
-let N_BIDS = 20
-let N_ASKS = 20
+let N_BIDS = 24
+let N_ASKS = 24
 let N_TRADES = 60
 
 function orderbook_get(asset0, asset1){
