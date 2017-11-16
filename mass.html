@@ -7,12 +7,12 @@
     <meta charset='utf-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1'>  <!-- Key for responsiveness! -->
 
-    <link rel='shortcut icon' href='favicon.png'>
+    <link rel='icon' href='favicon.png'>
     <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Montserrat:500|Material+Icons'>
     <link rel='stylesheet' href='material.blue-red.min.css'>
     <link rel='stylesheet' href='style.css'>
     <style>
-      .mdl-button{ height:25vh; min-height:256px; width:95%; min-width:360px; }
+      .btn_large{ height:25vh; min-height:256px; width:95%; min-width:360px; }
 
       .market0{
         background-image: url(logo_xlm.png), url(logo_cny.png);
@@ -65,8 +65,12 @@
 
         <nav class='mdl-navigation'>
           <a class='mdl-navigation__link' href='mass.html'><div class='material-icons'>extension</div>Mass markets</a>
-          <!-- <a class='mdl-navigation__link' href='single.html'><div class='material-icons'>accessibility</div>Single markets</a> -->
+          <a class='mdl-navigation__link' href='single.html'><div class='material-icons'>accessibility</div>Single markets</a>
           <a class='mdl-navigation__link' href='xlm.html'><div class='material-icons'>view_week</div>External markets</a>
+          <!-- <hr class='mdl-color--white border_none'>
+          <a class='mdl-navigation__link' href='manual.html'><div class='material-icons'>library_books</div>Manual</a> -->
+          <hr class='mdl-color--white border_none'>
+          <a class='mdl-navigation__link' href='https://github.com/etale-cohomology/quarx-trading'><div class='material-icons'>business</div>Source</a>
         </nav>
 
       </div>
@@ -79,35 +83,37 @@
           <div class='mdl-cell mdl-cell--12-col margin_bottom'>
             <h1 class='mdl-typography--display-1 montserrat inline margin_right'>Stellar Descentralized Exchange</h1>
             <h2 class='mdl-typography--title montserrat inline'>Mass markets</h2>
+            <button id='help_mass_markets' class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon margin_bottom2'><i class='material-icons'>help_outline</i></button>
+            <div for='help_mass_markets' class='mdl-tooltip'>In the Stellar network, every asset is issued by <i>some</i> account (except Lumens, the so-called <b>native asset</b>). In this page you can manually search for any asset to <b>trade</b> against any other asset.</div>
           </div>
 
           <div class='mdl-cell mdl-cell--4-col'>
-            <a href='exchange.html?asset0_code=XLM&asset1_code=CNY'>
-              <button class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised mdl-color--grey-800 market0'>
+            <a href='exchange.html?buying_asset_code=XLM&buying_asset_issuer=mass&selling_asset_code=CNY&selling_asset_issuer=mass'>
+              <button class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised mdl-color--grey-800 market0 btn_large'>
                 <h1 class='mdl-color-text--white mdl-typography--display-3'>XLM / CNY</h1>
               </button>
             </a>
           </div>
 
           <div class='mdl-cell mdl-cell--4-col'>
-            <a href='exchange.html?asset0_code=XLM&asset1_code=JPY'>
-              <button class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised mdl-color--grey-800 market1'>
+            <a href='exchange.html?buying_asset_code=XLM&buying_asset_issuer=mass&selling_asset_code=JPY&selling_asset_issuer=mass'>
+              <button class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised mdl-color--grey-800 market1 btn_large'>
                 <h1 class='mdl-color-text--white mdl-typography--display-3'>XLM / JPY</h1>
               </button>
             </a>
           </div>
 
           <div class='mdl-cell mdl-cell--4-col'>
-            <a href='exchange.html?asset0_code=XLM&asset1_code=XRP'>
-              <button class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised mdl-color--grey-800 market2'>
+            <a href='exchange.html?buying_asset_code=XLM&buying_asset_issuer=mass&selling_asset_code=XRP&selling_asset_issuer=mass'>
+              <button class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised mdl-color--grey-800 market2 btn_large'>
                 <h1 class='mdl-color-text--white mdl-typography--display-3'>XLM / XRP</h1>
               </button>
             </a>
           </div>
 
           <div class='mdl-cell mdl-cell--4-col'>
-            <a href='exchange.html?asset0_code=XLM&asset1_code=BTC'>
-              <button class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised mdl-color--grey-800 market3'>
+            <a href='exchange.html?buying_asset_code=XLM&buying_asset_issuer=mass&selling_asset_code=BTC&selling_asset_issuer=mass'>
+              <button class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised mdl-color--grey-800 market3 btn_large'>
                 <h1 class='mdl-color-text--white mdl-typography--display-3'>XLM / BTC</h1>
               </button>
             </a>

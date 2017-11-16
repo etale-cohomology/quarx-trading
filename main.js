@@ -105,7 +105,7 @@ function url_get(param_name){
 }
 
 
-// ---------------------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------
 // Filter an array and return the indices!
 function filter_binary_indices(array, min, max){
   let up      = -1
@@ -139,6 +139,11 @@ function filter_binary_values(array, min, max){
 }
 
 
+
+
+// ---------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------------
 let HORIZON = new StellarSdk.Server('https://horizon.stellar.org')
 
@@ -148,8 +153,12 @@ let N_BIDS = 24
 let N_ASKS = 24
 let N_TRADES = 60
 
-function orderbook_get(asset0, asset1){
-  HORIZON.orderbook(asset0, asset1).limit(N_BIDS).stream({onmessage: orderbook_stream})  // .limit() doesn't work!
+let TRADES = []
+
+
+// ---------------------------------------------------------------------------------------------------
+function orderbook_get(buying_asset, selling_asset){
+  HORIZON.orderbook(buying_asset, selling_asset).limit(N_BIDS).stream({onmessage: orderbook_stream})  // .limit() doesn't work!
   HORIZON.ledgers().order('desc').limit(1).call().then(ledgers_callback2).catch(error_show)
 }
 
@@ -162,6 +171,7 @@ function orderbook_stream(response){
   let date = new Date(Date.now())
   doc.querySelector('#spread_absolute').innerText = `${spread_absolute.toFixed(7)}`
   doc.querySelector('#spread_relative').innerText = `${spread_relative.toFixed(7)}`
+  doc.querySelector('#spread_absolute_title').innerText = `Spread (${url_get('selling_asset_code')})`
 
   bids_make(bids)
   asks_make(asks)
@@ -202,27 +212,40 @@ function ledger_stream2(response){
 
 
 // ---------------------------------------------------------------------------------------------------
-function trades_get(asset0, asset1){
-  HORIZON.orderbook(asset0, asset1).trades().order('desc').limit(1).call().then(trades_callback0)
+function trades_init(buying_asset, selling_asset){
+  HORIZON.orderbook(buying_asset, selling_asset).trades().order('desc').limit(1).call().then(trades_get)
 }
 
-function trades_callback0(response){
+function trades_get(response){
+  // let trade_eventsource = HORIZON.orderbook(buying_asset, selling_asset).trades().stream({onmessage: trade_stream}) // Doesn't work!
+
   let last_cursor = response.records[0].paging_token
-  HORIZON.orderbook(asset0, asset1).trades().cursor(last_cursor).order('desc').limit(200).call().then(trades_callback1)
-  // let trade_eventsource = HORIZON.orderbook(asset0, asset1).trades().stream({onmessage: trade_stream}) // Doesn't work!
+  HORIZON.orderbook(buying_asset, selling_asset).trades().cursor(last_cursor).order('desc').limit(200).call()
+    .then(trades_collect)
+    // .then(trades_collect)  // It works!
+    // .then(trades_collect)  // It works!
+    .then(trades_table_build)
 }
 
-function trades_callback1(response){
-  let trades = response.records
+function trades_collect(response){
+  Array.prototype.push.apply(TRADES, response.records)
+
+  let last_cursor = response.records[response.records.length - 1].paging_token
+  return HORIZON.orderbook(buying_asset, selling_asset).trades().cursor(last_cursor).order('desc').limit(200).call()
+}
+
+function trades_table_build(response){
+  Array.prototype.push.apply(TRADES, response.records)
+
   let trades_table = doc.querySelector('#trades_table')
   let trades_tbody_html = ''      
 
-  for(let i=0; i < N_TRADES; ++i){
-    let date = time_parse(trades[i].created_at)
-    let price = (trades[i].bought_amount / trades[i].sold_amount).toFixed(7)
-    let volume = trades[i].bought_amount
+  for(let i=0; i < Math.min(N_TRADES, TRADES.length-1); ++i){
+    let date = time_parse(TRADES[i].created_at)
+    let price = (TRADES[i].bought_amount / TRADES[i].sold_amount).toFixed(7)
+    let volume = TRADES[i].bought_amount
 
-    let price_prev = (trades[i+1].bought_amount / trades[i+1].sold_amount).toFixed(7)
+    let price_prev = (TRADES[i+1].bought_amount / TRADES[i+1].sold_amount).toFixed(7)
     let price_style = price >= price_prev ? 'mdl-color-text--green' : 'mdl-color-text--red'
 
     trades_tbody_html += `<tr><td>${volume}</td><td class='${price_style}'>${price}</td><td>${date}</td></tr>`
@@ -231,33 +254,26 @@ function trades_callback1(response){
   trades_table.tBodies[0].innerHTML = trades_tbody_html
   // created_at bought_amount bought_asset_code bought_asset_issuer bought_asset_type sold_amount sold_asset_code sold_asset_issuer sold_asset_type
 
-  candlestick_integral(trades)  // Compute the candlestick-integral of a (long) sequence of trades!
+  candlestick_integral()
 }
 
-
 // Compute the candlestick-integral of a (long) sequence of trades!
-function candlestick_integral(trades){
-  trades.reverse()  // Now trades are in ASCENDING order! =D
-
-  // for(let trade of trades){
-  //   trade = trade_get(trade)
-  //   let date = trade.date
-  //   let price = trade.price
-  //   let volume = trade.volume
-  //   // print(trade)
-  //   // print(time_parse(trade.created_at), (trade.bought_amount / trade.sold_amount).toFixed(7), trade.bought_amount, trade.bought_asset_type, trade.bought_asset_code, trade.sold_amount, trade.sold_asset_type, trade.sold_asset_code)
-  // }
+function candlestick_integral(){
+  TRADES.reverse()  // Now trades are in ASCENDING order! =D
+  print('TRADES.length', TRADES.length)
+  // for(let trade of TRADES) print(trade.bought_amount, trade.sold_amount)
 
   let dates = []
-  for(let trade of trades)
-    dates.push(date2secs(trade.created_at))
-  // print(dates)
+  for(let trade of TRADES)  dates.push(date2secs(trade.created_at))
+  // print(dates.length, dates)
 
   let first_date = dates[0]
   let last_date = dates[dates.length - 1]
   let INTERVAL = 1 * 5 * 60  // In seconds!
   let n_intervals = Math.ceil((last_date - first_date) / INTERVAL)
   // print(n_intervals, dates)
+
+  // for(let i=1; i<dates.length; ++i)  print(dates[i-1] <= dates[i], dates[i])
 
   let indices_master = []  // A 2-array!
   for(let i=0; i < n_intervals; ++i){
@@ -274,7 +290,7 @@ function candlestick_integral(trades){
 
     let candlestick = []
     for(let index of indices){
-      let trade = trade_get(trades[index])
+      let trade = trade_get(TRADES[index])
       candlestick.push(trade)
     }
 
@@ -294,9 +310,7 @@ function candlestick_integral(trades){
     }
   }
 
-  // print(CANDLESTICKS)
-  // for(let candlestick of CANDLESTICKS)
-  //   print(`${candlestick.date.toISOString()}, ${candlestick.open}, ${candlestick.high}, ${candlestick.low}, ${candlestick.close}, ${candlestick.volume}`)
+  // for(let candlestick of CANDLESTICKS)  print(`${candlestick.date.toISOString()}, ${candlestick.open.toFixed(7)}, ${candlestick.high.toFixed(7)}, ${candlestick.low.toFixed(7)}, ${candlestick.close.toFixed(7)}, ${candlestick.volume}`)
 
   // ---------------------
   charts_draw(CANDLESTICKS)
@@ -326,32 +340,17 @@ function trade_integral(trades){
     low = Math.min(trade.price, low)
     volume += trade.volume
   }
+  if(isNaN(high))   high = open
+  if(isNaN(low))    low = open
 
   return {date:date, open:open, high:high, low:low, close:close, volume:volume}
 }
 
 
+
+
 // ---------------------------------------------------------------------------------------------------
-function exchange_title(asset0_code, asset1_code){
-  doc.querySelector('#exchange').innerText = `Exchange ${asset0_code}/${asset1_code}`
-}
-
-function bidask_title(asset0_code, asset1_code){
-  doc.querySelector('#bids_title').innerText = `Bids (${asset1_code})`
-  doc.querySelector('#asks_title').innerText = `Asks (${asset1_code})`
-}
-
-function market_components(market){
-  let table = doc.querySelector('#market_components_table')
-  let tbody_html = ''
-  for(let component of market)
-    tbody_html += `<tr><td>${component}</td></tr>`
-  table.tBodies[0].innerHTML = tbody_html
-}
-
-
-
-
+// ---------------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------------
 function charts_draw(candlesticks){
   let chart_width = doc.querySelector('#chart0').clientWidth
@@ -359,7 +358,6 @@ function charts_draw(candlesticks){
   rsi_draw('chart1', candlesticks, chart_width, 240)
   stochastic_draw('chart2', candlesticks, chart_width, 240)
   williams_draw('chart3', candlesticks, chart_width, 240)
-
 }
 
 // chart0
@@ -428,12 +426,7 @@ function candlestick_draw(div_id, candlesticks, name, width_box, height_box){
   yPercentInit = yPercent.copy()
   draw()
 
-  function reset(){
-    zoom.scale(1)
-    zoom.translate([0, 0])
-    draw()
-  }
-
+  // ---------------------
   function zoomed(){
     x.zoomable().domain(d3.event.transform.rescaleX(zoomableInit).domain())
     y.domain(d3.event.transform.rescaleY(yInit).domain())
@@ -447,7 +440,7 @@ function candlestick_draw(div_id, candlesticks, name, width_box, height_box){
     svg.select('g.volume.axis').call(volumeAxis)
     svg.select('g.percent.axis').call(percentAxis)
 
-    // We know the data does not change, a simple refresh that does not perform data joins will suffice.
+    // We know the data does not change, so a simple refresh that does not perform data joins will suffice
     svg.select('g.candlestick').call(candlestick.refresh)
     svg.select('g.volume').call(volume.refresh)
     svg.select('g.sma.ma-0').call(sma0.refresh)
@@ -526,7 +519,7 @@ function stochastic_draw(div_id, candlesticks, width_box, height_box){
      .append('text').attr('transform', 'rotate(-90)').attr('y', 6).attr('dy', '.71em').style('text-anchor', 'end').text('Stochastic Oscillator')
 
   draw(data)  // Data to display initially
-  d3.select('button').on('click', function(){ draw(data) }).style('display', 'inline')  // Only want this button to be active if the data has loaded
+  // d3.select('button').on('click', function(){ draw(data) }).style('display', 'inline')  // Only want this button to be active if the data has loaded
 
   function draw(data){
       var stochasticData = techan.indicator.stochastic()(data)
@@ -582,6 +575,40 @@ function williams_draw(div_id, candlesticks, width_box, height_box){
       svg.selectAll('g.y.axis').call(yAxis)
   }
 }
+
+
+
+
+// ---------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------
+function btn_disable(btn_id){
+  let btn = doc.querySelector(`#${btn_id}`)
+  btn.disabled = true
+  btn.classList.add('mdl-button--disabled')
+}
+
+function btn_enable(btn_id){
+  let btn = doc.querySelector(`#${btn_id}`)
+  btn.disabled = false
+  btn.classList.remove('mdl-button--disabled')
+}
+
+function spinner_disable(spinner_id){
+  doc.querySelector(`#${spinner_id}`).classList.remove('is-active')
+}
+
+function spinner_enable(spinner_id){
+  doc.querySelector(`#${spinner_id}`).classList.add('is-active')
+}
+
+function generic_error_snackbar_show(error){
+  let snackbar_div = doc.querySelector('#snackbar_error')
+  let snackbar_data = {message: error}
+  // snackbar_div.MaterialSnackbar.showSnackbar(snackbar_data)
+  print(error)
+}
+
 
 /*
 GAECJVZ55YDSVO7KYNWSTFFTGF4AJ7DJH6O6WTTR33KCA2UBT4KOKBLY SAUI2E4EM7UW6PZ6FWXNRZC7GOTTHQHECXMQFWYVY43XCN7CLGRGEXWG

@@ -110,6 +110,9 @@
     let PI = Math.PI
     let TAU = 2 * PI
 
+    let background = new Image()
+    background.src = 'space.jpg'
+
     // ----------------------------------------------------------------------
     /*
     Internally, paths are stored as a list of sub-paths (lines, arcs, etc) which together form a shape
@@ -170,7 +173,8 @@
       let width = canvas.width
       let height = canvas.height
 
-      ctx.fillStyle = rgb(.1, .1, .1)
+      ctx.drawImage(background, 0, 0)
+      ctx.fillStyle = rgba(.1, .1, .1, .5)
       ctx.fillRect(0, 0, width, height)
 
       ctx.strokeStyle = '#f44336'
