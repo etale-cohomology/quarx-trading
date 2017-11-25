@@ -164,7 +164,8 @@ function filter_binary_values(array, min, max){
 // ---------------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------------
-let HORIZON = new StellarSdk.Server('https://horizon.stellar.org')
+let HORIZON_URL = 'https://horizon.stellar.org'
+let HORIZON = new StellarSdk.Server(HORIZON_URL)
 
 
 // ---------------------------------------------------------------------------------------------------
@@ -254,7 +255,7 @@ function trades_get(response){
 
   let last_cursor = response.records[0].paging_token
   HORIZON.orderbook(selling_asset, buying_asset).trades().cursor(last_cursor).order('desc').limit(200).call()
-    .then(trades_collect)  // It works!
+    // .then(trades_collect)  // It works!
     // .then(trades_collect)  // It works!
     // .then(trades_collect)  // It works!
     .then(trades_table_build)  // It works!
@@ -290,7 +291,9 @@ function trades_table_build(response){
     let price_prev = (TRADES[i+1].bought_amount / TRADES[i+1].sold_amount).toFixed(7)
     let price_style = price >= price_prev ? 'mdl-color-text--green' : 'mdl-color-text--red'
 
-    trades_tbody_html += `<tr><td>${volume}</td><td class='${price_style}'>${price}</td><td>${date}</td></tr>`
+    let href = `${HORIZON_URL}/order_book/trades?selling_asset_type=${TRADES[i+1].sold_asset_type}&selling_asset_code=${TRADES[i+1].sold_asset_code}&selling_asset_issuer=${TRADES[i+1].sold_asset_issuer}&buying_asset_type=${TRADES[i+1].bought_asset_type}&buying_asset_code=${TRADES[i+1].bought_asset_code}&buying_asset_issuer=${TRADES[i+1].bought_asset_issuer}&cursor=${TRADES[i+1].id}&limit=1`
+    // print(href)
+    trades_tbody_html += `<tr><td><a href='${href}' class='monospace'>${volume}</a></td><td class='${price_style}'><a href='${href}' class='monospace'>${price}</a></td><td><a href='${href}' class='monospace'>${date}</a></td></tr>`
   }
 
   trades_table.tBodies[0].innerHTML = trades_tbody_html

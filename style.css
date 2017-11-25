@@ -10,6 +10,9 @@ a{ text-decoration:none; color:inherit; }
 .none{ display:none; }
 .hide{ display:none; }
 
+.montserrat{ font-family:'Montserrat'; }
+.monospace{ font-family:Monospace!important; }
+
 .border_none{ border:none; }
 .borderless{ border:none; }
 
@@ -128,6 +131,8 @@ html,body,div,h1,h2,h3,h4,h5,h6,p{ font-family:'Montserrat'; }
 .mdl-layout__drawer { border:none; }
 
 .drawer_header{ height:200px; background:url(quarx.png) no-repeat center; }
+
+/*.mdl-textfield__label{ font-family:'Montserrat'; }*/
 
 /*----------------------------------------------------------------------*/
 h1,h2,h3,h4,h5,h6,p{ color:#ffffff; }
