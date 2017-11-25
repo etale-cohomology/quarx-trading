@@ -177,7 +177,7 @@
                 <h2 id='card_title_buy' class='mdl-typography--headline vcenter_child bold'>Sell</h2>
                 <div class='mdl-layout-spacer'></div>
                 <button class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon' id='help_sell_asset1'><i class='material-icons'>help_outline</i></button>
-                <div class='mdl-tooltip' for='help_sell_asset1'><b>Sell</b> asset.<br>In the Stellar network, an <b>asset</b> is specified by two pieces of data: 1) an asset code and 2) an <b>asset issuer</b>. This means that, in order to sell an asset, you need both the asset code and the asset issuer. An asset issuer is an account that created and first sent an asset. All assets except Lumens have an issuer. In this page, the <b>asset issuer</b> is <i>already selected</i>.</div>
+                <div class='mdl-tooltip' for='help_sell_asset1' id='tooltip_sell_asset1'><br>In the Stellar network, an <b>asset</b> is specified by two pieces of data: 1) an asset code and 2) an <b>asset issuer</b>. This means that, in order to sell an asset, you need both the asset code and the asset issuer. An asset issuer is an account that created and first sent an asset. All assets except Lumens have an issuer. In this page, the <b>asset issuer</b> is <i>already selected</i>.</div>
               </div>
 
               <div class='mdl-card__supporting-text width_100'>
@@ -226,7 +226,7 @@
                 <h2 id='card_title_sell' class='mdl-typography--headline vcenter_child bold'>Sell</h2>
                 <div class='mdl-layout-spacer'></div>
                 <button class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon' id='help_sell_asset0'><i class='material-icons'>help_outline</i></button>
-                <div class='mdl-tooltip' for='help_sell_asset0'><b>Sell</b> asset.<br>In the Stellar network, an <b>asset</b> is specified by two pieces of data: 1) an asset code and 2) an <b>asset issuer</b>. This means that, in order to sell an asset, you need both the asset code and the asset issuer. An asset issuer is an account that created and first sent an asset. All assets except Lumens have an issuer. In this page, the <b>asset issuer</b> is <i>already selected</i>.</div>
+                <div class='mdl-tooltip' for='help_sell_asset0' id='tooltip_sell_asset0'><br>In the Stellar network, an <b>asset</b> is specified by two pieces of data: 1) an asset code and 2) an <b>asset issuer</b>. This means that, in order to sell an asset, you need both the asset code and the asset issuer. An asset issuer is an account that created and first sent an asset. All assets except Lumens have an issuer. In this page, the <b>asset issuer</b> is <i>already selected</i>.</div>
               </div>
 
               <div class='mdl-card__supporting-text width_100'>
@@ -300,6 +300,7 @@
             <a href='mass.html' class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color-text--white' role='presentation'><i class='material-icons'>extension</i></a>
             <a href='single.html' class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color-text--white' role='presentation'><i class='material-icons'>accessibility</i></a>
             <a href='xlm.html' class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color-text--white' role='presentation'><i class='material-icons'>view_week</i></a>
+            <a href='https://github.com/etale-cohomology/quarx-trading' class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color-text--white' role='presentation'><i class='material-icons'>business</i></a>
           </div>
 
           <div class='mdl-mini-footer--right-section'>
@@ -539,6 +540,8 @@
       doc.querySelector('#tooltip_sell_asset0_price').innerHTML = `<b>Price</b> for 1 unit of <b>${buying_asset_code}</b> in exchange for <b>${selling_asset_code}</b>.`
       doc.querySelector('#tooltip_sell_asset1_amount').innerHTML = `Amount of <b>${selling_asset_code}</b> to sell.`
       doc.querySelector('#tooltip_sell_asset0_amount').innerHTML = `Amount of <b>${buying_asset_code}</b> to sell.`
+      doc.querySelector('#tooltip_sell_asset1').innerHTML = `<b>Sell</b> your <b>${selling_asset_code}</b> in exchange for <b>${buying_asset_code}</b>.<br>An <b>asset</b> is given by 2 pieces of data: 1) an <b>asset code</b> and 2) an <b>asset issuer</b>. All assets except Lumens have an issuer. Here, the <b>issuer</b> is <i>already selected</i>.`
+      doc.querySelector('#tooltip_sell_asset0').innerHTML = `<b>Sell</b> your <b>${buying_asset_code}</b> in exchange for <b>${selling_asset_code}</b>.<br>An <b>asset</b> is given by 2 pieces of data: 1) an <b>asset code</b> and 2) an <b>asset issuer</b>. All assets except Lumens have an issuer. Here, the <b>issuer</b> is <i>already selected</i>.`
     }
 
     function market_components(market){

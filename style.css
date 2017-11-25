@@ -27,6 +27,7 @@ a{ text-decoration:none; color:inherit; }
 .flex_justify_space_around{ display:flex; justify-content:space-around; -webkit-justify-content:space-around; }
 .flex_justify_space_between{ display:flex; justify-content:space-between; -webkit-justify-content:space-between; }
 .flex_align_center{ display:flex; align-items:center; -webkit-align-items:center; }
+.flex_align_start{ display:flex; align-items:flex-start; -webkit-align-items:flex-start; }
 
 .margin_top{ margin-top:16px; }
 .margin_right{ margin-right:16px; }
@@ -98,6 +99,8 @@ a{ text-decoration:none; color:inherit; }
 
 .max_width_192px{ max-width:192px; }
 .max_width_216px{ max-width:216px; }
+
+.min_height_100vh{ min-height:100vh; }
 
 .bold{ font-weight:bold; }
 
