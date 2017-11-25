@@ -254,10 +254,10 @@ function trades_get(response){
 
   let last_cursor = response.records[0].paging_token
   HORIZON.orderbook(selling_asset, buying_asset).trades().cursor(last_cursor).order('desc').limit(200).call()
-    .then(trades_collect)
+    .then(trades_collect)  // It works!
     // .then(trades_collect)  // It works!
     // .then(trades_collect)  // It works!
-    .then(trades_table_build)
+    .then(trades_table_build)  // It works!
 }
 
 function trade_stream(response){
@@ -273,6 +273,11 @@ function trades_collect(response){
 
 function trades_table_build(response){
   Array.prototype.push.apply(TRADES, response.records)
+
+  TRADES = trades_purge_empty(TRADES)
+
+  print('TRADES', TRADES)
+  // for(let trade of TRADES) print(parseFloat(trade.bought_amount), parseFloat(trade.sold_amount), trade.bought_amount / trade.sold_amount)
 
   let trades_table = doc.querySelector('#trades_table')
   let trades_tbody_html = ''
@@ -294,10 +299,19 @@ function trades_table_build(response){
   candlestick_integral()
 }
 
+// Purge empty trades (ie. trades with 0 bought_amount or 0 sold_amount!
+function trades_purge_empty(trades){
+  let purged_trades = []
+  for(let i=0; i<trades.length; ++i)
+    if((trades[i].bought_amount > 0) && (trades[i].sold_amount > 0))
+      purged_trades.push(trades[i])
+  return purged_trades
+}
+
 // Compute the candlestick-integral of a (long) sequence of trades!
 function candlestick_integral(){
   TRADES.reverse()  // Now trades are in ASCENDING order! =D
-  print('TRADES.length', TRADES.length)
+  // print('TRADES', TRADES)
   // for(let trade of TRADES) print(trade.bought_amount, trade.sold_amount)
 
   let dates = []
