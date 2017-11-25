@@ -22,6 +22,25 @@ function undefined_to_NA(object){
 // ----------------------------------------------------------------------
 const average = (array) => array.reduce((a, b) => a + b) / array.length;
 
+
+// ---------------------
+Array.prototype.contains = function(v){
+  for(var i = 0; i < this.length; i++)
+    if(this[i] === v) return true
+  return false
+}
+
+Array.prototype.unique = function(){
+  var arr = []
+  for(var i = 0; i < this.length; i++)
+    if(!arr.contains(this[i]))  arr.push(this[i])
+  return arr
+}
+
+function round(number, precision){    
+  return +(Math.round(number + 'e+' + precision)  + 'e-' + precision)
+}
+
 // ----------------------------------------------------------------------
 function rand(min=0, max=1){
   return Math.random() * (max - min) + min;
@@ -145,7 +164,7 @@ function filter_binary_values(array, min, max){
 // ---------------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------------
-let HORIZON = new StellarSdk.Server('https://horizon.stellar.org')
+let HORIZON = new StellarSdk.Server('https://horizon-testnet.stellar.org')
 
 
 // ---------------------------------------------------------------------------------------------------
@@ -153,16 +172,18 @@ let N_BIDS = 24
 let N_ASKS = 24
 let N_TRADES = 60
 
-let TRADES = []
+let TRADES
 
 
 // ---------------------------------------------------------------------------------------------------
 function orderbook_get(buying_asset, selling_asset){
-  HORIZON.orderbook(buying_asset, selling_asset).limit(N_BIDS).stream({onmessage: orderbook_stream})  // .limit() doesn't work!
-  HORIZON.ledgers().order('desc').limit(1).call().then(ledgers_callback2).catch(error_show)
+  HORIZON.orderbook(selling_asset, buying_asset).limit(N_BIDS).stream({onmessage: orderbook_stream})  // .limit() doesn't work!
+  HORIZON.ledgers().order('desc').limit(1).call().then(ledgers_callback).catch(error_show)
 }
 
 function orderbook_stream(response){
+  // print('bids', response.bids)
+  // print('asks', response.asks)
   let bids = response.bids.slice(0, N_BIDS)
   let asks = response.asks.slice(0, N_ASKS)
   let spread_absolute = asks[0].price - bids[0].price
@@ -170,42 +191,53 @@ function orderbook_stream(response){
 
   let date = new Date(Date.now())
   doc.querySelector('#spread_absolute').innerText = `${spread_absolute.toFixed(7)}`
-  doc.querySelector('#spread_relative').innerText = `${spread_relative.toFixed(7)}`
-  doc.querySelector('#spread_absolute_title').innerText = `Spread (${url_get('selling_asset_code')})`
+  doc.querySelector('#spread_relative').innerText = `${spread_relative.toFixed(3)}`
+  doc.querySelector('#spread_absolute_title').innerText = `Spread (${url_get('buying_asset_code')})`
 
-  bids_make(bids)
-  asks_make(asks)
+  bids_table_make(bids)
+  asks_table_make(asks)
 }
 
-function limit_order_get(limit_order){
-  return [limit_order.price, limit_order.amount]
-}
-
-function bids_make(bids){
+function bids_table_make(bids){
   let bids_table = doc.querySelector('#bids_table')
   let bids_html = ''
-  for(let bid of bids.reverse())
-    bids_html += `<tr><td>${bid.amount}</td><td class='mdl-color-text--green'>${bid.price}</td></tr>`
+
+  bids[0].amount_integral = parseFloat(bids[0].amount)  // Market size integral: base step!
+  for(let i=1; i<bids.length; ++i)  // Market size integral: inductive step!
+    bids[i].amount_integral = bids[i-1].amount_integral + parseFloat(bids[i].amount)
+
+  for(let bid of bids.reverse()){
+    bid.market_depth = bid.amount_integral / bids[0].amount_integral
+    let style = `style='background:linear-gradient(to right, #222 ${100 * (1 - bid.market_depth)}%, #93cf96 ${100 * (1 - bid.market_depth)}%);'`
+    bids_html += `<tr ${style}><td>${bid.amount_integral.toFixed(7)}</td><td>${bid.amount}</td><td class='mdl-color-text--green-800'>${bid.price}</td></tr>`
+  }
 
   bids_table.tBodies[0].innerHTML = bids_html
 }
 
-function asks_make(asks){
+function asks_table_make(asks){
   let asks_table = doc.querySelector('#asks_table')
   let asks_html = ''
-  for(let ask of asks)
-    asks_html += `<tr><td>${ask.amount}</td><td class='mdl-color-text--red'>${ask.price}</td></tr>`
+
+  asks[0].amount_integral = parseFloat(asks[0].amount)  // Market size integral: base step
+  for(let i=1; i<asks.length; ++i)  // Market size integral: recursive step!
+    asks[i].amount_integral = asks[i-1].amount_integral + parseFloat(asks[i].amount)
+
+  for(let ask of asks){
+    ask.market_depth = ask.amount_integral / asks[asks.length - 1].amount_integral
+    let style = `style='background:linear-gradient(to right, #222 ${100 * (1 - ask.market_depth)}%, #f88e86 ${100 * (1 - ask.market_depth)}%);'`
+    asks_html += `<tr ${style}><td>${ask.amount_integral.toFixed(7)}</td><td>${ask.amount}</td><td class='mdl-color-text--red-800'>${ask.price}</td></tr>`
+  }
 
   asks_table.tBodies[0].innerHTML = asks_html
 }
 
-function ledgers_callback2(response){
-  let last_cursor = response.records[0].paging_token
-  HORIZON.ledgers().cursor(last_cursor).order('asc').limit(1).stream({onmessage: ledger_stream2})
+function ledgers_callback(response){
+  HORIZON.ledgers().cursor('now').stream({onmessage: ledgers_stream})
   doc.querySelector('#ledger_sequence').innerText = `Ledger ${response.records[0].sequence}`
 }
 
-function ledger_stream2(response){
+function ledgers_stream(response){
   doc.querySelector('#orderbook_date').innerText = `Orderbook updated ${time_parse(response.closed_at)}`
   doc.querySelector('#ledger_sequence').innerText = `Ledger ${response.sequence}`
 }
@@ -213,32 +245,37 @@ function ledger_stream2(response){
 
 // ---------------------------------------------------------------------------------------------------
 function trades_init(buying_asset, selling_asset){
-  HORIZON.orderbook(buying_asset, selling_asset).trades().order('desc').limit(1).call().then(trades_get)
+  TRADES = []  // Reset global TRADES!
+  HORIZON.orderbook(selling_asset, buying_asset).trades().order('desc').limit(1).call().then(trades_get)
 }
 
 function trades_get(response){
   // let trade_eventsource = HORIZON.orderbook(buying_asset, selling_asset).trades().stream({onmessage: trade_stream}) // Doesn't work!
 
   let last_cursor = response.records[0].paging_token
-  HORIZON.orderbook(buying_asset, selling_asset).trades().cursor(last_cursor).order('desc').limit(200).call()
+  HORIZON.orderbook(selling_asset, buying_asset).trades().cursor(last_cursor).order('desc').limit(200).call()
     .then(trades_collect)
     // .then(trades_collect)  // It works!
     // .then(trades_collect)  // It works!
     .then(trades_table_build)
 }
 
+function trade_stream(response){
+  print(arguments.callee.name, response)
+}
+
 function trades_collect(response){
   Array.prototype.push.apply(TRADES, response.records)
 
   let last_cursor = response.records[response.records.length - 1].paging_token
-  return HORIZON.orderbook(buying_asset, selling_asset).trades().cursor(last_cursor).order('desc').limit(200).call()
+  return HORIZON.orderbook(selling_asset, buying_asset).trades().cursor(last_cursor).order('desc').limit(200).call()
 }
 
 function trades_table_build(response){
   Array.prototype.push.apply(TRADES, response.records)
 
   let trades_table = doc.querySelector('#trades_table')
-  let trades_tbody_html = ''      
+  let trades_tbody_html = ''
 
   for(let i=0; i < Math.min(N_TRADES, TRADES.length-1); ++i){
     let date = time_parse(TRADES[i].created_at)
@@ -478,7 +515,7 @@ function rsi_draw(div_id, candlesticks, width_box, height_box){
   svg.append('g').attr('class', 'y axis').append('text').attr('transform', 'rotate(-90)').attr('y', 6).attr('dy', '.71em').style('text-anchor', 'end').text('RSI')
 
   draw(data)  // Data to display initially
-  // d3.select('button').on('click', function(){ draw(data) }).style('display', 'inline')  // Only want this button to be active if the data has loaded
+  // d3.select('button').on('click', functiuuon(){ draw(data) }).style('display', 'inline')  // Only want this button to be active if the data has loaded
 
   function draw(data){
     var rsiData = techan.indicator.rsi()(data)

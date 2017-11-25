@@ -89,123 +89,118 @@
       <main class='mdl-layout__content mdl-color--grey-900'>
 
         <!-- ------------------------------------------------- -->
-        <div class='mdl-grid mdl-grid--no-spacing mdl-color-text--white margin_top flex_justify_center'>
+        <div class='mdl-grid mdl-grid--no-spacing mdl-color-text--white margin_top'>
 
           <!-- --------------------- -->
-          <div class='mdl-cell mdl-cell--12-col'><h1 id='exchange' class='mdl-typography--headline montserrat bold margin_left'>Exchange</h1></div>
+          <div class='mdl-cell mdl-cell--12-col'>
+            <h1 id='exchange' class='mdl-typography--headline montserrat bold margin_left'>Exchange</h1>
+          </div>
 
           <!-- --------------------- -->
-          <div class='mdl-cell mdl-cell--9-col'>
+          <div class='mdl-cell mdl-cell--8-col'>
 
             <!-- ------- -->
-            <div class='mdl-grid'>
+            <div class='mdl-grid flex_justify_center'>
               <div class='mdl-card mdl-shadow--4dp mdl-color--grey-900'><div id='chart0' class='mdl-cell mdl-cell--12-col'></div></div>
               <div class='mdl-card mdl-shadow--4dp mdl-color--grey-900'><div id='chart1' class='mdl-cell mdl-cell--12-col'></div></div>
               <div class='mdl-card mdl-shadow--4dp mdl-color--grey-900'><div id='chart2' class='mdl-cell mdl-cell--12-col'></div></div>
               <div class='mdl-card mdl-shadow--4dp mdl-color--grey-900'><div id='chart3' class='mdl-cell mdl-cell--12-col'></div></div>
-            </div>
-
-          </div>
-
-          <!-- --------------------- -->
-          <div class='mdl-cell mdl-cell--2-col'>
-
-            <div class='mdl-grid mdl-grid--no-spacing flex_justify_center'>
 
               <div class='mdl-cell mdl-cell--12-col'>
                 <h1 id='orderbook_date' class='montserrat text_center'>Orderbook updated</h1>
                 <h2 id='ledger_sequence' class='montserrat text_center margin_bottom'>Ledger</h2>
               </div>
-              
-              <div class='mdl-cell mdl-cell--6-col'>
+            </div>
 
-                <h2 id='bids_title' class='montserrat'>Bids</h2>
-                <table id='bids_table' class='mdl-data-table mdl-js-data-table mdl-shadow--2dp mdl-color--grey-900 bids_table'>
-                  <thead><tr><th>Market size</th><th>Price</th></tr></thead>
-                  <tbody></tbody>
-                </table>
+          </div>
 
-                <div class='mdl-card mdl-shadow--2dp mdl-color--grey-900'>
-                  <div id='spread_absolute_title' class='mdl-card__supporting-text mdl-color-text--white montserrat'>Spread</div>
-                  <div class='mdl-card__title'>
-                    <div id='spread_absolute' class='mdl-card__title-text mdl-color-text--white montserrat'></div>
-                  </div>
+          <!-- --------------------- -->
+          <div class='mdl-cell mdl-cell--2-col mdl-cell--4-col-tablet mdl-cell--4-col-phone'>
+
+            <h2 id='bids_title' class='text_center'>Bids</h2>
+            <table id='bids_table' class='mdl-data-table mdl-js-data-table mdl-shadow--2dp mdl-color--grey-900 width_96'>
+              <thead><tr><th>Market size integral</th><th>Market size</th><th>Price</th></tr></thead>
+              <tbody></tbody>
+            </table>
+
+
+            <div class='mdl-grid mdl-grid--no-spacing'>
+
+              <div class='mdl-card spread_card mdl-shadow--2dp mdl-color--grey-900'>
+                <div id='spread_absolute_title' class='mdl-card__supporting-text mdl-color-text--white montserrat'>Spread</div>
+                <div class='mdl-card__title'>
+                  <div id='spread_absolute' class='mdl-card__title-text mdl-color-text--white montserrat'></div>
                 </div>
-
-                <div class='mdl-card mdl-shadow--2dp mdl-color--grey-900'>
-                  <div class='mdl-card__supporting-text mdl-color-text--white montserrat'>Spread (%)</div>
-                  <div class='mdl-card__title'>
-                    <div id='spread_relative' class='mdl-card__title-text mdl-color-text--white montserrat'></div>
-                  </div>
-                </div>
-
-                <h2 id='asks_title' class='montserrat'>Asks</h2>
-                <table id='asks_table' class='mdl-data-table mdl-js-data-table mdl-shadow--2dp mdl-color--grey-900 asks_table'>
-                  <thead><tr><th>Market size</th><th>Price</th></tr></thead>
-                  <tbody></tbody>
-                </table>
-
               </div>
 
-              <div class='mdl-cell mdl-cell--6-col'>
-                <h1 id='trades_last'>Last trades</h1>
-                <table id='trades_table' class='mdl-data-table mdl-js-data-table mdl-shadow--2dp mdl-color--grey-900'>
-                  <thead><tr><th>Trade size</th><th>Price</th><th>Time</th></tr></thead>
-                  <tbody></tbody>
-                </table>
+              <div class='mdl-card spread_card mdl-shadow--2dp mdl-color--grey-900'>
+                <div class='mdl-card__supporting-text mdl-color-text--white montserrat'>Spread (%)</div>
+                <div class='mdl-card__title'>
+                  <div id='spread_relative' class='mdl-card__title-text mdl-color-text--white montserrat'></div>
+                </div>
               </div>
 
             </div>
 
+
+            <h2 id='asks_title' class='text_center'>Asks</h2>
+            <table id='asks_table' class='mdl-data-table mdl-js-data-table mdl-shadow--2dp mdl-color--grey-900 width_96'>
+              <thead><tr><th>Market size integral</th><th>Market size</th><th>Price</th></tr></thead>
+              <tbody></tbody>
+            </table>
+
+          </div>
+
+          <!-- --------------------- Spacer! =D -->
+          <!-- <div class='mdl-cell--stretch mdl-cell--1-col'></div> -->
+
+          <!-- --------------------- -->
+          <div class='mdl-cell mdl-cell--2-col mdl-cell--4-col-tablet mdl-cell--4-col-phone'>
+            <h1 id='trades_last' class='text_center'>Last trades</h1>
+            <table id='trades_table' class='mdl-data-table mdl-js-data-table mdl-shadow--2dp mdl-color--grey-900 width_96'>
+              <thead><tr><th>Trade size</th><th>Price</th><th>Time</th></tr></thead>
+              <tbody></tbody>
+            </table>
           </div>
 
         </div>  <!-- END mdl-grid -->
 
         <!-- ------------------------------------------------- -->
-        <div class='mdl-grid mdl-grid--no-spacing mdl-color-text--white margin_top flex_justify_center margin_top5'>
+        <div class='mdl-grid mdl-grid--no-spacing mdl-color-text--white flex_justify_center'>
 
           <!-- --------------------- -->
-          <div class='mdl-cell mdl-cell--6-col flex_justify_center'>
+          <div class='mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet flex_justify_center'>
 
             <div class='mdl-card mdl-shadow--4dp width_100 mdl-color--grey-800'>
 
               <div class='mdl-card__title mdl-color--black mdl-color-text--white vcenter_parent'>
-                <h2 id='card_title_buy' class='mdl-typography--headline vcenter_child bold'>Buy</h2>
+                <h2 id='card_title_buy' class='mdl-typography--headline vcenter_child bold'>Sell</h2>
                 <div class='mdl-layout-spacer'></div>
-                <button class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon' id='help_buy'><i class='material-icons'>help_outline</i></button>
-                <div class='mdl-tooltip' for='help_buy'>Buy asset.</div>
+                <button class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon' id='help_sell_asset1'><i class='material-icons'>help_outline</i></button>
+                <div class='mdl-tooltip' for='help_sell_asset1'><b>Sell</b> asset.<br>In the Stellar network, an <b>asset</b> is specified by two pieces of data: 1) an asset code and 2) an <b>asset issuer</b>. This means that, in order to sell an asset, you need both the asset code and the asset issuer. An asset issuer is an account that created and first sent an asset. All assets except Lumens have an issuer. In this page, the <b>asset issuer</b> is <i>already selected</i>.</div>
               </div>
 
               <div class='mdl-card__supporting-text width_100'>
-                <button class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white margin_right3' id='help_buy_price'><i class='material-icons'>explore</i></button>
-                <div class='mdl-tooltip' for='help_buy_price'>Buying price for the asset.</div>
+                <button class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white margin_right3' id='help_sell_asset1_price'><i class='material-icons'>explore</i></button>
+                <div class='mdl-tooltip' for='help_sell_asset1_price' id='tooltip_sell_asset1_price'><b>Price</b> for 1 unit of the <b>selling asset</b> (see table title) in exchange for the counter asset.</div>
                 <div class='mdl-textfield mdl-js-textfield main_textfield'>
                   <input class='mdl-textfield__input' type='text' id='input_buy_price'/>
-                  <label class='mdl-textfield__label mdl-color-text--grey-500'>Buying price</label>
+                  <label class='mdl-textfield__label mdl-color-text--grey-500'>Selling price</label>
                 </div>
               </div>
 
               <div class='mdl-card__supporting-text width_100'>
-                <button class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white margin_right3' id='help_buy_amount'><i class='material-icons'>whatshot</i></button>
-                <div class='mdl-tooltip' for='help_buy_amount'>Amount to buy.</div>
+                <button class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white margin_right3' id='help_sell_asset1_amount'><i class='material-icons'>whatshot</i></button>
+                <div class='mdl-tooltip' for='help_sell_asset1_amount' id='tooltip_sell_asset1_amount'>Amount to sell of the <b>selling asset</b> (see table title).</div>
                 <div class='mdl-textfield mdl-js-textfield main_textfield'>
                   <input class='mdl-textfield__input' type='text' id='input_buy_amount'/>
-                  <label class='mdl-textfield__label mdl-color-text--grey-500'>Amount to buy</label>
+                  <label class='mdl-textfield__label mdl-color-text--grey-500'>Amount to sell</label>
                 </div>
               </div>
 
               <div class='mdl-card__supporting-text width_100'>
-                <button class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white margin_right3' id='help_buy_asset_issuer'><i class='material-icons'>gavel</i></button>
-                <div class='mdl-tooltip' for='help_buy_asset_issuer'>In the Stellar network, an <b>asset</b> is specified by two pieces of data: 1) an asset code and 2) an <b>asset issuer</b>. This means that, in order to buy an asset, you need both the asset code and the asset issuer. An asset issuer is an account that created and first sent an asset. All assets except Lumens have an issuer.</div>
-                <div class='mdl-textfield mdl-js-textfield main_textfield'>
-                  <input class='mdl-textfield__input' type='text' id='input_buy_asset_issuer'/>
-                  <label class='mdl-textfield__label mdl-color-text--grey-500'>Asset issuer</label>
-                </div>
-              </div>
-
-              <div class='mdl-card__supporting-text width_100'>
-                <button class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white margin_right3' id='help_buy_secret_seed'><i class='material-icons'>lock_outline</i></button>
-                <div class='mdl-tooltip' for='help_buy_secret_seed'>Secret seed.</div>
+                <button class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white margin_right3' id='help_sell_asset1_secret_seed'><i class='material-icons'>lock_outline</i></button>
+                <div class='mdl-tooltip' for='help_sell_asset1_secret_seed'>In order to cryptographically <b>sign</b> a <b>transaction</b> to <i>submit</i> to the Stellar network, you must use your <b>secret seed</b>. We <i>never</i> store your secret seed anywhere.</div>
                 <div class='mdl-textfield mdl-js-textfield main_textfield'>
                   <input class='mdl-textfield__input' type='text' id='input_buy_secret_seed'/>
                   <label class='mdl-textfield__label mdl-color-text--grey-500'>Secret seed</label>
@@ -223,20 +218,20 @@
           </div>
 
           <!-- --------------------- -->
-          <div class='mdl-cell mdl-cell--6-col flex_justify_center'>
+          <div class='mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet flex_justify_center'>
 
             <div class='mdl-card mdl-shadow--4dp width_100 mdl-color--grey-800'>
 
               <div class='mdl-card__title mdl-color--black mdl-color-text--white vcenter_parent'>
                 <h2 id='card_title_sell' class='mdl-typography--headline vcenter_child bold'>Sell</h2>
                 <div class='mdl-layout-spacer'></div>
-                <button class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon' id='help_sell'><i class='material-icons'>help_outline</i></button>
-                <div class='mdl-tooltip' for='help_sell'>Sell asset.</div>
+                <button class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon' id='help_sell_asset0'><i class='material-icons'>help_outline</i></button>
+                <div class='mdl-tooltip' for='help_sell_asset0'><b>Sell</b> asset.<br>In the Stellar network, an <b>asset</b> is specified by two pieces of data: 1) an asset code and 2) an <b>asset issuer</b>. This means that, in order to sell an asset, you need both the asset code and the asset issuer. An asset issuer is an account that created and first sent an asset. All assets except Lumens have an issuer. In this page, the <b>asset issuer</b> is <i>already selected</i>.</div>
               </div>
 
               <div class='mdl-card__supporting-text width_100'>
-                <button class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white margin_right3' id='help_sell_price'><i class='material-icons'>explore</i></button>
-                <div class='mdl-tooltip' for='help_sell_price'>Selling price for the asset.</div>
+                <button class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white margin_right3' id='help_sell_asset0_price'><i class='material-icons'>explore</i></button>
+                <div class='mdl-tooltip' for='help_sell_asset0_price' id='tooltip_sell_asset0_price'><b>Price</b> for 1 unit of the <b>selling asset</b> (see table title) in exchange for the counter asset.</div>
                 <div class='mdl-textfield mdl-js-textfield main_textfield'>
                   <input class='mdl-textfield__input' type='text' id='input_sell_price'/>
                   <label class='mdl-textfield__label mdl-color-text--grey-500'>Selling price</label>
@@ -244,8 +239,8 @@
               </div>
 
               <div class='mdl-card__supporting-text width_100'>
-                <button class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white margin_right3' id='help_sell_amount'><i class='material-icons'>whatshot</i></button>
-                <div class='mdl-tooltip' for='help_sell_amount'>Amount to sell.</div>
+                <button class='mdl-button mdl-js-button mdl-js-button-ripple-effect mdl-button--icon mdl-color--white margin_right3' id='help_sell_asset0_amount'><i class='material-icons'>whatshot</i></button>
+                <div class='mdl-tooltip' for='help_sell_asset0_amount' id='tooltip_sell_asset0_amount'>Amount to sell of the <b>selling asset</b> (see table title).</div>
                 <div class='mdl-textfield mdl-js-textfield main_textfield'>
                   <input class='mdl-textfield__input' type='text' id='input_sell_amount'/>
                   <label class='mdl-textfield__label mdl-color-text--grey-500'>Amount to sell</label>
@@ -253,17 +248,8 @@
               </div>
 
               <div class='mdl-card__supporting-text width_100'>
-                <button class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white margin_right3' id='help_sell_asset_issuer'><i class='material-icons'>gavel</i></button>
-                <div class='mdl-tooltip' for='help_sell_asset_issuer'>In the Stellar network, an <b>asset</b> is specified by two pieces of data: 1) an asset code and 2) an <b>asset issuer</b>. This means that, in order to sell an asset, you need both the asset code and the asset issuer. An asset issuer is an account that created and first sent an asset. All assets except Lumens have an issuer.</div>
-                <div class='mdl-textfield mdl-js-textfield main_textfield'>
-                  <input class='mdl-textfield__input' type='text' id='input_sell_asset_issuer'/>
-                  <label class='mdl-textfield__label mdl-color-text--grey-500'>Asset issuer</label>
-                </div>
-              </div>
-
-              <div class='mdl-card__supporting-text width_100'>
-                <button class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white margin_right3' id='help_sell_secret_seed'><i class='material-icons'>lock_outline</i></button>
-                <div class='mdl-tooltip' for='help_sell_secret_seed'>Secret seed.</div>
+                <button class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white margin_right3' id='help_sell_asset0_secret_seed'><i class='material-icons'>lock_outline</i></button>
+                <div class='mdl-tooltip' for='help_sell_asset0_secret_seed'>In order to cryptographically <b>sign</b> a <b>transaction</b> to <i>submit</i> to the Stellar network, you must use your <b>secret seed</b>. We <i>never</i> store your secret seed anywhere.</div>
                 <div class='mdl-textfield mdl-js-textfield main_textfield'>
                   <input class='mdl-textfield__input' type='text' id='input_sell_secret_seed'/>
                   <label class='mdl-textfield__label mdl-color-text--grey-500'>Secret seed</label>
@@ -285,7 +271,7 @@
 
             <h2 class='mdl-typography--subhead montserrat bold text_center margin_top'>Market components
             <button id='help_market_components' class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon margin_bottom2'><i class='material-icons'>help_outline</i></button>
-            <div for='help_market_components' class='mdl-tooltip'>Click on a market component/participant to view its <b>account</b> profile on <b>Stellar Desk</b>.</div>
+            <div class='mdl-tooltip' for='help_market_components'>This is the list of <b>anchors</b> that are being considered in this <b>market</b>. If you place a <b>trade</b>, it'll be against one of these accounts; make sure you <b>trust</b> them first! Click on a market component / participant to view its account profile on <b>Stellar Desk</b>.</div>
             </h2>
             <table id='market_components_table' class='mdl-data-table mdl-js-data-table mdl-shadow--2dp mdl-color--grey-900 hcenter'>
               <tbody></tbody>
@@ -296,12 +282,14 @@
         </div>  <!-- END mdl-grid -->
 
         <!-- ------------------------------------------------- Snackbars! -->
-        <div id='snackbar_error' class='mdl-snackbar mdl-js-snackbar mdl-color--red'>  <!-- Snackbar for error! -->
-          <div class='mdl-snackbar__text'></div><button class='mdl-snackbar__action' type='button'></button>
+        <div id='snackbar_error' class='mdl-snackbar mdl-js-snackbar mdl-color--red'>
+          <div class='mdl-snackbar__text'></div>
+          <button class='mdl-snackbar__action' type='button'></button>
         </div>
 
-        <div id='snackbar_success' class='mdl-snackbar mdl-js-snackbar mdl-color--green'>  <!-- Snackbar for success! -->
-          <div class='mdl-snackbar__text'></div><button class='mdl-snackbar__action' type='button'></button>
+        <div id='snackbar_success' class='mdl-snackbar mdl-js-snackbar mdl-color--green'>
+          <div class='mdl-snackbar__text'></div>
+          <button class='mdl-snackbar__action' type='button'></button>
         </div>
 
         <!-- ------------------------------------------------- -->
@@ -332,12 +320,26 @@
   <script src='main.js'></script>
   <script>
     // ---------------------------------------------------------------------------------------------------
-    r(function(){
-        // put all that pesky code here
-    });
-    function r(f){/in/.test(document.readyState)?setTimeout('r('+f+')',9):f()}
+    // Create snackbars! Doesn't work, either!
+    // let snackbar_success = doc.createElement('div')
+    // let snackbar_success_text = doc.createElement('div')
+    // let snackbar_success_button = doc.createElement('button')
+
+    // snackbar_success.id = 'snackbar_success'
+    // snackbar_success.className = 'mdl-snackbar mdl-js-snackbar mdl-color--green'
+    // snackbar_success_text.className = 'mdl-snackbar__text'
+    // snackbar_success_button.className = 'mdl-snackbar__action'
+
+    // snackbar_success.appendChild(snackbar_success_text)
+    // snackbar_success.appendChild(snackbar_success_button)
+    // componentHandler.upgradeElement(snackbar_success)
+    // doc.body.appendChild(snackbar_success)
 
 
+
+
+    // ---------------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------------
     // ---------------------------------------------------------------------------------------------------
     function asset_buy_execute(){
       btn_disable('btn_buy')
@@ -365,9 +367,6 @@
       let buying_asset = new StellarSdk.Asset(url_get('buying_asset_code'), url_get('buying_asset_issuer'))
       let selling_asset = new StellarSdk.Asset(url_get('selling_asset_code'), url_get('selling_asset_issuer'))
 
-      print('buying_asset', buying_asset)
-      print('selling_asset', selling_asset)
-
       if(!(price > 0)){
         generic_error_snackbar_show('Error: price must be a positive number.')
         btn_enable('btn_buy')
@@ -387,11 +386,16 @@
       account0_seed = undefined
     }
 
+    // If <= highest bid, SELL `selling` with amount by matching agains highest bid
+    // If > highest bid, place limit order to SELL `selling` asset
     function operation_buy_asset(account0, account0_seed, buying_asset, selling_asset, price, amount){
       let tx = {buying: buying_asset,
                 selling: selling_asset,
-                price: price,
-                amount: amount}
+                price: price,//round(1 / parseFloat(price), 7),  // Price of 1 unit of `selling` in terms of `buying`!
+                amount: amount}//round(parseFloat(amount) / parseFloat(price)).toString()}//round(1 / parseFloat(amount), 7).toString()}  // Amount of `selling`!
+      print('buying_asset', buying_asset)
+      print('selling_asset', selling_asset)
+      print('transaction', tx)
       let operation = StellarSdk.Operation.manageOffer(tx)
       let transaction = new StellarSdk.TransactionBuilder(account0).addOperation(operation).build()  // 1. Build transaction!
       transaction.sign(StellarSdk.Keypair.fromSeed(account0_seed))  // 2. Sign transaction!
@@ -399,14 +403,14 @@
       account0_seed = undefined
     }
 
+    // ----------------------------------------------------------------------
     function buy_asset_success(operation){
       btn_enable('btn_buy')
       spinner_disable('spinner_buy')
 
       let snackbar_div = doc.querySelector('#snackbar_success')
       let snackbar_data = {message: 'Buy order placed successfully!'}
-      componentHandler.upgradeElement(snackbar_div)
-      snackbar_div.MaterialSnackbar.showSnackbar(snackbar_data)
+      // snackbar_div.MaterialSnackbar.showSnackbar(snackbar_data)
 
       doc.querySelector('#input_buy_secret_seed').value = ''
 
@@ -419,30 +423,129 @@
 
       let snackbar_div = doc.querySelector('#snackbar_error')
       let snackbar_data = {message: msg}
-      componentHandler.upgradeElement(snackbar_div)
-      snackbar_div.MaterialSnackbar.showSnackbar(snackbar_data)
+      // snackbar_div.MaterialSnackbar.showSnackbar(snackbar_data)
 
       print(error.detail, error)
     }
 
 
     // ---------------------------------------------------------------------------------------------------
-    function exchange_title(buying_asset_code, asset1_code){
-      doc.querySelector('#exchange').innerText = `Exchange ${buying_asset_code}/${asset1_code}`
+    function asset_sell_execute(){
+      btn_disable('btn_sell')
+      spinner_enable('spinner_sell')
+
+      let account0_seed = doc.querySelector('#input_sell_secret_seed').value
+      let account0_id
+      try{
+        account0_id = StellarSdk.Keypair.fromSeed(account0_seed).accountId()
+      }catch(error){
+        sell_asset_error(error, 'Error: invalid secret seed')
+        return
+      }
+      account0_seed = undefined
+
+      HORIZON.loadAccount(account0_id).then(sell_asset_callback)
     }
 
-    function bidask_title(buying_asset_code, asset1_code){
-      doc.querySelector('#bids_title').innerText = `Bids (${asset1_code})`
-      doc.querySelector('#asks_title').innerText = `Asks (${asset1_code})`
+    function sell_asset_callback(account){
+      let account0 = new StellarSdk.Account(account.id, account.sequence)
+      let account0_seed = doc.querySelector('#input_sell_secret_seed').value
+
+      let price = doc.querySelector('#input_sell_price').value
+      let amount = doc.querySelector('#input_sell_amount').value
+      let buying_asset = new StellarSdk.Asset(url_get('buying_asset_code'), url_get('buying_asset_issuer'))
+      let selling_asset = new StellarSdk.Asset(url_get('selling_asset_code'), url_get('selling_asset_issuer'))
+
+      if(!(price > 0)){
+        generic_error_snackbar_show('Error: price must be a positive number.')
+        btn_enable('btn_sell')
+        spinner_disable('spinner_sell')
+        account0_seed = undefined
+        return
+      }
+      if(!(amount > 0)){
+        generic_error_snackbar_show('Error: amount must be a positive number.')
+        btn_enable('btn_sell')
+        spinner_disable('spinner_sell')
+        account0_seed = undefined
+        return
+      }
+
+      operation_sell_asset(account0, account0_seed, buying_asset, selling_asset, price, amount)
+      account0_seed = undefined
+    }
+
+    function operation_sell_asset(account0, account0_seed, buying_asset, selling_asset, price, amount){
+      let tx = {buying: buying_asset,
+                selling: selling_asset,
+                price: price,
+                amount: amount}
+      print('buying_asset', buying_asset)
+      print('selling_asset', selling_asset)
+      print('transaction', tx)
+      let operation = StellarSdk.Operation.manageOffer(tx)
+      let transaction = new StellarSdk.TransactionBuilder(account0).addOperation(operation).build()  // 1. Build transaction!
+      transaction.sign(StellarSdk.Keypair.fromSeed(account0_seed))  // 2. Sign transaction!
+      HORIZON.submitTransaction(transaction).then(sell_asset_success).catch(sell_asset_error)  // 3. Submit transaction!
+      account0_seed = undefined
+    }
+
+    // ----------------------------------------------------------------------
+    function sell_asset_success(operation){
+      btn_enable('btn_sell')
+      spinner_disable('spinner_sell')
+
+      let snackbar_div = doc.querySelector('#snackbar_success')
+      let snackbar_data = {message: 'sell order placed successfully!'}
+      // snackbar_div.MaterialSnackbar.showSnackbar(snackbar_data)
+
+      doc.querySelector('#input_sell_secret_seed').value = ''
+
+      print(arguments.callee.name, operation)
+    }
+
+    function sell_asset_error(error, msg){
+      btn_enable('btn_sell')
+      spinner_disable('spinner_sell')
+
+      let snackbar_div = doc.querySelector('#snackbar_error')
+      let snackbar_data = {message: msg}
+      // snackbar_div.MaterialSnackbar.showSnackbar(snackbar_data)
+
+      print(error.detail, error)
+    }
+
+
+
+
+    // ---------------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------------
+    function exchange_title(buying_asset_code, selling_asset_code){
+      doc.querySelector('#exchange').innerText = `Exchange ${buying_asset_code}/${selling_asset_code}`
+    }
+
+    function trades_title(buying_asset_code, selling_asset_code){
+      doc.querySelector('#trades_last').innerText = `Last trades ${buying_asset_code}/${selling_asset_code}`
+    }
+
+    function bidask_title(buying_asset_code, selling_asset_code){
+      doc.querySelector('#bids_title').innerText = `Bids ${buying_asset_code}/${selling_asset_code}`
+      doc.querySelector('#asks_title').innerText = `Asks ${buying_asset_code}/${selling_asset_code}`
+    }
+
+    function order_cards_tooltips(buying_asset_code, selling_asset_code){
+      doc.querySelector('#tooltip_sell_asset1_price').innerHTML = `<b>Price</b> for 1 unit of <b>${selling_asset_code}</b> in exchange for <b>${buying_asset_code}</b>.`
+      doc.querySelector('#tooltip_sell_asset0_price').innerHTML = `<b>Price</b> for 1 unit of <b>${buying_asset_code}</b> in exchange for <b>${selling_asset_code}</b>.`
+      doc.querySelector('#tooltip_sell_asset1_amount').innerHTML = `Amount of <b>${selling_asset_code}</b> to sell.`
+      doc.querySelector('#tooltip_sell_asset0_amount').innerHTML = `Amount of <b>${buying_asset_code}</b> to sell.`
     }
 
     function market_components(market){
       let table = doc.querySelector('#market_components_table')
       let tbody_html = ''
-      for(let component of market){
+      for(let component of market)
         tbody_html += `<tr><td><a href='https://stellardesk.org/accounts?account=${component}'>${component}</a></td></tr>`
-        print('component', component)
-      }
       table.tBodies[0].innerHTML = tbody_html
     }
 
@@ -451,7 +554,7 @@
     let MARKETS = {
       CNY: ['GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX',],
       JPY: ['GBVAOIACNSB7OVUXJYC5UE2D4YK2F7A24T7EE5YOMN4CE6GCHUTOUQXM'],
-      BTC: ['GDXTJEK4JZNSTNQAWA53RZNS2GIKTDRPEUWDXELFMKU52XNECNVDVXDI', 'GAUTUYY2THLF7SGITDFMXJVYH3LHDSMGEAKSBU267M2K7A3W543CKUEF', 'GBSTRH4QOTWNSVA6E4HFERETX4ZLSR3CIUBLK7AXYII277PFJC4BBYOG'],
+      BTC: ['GDXTJEK4JZNSTNQAWA53RZNS2GIKTDRPEUWDXELFMKU52XNECNVDVXDI'],  // 'GAUTUYY2THLF7SGITDFMXJVYH3LHDSMGEAKSBU267M2K7A3W543CKUEF', 'GBSTRH4QOTWNSVA6E4HFERETX4ZLSR3CIUBLK7AXYII277PFJC4BBYOG'
       XRP: ['GA7FCCMTTSUIC37PODEL6EOOSPDRILP6OQI5FWCWDDVDBLJV72W6RINZ'],
     }
 
@@ -478,6 +581,7 @@
     }else{
       buying_asset  = parse_xlm(buying_asset_code, buying_asset_issuer)
       selling_asset = new parse_xlm(selling_asset_code, selling_asset_issuer)
+      market_components([buying_asset_issuer, selling_asset_issuer].unique())
       print('single market')
     }
 
@@ -485,43 +589,28 @@
     trades_init(buying_asset, selling_asset)
 
     exchange_title(buying_asset_code, selling_asset_code)
+    trades_title(buying_asset_code, selling_asset_code)
     bidask_title(buying_asset_code, selling_asset_code)
+    order_cards_tooltips(buying_asset_code, selling_asset_code)
 
 
     // ---------------------------------------------------------------------------------------------------
     // Buy/sell button control!
-    doc.querySelector('#btn_buy').onclick = buy_asset
-    doc.querySelector('#btn_sell').onclick = sell_asset
-    doc.querySelector('#input_buy_price').onkeypress = function(event){         if(event.keyCode == 13)  buy_asset() }
-    doc.querySelector('#input_buy_amount').onkeypress = function(event){        if(event.keyCode == 13)  buy_asset() }
-    doc.querySelector('#input_buy_asset_issuer').onkeypress = function(event){  if(event.keyCode == 13)  buy_asset() }
-    doc.querySelector('#input_buy_secret_seed').onkeypress = function(event){   if(event.keyCode == 13)  buy_asset() }
-    doc.querySelector('#input_sell_price').onkeypress = function(event){        if(event.keyCode == 13)  sell_asset() }
-    doc.querySelector('#input_sell_amount').onkeypress = function(event){       if(event.keyCode == 13)  sell_asset() }
-    doc.querySelector('#input_sell_asset_issuer').onkeypress = function(event){ if(event.keyCode == 13)  sell_asset() }
-    doc.querySelector('#input_sell_secret_seed').onkeypress = function(event){  if(event.keyCode == 13)  sell_asset() }
-
-    function buy_asset(){
-      let buy_price     = doc.querySelector('#input_buy_price').value
-      let buy_amount    = doc.querySelector('#input_buy_amount').value
-      let asset_issuer  = doc.querySelector('#input_buy_asset_issuer').value
-      let secret_seed   = doc.querySelector('#input_buy_secret_seed').value
-      asset_buy_execute()
-    }
-
-    function sell_asset(){
-      let buy_price     = doc.querySelector('#input_sell_price').value
-      let buy_amount    = doc.querySelector('#input_sell_amount').value
-      let asset_issuer  = doc.querySelector('#input_sell_asset_issuer').value
-      let secret_seed   = doc.querySelector('#input_sell_secret_seed').value
-    }
+    doc.querySelector('#btn_buy').onclick = asset_buy_execute
+    doc.querySelector('#btn_sell').onclick = asset_sell_execute
+    doc.querySelector('#input_buy_price').onkeypress = function(event){         if(event.keyCode == 13)  asset_buy_execute() }
+    doc.querySelector('#input_buy_amount').onkeypress = function(event){        if(event.keyCode == 13)  asset_buy_execute() }
+    doc.querySelector('#input_buy_secret_seed').onkeypress = function(event){   if(event.keyCode == 13)  asset_buy_execute() }
+    doc.querySelector('#input_sell_price').onkeypress = function(event){        if(event.keyCode == 13)  asset_sell_execute() }
+    doc.querySelector('#input_sell_amount').onkeypress = function(event){       if(event.keyCode == 13)  asset_sell_execute() }
+    doc.querySelector('#input_sell_secret_seed').onkeypress = function(event){  if(event.keyCode == 13)  asset_sell_execute() }
 
 
     // ---------------------------------------------------------------------------------------------------
     // Set card titles!
-    doc.querySelector('#card_title_buy').innerText = `Buy ${buying_asset_code.toUpperCase()}`
+    doc.querySelector('#card_title_buy').innerText = `Sell ${selling_asset_code.toUpperCase()}`
     doc.querySelector('#card_title_sell').innerText = `Sell ${buying_asset_code.toUpperCase()}`
-    doc.querySelector('#btn_buy').innerHTML = `Buy ${buying_asset_code.toUpperCase()} <i class='material-icons vcenter_child margin_left4'>send</i>`
+    doc.querySelector('#btn_buy').innerHTML = `Sell ${selling_asset_code.toUpperCase()} <i class='material-icons vcenter_child margin_left4'>send</i>`
     doc.querySelector('#btn_sell').innerHTML = `Sell ${buying_asset_code.toUpperCase()} <i class='material-icons vcenter_child margin_left4'>send</i>`
   </script>
 
