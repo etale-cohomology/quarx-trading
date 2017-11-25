@@ -170,7 +170,7 @@ let HORIZON = new StellarSdk.Server('https://horizon.stellar.org')
 // ---------------------------------------------------------------------------------------------------
 let N_BIDS = 24
 let N_ASKS = 24
-let N_TRADES = 60
+let N_TRADES = 64
 
 let TRADES
 
