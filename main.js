@@ -78,6 +78,11 @@ function date_parse(stellar_timestamp){
   return date_format(date)
 }
 
+function date_parse2(stellar_timestamp){
+  let date = new Date(stellar_timestamp)
+  return date_format2(date)
+}
+
 // TODO. Currently this function is a quick & dirty hack. Should the date format change ever so slightly, this function would break! FIX THIS.
 function datestr_to_secs(datestr){
   let time = datestr.slice(-8)
@@ -172,6 +177,7 @@ let HORIZON = new StellarSdk.Server(HORIZON_URL)
 let N_BIDS = 24
 let N_ASKS = 24
 let N_TRADES = 64
+let CANDLESTICK_INTERVAL_SIZE_IN_SECS = 1 * 5 * 60
 
 let TRADES
 
@@ -208,8 +214,8 @@ function bids_table_make(bids){
     bids[i].amount_integral = bids[i-1].amount_integral + parseFloat(bids[i].amount)
 
   for(let bid of bids.reverse()){
-    bid.market_depth = bid.amount_integral / bids[0].amount_integral
-    let style = `style='background:linear-gradient(to right, #222 ${100 * (1 - bid.market_depth)}%, #93cf96 ${100 * (1 - bid.market_depth)}%);'`
+    bid.market_depth = 1 - bid.amount_integral / bids[0].amount_integral
+    let style = `style='background:linear-gradient(to right, #222 ${100 * bid.market_depth}%, #93cf96 ${100 * bid.market_depth}%);'`
     bids_html += `<tr ${style}><td>${bid.amount_integral.toFixed(7)}</td><td>${bid.amount}</td><td class='mdl-color-text--green-800'>${bid.price}</td></tr>`
   }
 
@@ -225,8 +231,8 @@ function asks_table_make(asks){
     asks[i].amount_integral = asks[i-1].amount_integral + parseFloat(asks[i].amount)
 
   for(let ask of asks){
-    ask.market_depth = ask.amount_integral / asks[asks.length - 1].amount_integral
-    let style = `style='background:linear-gradient(to right, #222 ${100 * (1 - ask.market_depth)}%, #f88e86 ${100 * (1 - ask.market_depth)}%);'`
+    ask.market_depth = 1 - ask.amount_integral / asks[asks.length - 1].amount_integral
+    let style = `style='background:linear-gradient(to right, #222 ${100 * ask.market_depth}%, #f88e86 ${100 * ask.market_depth}%);'`
     asks_html += `<tr ${style}><td>${ask.amount_integral.toFixed(7)}</td><td>${ask.amount}</td><td class='mdl-color-text--red-800'>${ask.price}</td></tr>`
   }
 
@@ -245,24 +251,13 @@ function ledgers_stream(response){
 
 
 // ---------------------------------------------------------------------------------------------------
-function trades_init(buying_asset, selling_asset){
+function trades_get(buying_asset, selling_asset){
+  // let trade_eventsource = HORIZON.orderbook(buying_asset, selling_asset).trades().stream({onmessage: function(){ print('stream!') }}) // Doesn't work!
+
   TRADES = []  // Reset global TRADES!
-  HORIZON.orderbook(selling_asset, buying_asset).trades().order('desc').limit(1).call().then(trades_get)
-}
-
-function trades_get(response){
-  // let trade_eventsource = HORIZON.orderbook(buying_asset, selling_asset).trades().stream({onmessage: trade_stream}) // Doesn't work!
-
-  let last_cursor = response.records[0].paging_token
-  HORIZON.orderbook(selling_asset, buying_asset).trades().cursor(last_cursor).order('desc').limit(200).call()
-    // .then(trades_collect)  // It works!
-    // .then(trades_collect)  // It works!
+  HORIZON.orderbook(selling_asset, buying_asset).trades().order('desc').limit(200).call()
     // .then(trades_collect)  // It works!
     .then(trades_table_build)  // It works!
-}
-
-function trade_stream(response){
-  print(arguments.callee.name, response)
 }
 
 function trades_collect(response){
@@ -277,16 +272,17 @@ function trades_table_build(response){
 
   TRADES = trades_purge_empty(TRADES)
 
-  print('TRADES', TRADES)
+  // print('TRADES', TRADES)
   // for(let trade of TRADES) print(parseFloat(trade.bought_amount), parseFloat(trade.sold_amount), trade.bought_amount / trade.sold_amount)
 
   let trades_table = doc.querySelector('#trades_table')
   let trades_tbody_html = ''
 
-  for(let i=0; i < Math.min(N_TRADES, TRADES.length-1); ++i){
-    let date = time_parse(TRADES[i].created_at)
-    let price = (TRADES[i].bought_amount / TRADES[i].sold_amount).toFixed(7)
+  for(let i=0; i < Math.min(N_TRADES, TRADES.length - 1); i++){
     let volume = TRADES[i].bought_amount
+    let price = (TRADES[i].bought_amount / TRADES[i].sold_amount).toFixed(7)
+    let date = date_parse2(TRADES[i].created_at)
+    // print(i, volume, price, date)
 
     let price_prev = (TRADES[i+1].bought_amount / TRADES[i+1].sold_amount).toFixed(7)
     let price_style = price >= price_prev ? 'mdl-color-text--green' : 'mdl-color-text--red'
@@ -299,7 +295,7 @@ function trades_table_build(response){
   trades_table.tBodies[0].innerHTML = trades_tbody_html
   // created_at bought_amount bought_asset_code bought_asset_issuer bought_asset_type sold_amount sold_asset_code sold_asset_issuer sold_asset_type
 
-  candlestick_integral()
+  candlestick_integral(TRADES, CANDLESTICK_INTERVAL_SIZE_IN_SECS)
 }
 
 // Purge empty trades (ie. trades with 0 bought_amount or 0 sold_amount!
@@ -311,29 +307,28 @@ function trades_purge_empty(trades){
   return purged_trades
 }
 
-// Compute the candlestick-integral of a (long) sequence of trades!
-function candlestick_integral(){
-  TRADES.reverse()  // Now trades are in ASCENDING order! =D
-  // print('TRADES', TRADES)
-  // for(let trade of TRADES) print(trade.bought_amount, trade.sold_amount)
+// Compute the candlestick-integral of a sequence of trades (expected to be in DESCENDING order)!
+function candlestick_integral(trades, interval_size_in_secs){
+  trades.reverse()  // Now the trades are in ASCENDING order! =D
+  // print('trades', trades)
+  // for(let trade of trades) print(trade.bought_amount, trade.sold_amount)
 
   let dates = []
-  for(let trade of TRADES)  dates.push(date2secs(trade.created_at))
+  for(let trade of trades)  dates.push(date2secs(trade.created_at))
   // print(dates.length, dates)
 
   let first_date = dates[0]
   let last_date = dates[dates.length - 1]
-  let INTERVAL = 1 * 5 * 60  // In seconds!
-  let n_intervals = Math.ceil((last_date - first_date) / INTERVAL)
+  let n_intervals = Math.ceil((last_date - first_date) / interval_size_in_secs)
   // print(n_intervals, dates)
 
   // for(let i=1; i<dates.length; ++i)  print(dates[i-1] <= dates[i], dates[i])
 
   let indices_master = []  // A 2-array!
   for(let i=0; i < n_intervals; ++i){
-    let indices = filter_binary_indices(dates, first_date + i * INTERVAL, first_date + (i+1) * INTERVAL)
+    let indices = filter_binary_indices(dates, first_date + i * interval_size_in_secs, first_date + (i+1) * interval_size_in_secs)
     indices_master.push(indices)
-    // print('endpoints', first_date + i * INTERVAL, first_date + (i+1) * INTERVAL)
+    // print('endpoints', first_date + i * interval_size_in_secs, first_date + (i+1) * interval_size_in_secs)
     // print(indices)
   }
 
@@ -344,7 +339,7 @@ function candlestick_integral(){
 
     let candlestick = []
     for(let index of indices){
-      let trade = trade_get(TRADES[index])
+      let trade = trade_get(trades[index])
       candlestick.push(trade)
     }
 
@@ -355,7 +350,7 @@ function candlestick_integral(){
   // ------- Second pass over `CANDLESTICKS`!
   for(let i=0; i < CANDLESTICKS.length; ++i){
     if(CANDLESTICKS[i].date == -1){
-      CANDLESTICKS[i].date = new Date(1000 * (date2secs(CANDLESTICKS[i-1].date) + INTERVAL))
+      CANDLESTICKS[i].date = new Date(1000 * (date2secs(CANDLESTICKS[i-1].date) + interval_size_in_secs))
       CANDLESTICKS[i].open = CANDLESTICKS[i-1].close
       CANDLESTICKS[i].high = CANDLESTICKS[i-1].close
       CANDLESTICKS[i].low  = CANDLESTICKS[i-1].close
@@ -659,7 +654,7 @@ function spinner_enable(spinner_id){
 function generic_error_snackbar_show(error){
   let snackbar_div = doc.querySelector('#snackbar_error')
   let snackbar_data = {message: error}
-  // snackbar_div.MaterialSnackbar.showSnackbar(snackbar_data)
+  snackbar_div.MaterialSnackbar.showSnackbar(snackbar_data)
   print(error)
 }
 
