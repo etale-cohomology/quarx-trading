@@ -73,13 +73,13 @@ function date_format2(date){
   return `${MONTHS[date.getMonth()]} ${pad_zero2(date.getDate())} ${pad_zero2(date.getHours())}:${pad_zero2(date.getMinutes())}:${pad_zero2(date.getSeconds())}`
 }
 
-function date_parse(stellar_timestamp){
-  let date = new Date(stellar_timestamp)
+function date_parse(timestamp_iso8601){
+  let date = new Date(timestamp_iso8601)
   return date_format(date)
 }
 
-function date_parse2(stellar_timestamp){
-  let date = new Date(stellar_timestamp)
+function date_parse2(timestamp_iso8601){
+  let date = new Date(timestamp_iso8601)
   return date_format2(date)
 }
 
@@ -90,8 +90,8 @@ function datestr_to_secs(datestr){
   return secs
 }
 
-function time_parse(stellar_timestamp){
-  let date = new Date(stellar_timestamp)
+function time_parse(timestamp_iso8601){
+  let date = new Date(timestamp_iso8601)
   return `${pad_zero2(date.getHours())}:${pad_zero2(date.getMinutes())}:${pad_zero2(date.getSeconds())}`
 }
 
@@ -114,9 +114,9 @@ function xhr_load(event){
   print(response._embedded.records)
 }
 
-function get_request(url){
+function get_request(url, callback){
   let xhr = new XMLHttpRequest()
-  xhr.addEventListener('load', xhr_load)
+  xhr.addEventListener('load', callback ? callback : xhr_load)
   xhr.open('GET', url)
   xhr.send()
 }
@@ -162,10 +162,15 @@ function filter_binary_values(array, min, max){
   return result
 }
 
+// ------------------------------------------------------------------------------------------------
+// Return a value that goes into `asset_code`!
+function native2xlm(asset_code, asset_type){
+  return undefined2na(asset_type == 'native' ? 'XLM' : asset_code)
+}
 
 
 
-// ---------------------------------------------------------------------------------------------------
+
 // ---------------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------------
@@ -256,6 +261,7 @@ function trades_get(buying_asset, selling_asset){
 
   TRADES = []  // Reset global TRADES!
   HORIZON.orderbook(selling_asset, buying_asset).trades().order('desc').limit(200).call()
+    // .then(trades_collect)  // It works!
     // .then(trades_collect)  // It works!
     .then(trades_table_build)  // It works!
 }
@@ -656,6 +662,19 @@ function generic_error_snackbar_show(error){
   let snackbar_data = {message: error}
   snackbar_div.MaterialSnackbar.showSnackbar(snackbar_data)
   print(error)
+}
+
+// Get error message for the snackbar data field!
+function snackbar_get_data(error, msg, default_msg){
+  let message = default_msg
+  if(msg){
+    message = msg
+  }else if(error.message){
+    if(error.message.detail){
+      message = error.message.detail
+    }
+  }
+  return {message: message}
 }
 
 

@@ -51,23 +51,23 @@
       /*----------------------------------------------------------------------*/
       .mdl-card__title{ font-weight:bold; padding:16px; }
       .main_textfield{ width:90%; color:#ffffff; }
+      @media screen and (max-width:768px){ .main_textfield{ width:85%; } }
       @media screen and (max-width:414px){ .main_textfield{ width:80%; } }
     </style>
   </head>
 
   <body>
 
-    <!-- --------------------------------------------------------------------------------------------------- -->
     <div class='mdl-layout mdl-js-layout mdl-layout--fixed-header'>
 
-      <!-- ---------------------------------------------------------------------- -->
+      <!-- --------------------------------------------------------------------------------------------------- -->
       <header class='mdl-layout__header bg_dark'>
         <div class='mdl-layout__header-row'>
           <h1 id='title0' class='mdl-typography--title montserrat'>Quarx</h1>
         </div>
       </header>
 
-      <!-- ---------------------------------------------------------------------- -->
+      <!-- --------------------------------------------------------------------------------------------------- -->
       <div class='mdl-layout__drawer bg_dark'> <!-- 1.2 mdl-layout__drawer! -->
 
         <a href='/'><div class='drawer_header'></div></a>
@@ -84,21 +84,21 @@
 
       </div>
 
-      <!-- ---------------------------------------------------------------------- --> <!-- Content! -->
+      <!-- --------------------------------------------------------------------------------------------------- -->
       <main class='mdl-layout__content mdl-color--grey-900'>
 
-        <!-- ------------------------------------------------- -->
+        <!-- ---------------------------------------------------------------------- -->
         <div class='mdl-grid mdl-grid--no-spacing mdl-color-text--white margin_top'>
 
-          <!-- --------------------- -->
+          <!-- ------------------------------------------------- -->
           <div class='mdl-cell mdl-cell--12-col'>
             <h1 id='exchange' class='mdl-typography--headline montserrat bold margin_left'>Exchange</h1>
           </div>
 
-          <!-- --------------------- -->
+          <!-- ------------------------------------------------- -->
           <div class='mdl-cell mdl-cell--8-col'>
 
-            <!-- ------- -->
+            <!-- --------------------- -->
             <div class='mdl-grid flex_justify_center'>
               <div class='mdl-card mdl-shadow--4dp mdl-color--grey-900'><div id='chart0' class='mdl-cell mdl-cell--12-col'></div></div>
               <div class='mdl-card mdl-shadow--4dp mdl-color--grey-900'><div id='chart1' class='mdl-cell mdl-cell--12-col'></div></div>
@@ -113,7 +113,7 @@
 
           </div>
 
-          <!-- --------------------- -->
+          <!-- ------------------------------------------------- -->
           <div class='mdl-cell mdl-cell--2-col mdl-cell--4-col-tablet mdl-cell--4-col-phone'>
 
             <h2 id='bids_title' class='mdl-typography--body-1 text_center'>Bids</h2>
@@ -150,10 +150,10 @@
 
           </div>
 
-          <!-- --------------------- Spacer! =D -->
+          <!-- ------------------------------------------------- Spacer! =D -->
           <!-- <div class='mdl-cell--stretch mdl-cell--1-col'></div> -->
 
-          <!-- --------------------- -->
+          <!-- ------------------------------------------------- -->
           <div class='mdl-cell mdl-cell--2-col mdl-cell--4-col-tablet mdl-cell--4-col-phone'>
             <h1 id='trades_last' class='mdl-typography--body-1 text_center'>Last trades</h1>
             <table id='trades_table' class='mdl-data-table mdl-js-data-table mdl-shadow--2dp mdl-color--grey-900 width_96'>
@@ -164,114 +164,220 @@
 
         </div>  <!-- END mdl-grid -->
 
-        <!-- ------------------------------------------------- -->
+        <!-- ---------------------------------------------------------------------- -->
         <div class='mdl-grid mdl-grid--no-spacing mdl-color-text--white flex_justify_center'>
 
-          <!-- --------------------- -->
-          <div class='mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet flex_justify_center'>
+          <!-- ------------------------------------------------- -->
+          <div class='mdl-cell mdl-cell--4-col flex_justify_center'>
 
-            <div class='mdl-tooltip' for='help_sell_asset1' id='tooltip_sell_asset1'><br>In the Stellar network, an <b>asset</b> is specified by two pieces of data: 1) an asset code and 2) an <b>asset issuer</b>. This means that, in order to sell an asset, you need both the asset code and the asset issuer. An asset issuer is an account that created and first sent an asset. All assets (except Lumens) have an issuer. In this page, the <b>asset issuer</b> is <i>already selected</i>.</div>
-            <div class='mdl-tooltip' for='help_sell_asset1_price' id='tooltip_sell_asset1_price'><b>Price</b> for 1 unit of the <b>selling asset</b> (see table title) in exchange for the counter asset.</div>
-            <div class='mdl-tooltip' for='help_sell_asset1_amount' id='tooltip_sell_asset1_amount'>Amount to sell of the <b>selling asset</b> (see table title).</div>
-            <div class='mdl-tooltip' for='help_sell_asset1_secret_seed'>In order to cryptographically <b>sign</b> a <b>transaction</b> to <i>submit</i> to the Stellar network, you must use your <b>secret seed</b>. We <i>never</i> store your secret seed.</div>
+            <div class='mdl-tooltip' for='help_asset1_sell' id='tooltip_asset1_sell'><br>In the Stellar network, an <b>asset</b> is specified by two pieces of data: 1) an asset code and 2) an <b>asset issuer</b>. This means that, in order to sell an asset, you need both the asset code and the asset issuer. An asset issuer is an account that created and first sent an asset. All assets (except Lumens) have an issuer. In this page, the <b>asset issuer</b> is <i>already selected</i>.</div>
+            <div class='mdl-tooltip' for='help_asset1_sell_price' id='tooltip_asset1_sell_price'><b>Price</b> for 1 unit of the <b>selling asset</b> (see table title) in exchange for the counter asset.</div>
+            <div class='mdl-tooltip' for='help_asset1_sell_amount' id='tooltip_asset1_sell_amount'>Amount to sell of the <b>selling asset</b> (see table title).</div>
+            <div class='mdl-tooltip' for='help_asset1_sell_secret_seed'>In order to cryptographically <b>sign</b> a <b>transaction</b> to <i>submit</i> to the Stellar network, you must use your <b>secret seed</b>. We <i>never</i> store your secret seed.</div>
 
             <div class='mdl-card mdl-shadow--4dp width_100 mdl-color--grey-800'>
 
               <div class='mdl-card__title mdl-color--black mdl-color-text--white vcenter_parent'>
-                <h2 id='card_title_sell_asset1' class='mdl-typography--headline montserrat bold vcenter_child'>Sell</h2>
+                <h2 id='card_title_asset1_sell' class='mdl-typography--headline montserrat bold vcenter_child'>Sell</h2>
                 <div class='mdl-layout-spacer'></div>
-                <button class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon' id='help_sell_asset1'><i class='material-icons'>help_outline</i></button>
+                <button class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon' id='help_asset1_sell'><i class='material-icons'>help_outline</i></button>
               </div>
 
               <div class='mdl-card__supporting-text width_100'>
-                <button class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white margin_right3' id='help_sell_asset1_price'><i class='material-icons'>explore</i></button>
+                <button class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white margin_right3' id='help_asset1_sell_price'><i class='material-icons'>explore</i></button>
                 <div class='mdl-textfield mdl-js-textfield main_textfield'>
-                  <input class='mdl-textfield__input' type='text' id='input_buy_price'/>
+                  <input class='mdl-textfield__input' type='text' id='input_asset1_price'/>
                   <label class='mdl-textfield__label mdl-color-text--grey-500'>Selling price</label>
                 </div>
               </div>
 
               <div class='mdl-card__supporting-text width_100'>
-                <button class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white margin_right3' id='help_sell_asset1_amount'><i class='material-icons'>whatshot</i></button>
+                <button class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white margin_right3' id='help_asset1_sell_amount'><i class='material-icons'>whatshot</i></button>
                 <div class='mdl-textfield mdl-js-textfield main_textfield'>
-                  <input class='mdl-textfield__input' type='text' id='input_buy_amount'/>
+                  <input class='mdl-textfield__input' type='text' id='input_asset1_amount'/>
                   <label class='mdl-textfield__label mdl-color-text--grey-500'>Amount to sell</label>
                 </div>
               </div>
 
               <div class='mdl-card__supporting-text width_100'>
-                <button class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white margin_right3' id='help_sell_asset1_secret_seed'><i class='material-icons'>lock_outline</i></button>
+                <button class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white margin_right3' id='help_asset1_sell_secret_seed'><i class='material-icons'>lock_outline</i></button>
                 <div class='mdl-textfield mdl-js-textfield main_textfield'>
-                  <input class='mdl-textfield__input' type='text' id='input_buy_secret_seed'/>
+                  <input class='mdl-textfield__input' type='password' id='input_asset1_secret_seed'/>
                   <label class='mdl-textfield__label mdl-color-text--grey-500'>Secret seed</label>
                 </div>
               </div>
 
+              <div class='mdl-layout-spacer'></div>
               <div class='mdl-card__actions mdl-card--border vcenter_parent margin_top4'>
                 <div class='mdl-layout-spacer'></div>
-                <div id='spinner_buy' class='mdl-spinner mdl-js-spinner vcenter_child margin_right3'></div>
-                <button id='btn_buy' class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised mdl-button--accent vcenter_child vcenter_parent'>buy<i class='material-icons vcenter_child margin_left4'>send</i></button>
+                <div id='spinner_asset1_sell' class='mdl-spinner mdl-js-spinner vcenter_child margin_right3'></div>
+                <button id='btn_asset1_sell' class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised mdl-button--accent vcenter_child vcenter_parent'>sell<i class='material-icons vcenter_child margin_left4'>send</i></button>
               </div>
 
             </div>
 
           </div>
 
-          <!-- --------------------- -->
-          <div class='mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet flex_justify_center'>
+          <!-- ------------------------------------------------- -->
+          <div class='mdl-cell mdl-cell--4-col flex_justify_center'>
 
-            <div class='mdl-tooltip' for='help_sell_asset0' id='tooltip_sell_asset0'><br>In the Stellar network, an <b>asset</b> is specified by two pieces of data: 1) an asset code and 2) an <b>asset issuer</b>. This means that, in order to sell an asset, you need both the asset code and the asset issuer. An asset issuer is an account that created and first sent an asset. All assets (except Lumens) have an issuer. In this page, the <b>asset issuer</b> is <i>already selected</i>.</div>
-            <div class='mdl-tooltip' for='help_sell_asset0_price' id='tooltip_sell_asset0_price'><b>Price</b> for 1 unit of the <b>selling asset</b> (see table title) in exchange for the counter asset.</div>
-            <div class='mdl-tooltip' for='help_sell_asset0_amount' id='tooltip_sell_asset0_amount'>Amount to sell of the <b>selling asset</b> (see table title).</div>
-            <div class='mdl-tooltip' for='help_sell_asset0_secret_seed'>In order to cryptographically <b>sign</b> a <b>transaction</b> to <i>submit</i> to the Stellar network, you must use your <b>secret seed</b>. We <i>never</i> store your secret seed.</div>
+            <div class='mdl-tooltip' for='help_asset0_sell' id='tooltip_asset0_sell'><br>In the Stellar network, an <b>asset</b> is specified by two pieces of data: 1) an asset code and 2) an <b>asset issuer</b>. This means that, in order to sell an asset, you need both the asset code and the asset issuer. An asset issuer is an account that created and first sent an asset. All assets (except Lumens) have an issuer. In this page, the <b>asset issuer</b> is <i>already selected</i>.</div>
+            <div class='mdl-tooltip' for='help_asset0_sell_price' id='tooltip_asset0_sell_price'><b>Price</b> for 1 unit of the <b>selling asset</b> (see table title) in exchange for the counter asset.</div>
+            <div class='mdl-tooltip' for='help_asset0_sell_amount' id='tooltip_asset0_sell_amount'>Amount to sell of the <b>selling asset</b> (see table title).</div>
+            <div class='mdl-tooltip' for='help_asset0_sell_secret_seed'>In order to cryptographically <b>sign</b> a <b>transaction</b> to <i>submit</i> to the Stellar network, you must use your <b>secret seed</b>. We <i>never</i> store your secret seed.</div>
 
             <div class='mdl-card mdl-shadow--4dp width_100 mdl-color--grey-800'>
 
               <div class='mdl-card__title mdl-color--black mdl-color-text--white vcenter_parent'>
-                <h2 id='card_title_sell_asset0' class='mdl-typography--headline montserrat bold vcenter_child'>Sell</h2>
+                <h2 id='card_title_asset0_sell' class='mdl-typography--headline montserrat bold vcenter_child'>Sell</h2>
                 <div class='mdl-layout-spacer'></div>
-                <button class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon' id='help_sell_asset0'><i class='material-icons'>help_outline</i></button>
+                <button class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon' id='help_asset0_sell'><i class='material-icons'>help_outline</i></button>
               </div>
 
               <div class='mdl-card__supporting-text width_100'>
-                <button class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white margin_right3' id='help_sell_asset0_price'><i class='material-icons'>explore</i></button>
+                <button class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white margin_right3' id='help_asset0_sell_price'><i class='material-icons'>explore</i></button>
                 <div class='mdl-textfield mdl-js-textfield main_textfield'>
-                  <input class='mdl-textfield__input' type='text' id='input_sell_price'/>
+                  <input class='mdl-textfield__input' type='text' id='input_asset0_price'/>
                   <label class='mdl-textfield__label mdl-color-text--grey-500'>Selling price</label>
                 </div>
               </div>
 
               <div class='mdl-card__supporting-text width_100'>
-                <button class='mdl-button mdl-js-button mdl-js-button-ripple-effect mdl-button--icon mdl-color--white margin_right3' id='help_sell_asset0_amount'><i class='material-icons'>whatshot</i></button>
+                <button class='mdl-button mdl-js-button mdl-js-button-ripple-effect mdl-button--icon mdl-color--white margin_right3' id='help_asset0_sell_amount'><i class='material-icons'>whatshot</i></button>
                 <div class='mdl-textfield mdl-js-textfield main_textfield'>
-                  <input class='mdl-textfield__input' type='text' id='input_sell_amount'/>
+                  <input class='mdl-textfield__input' type='text' id='input_asset0_amount'/>
                   <label class='mdl-textfield__label mdl-color-text--grey-500'>Amount to sell</label>
                 </div>
               </div>
 
               <div class='mdl-card__supporting-text width_100'>
-                <button class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white margin_right3' id='help_sell_asset0_secret_seed'><i class='material-icons'>lock_outline</i></button>
+                <button class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white margin_right3' id='help_asset0_sell_secret_seed'><i class='material-icons'>lock_outline</i></button>
                 <div class='mdl-textfield mdl-js-textfield main_textfield'>
-                  <input class='mdl-textfield__input' type='text' id='input_sell_secret_seed'/>
+                  <input class='mdl-textfield__input' type='password' id='input_asset0_secret_seed'/>
                   <label class='mdl-textfield__label mdl-color-text--grey-500'>Secret seed</label>
                 </div>
               </div>
 
+              <div class='mdl-layout-spacer'></div>
               <div class='mdl-card__actions mdl-card--border vcenter_parent margin_top4'>
                 <div class='mdl-layout-spacer'></div>
-                <div id='spinner_sell' class='mdl-spinner mdl-js-spinner vcenter_child margin_right3'></div>
-                <button id='btn_sell' class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised mdl-button--accent vcenter_child vcenter_parent'>sell<i class='material-icons vcenter_child margin_left4'>send</i></button>
+                <div id='spinner_asset0_sell' class='mdl-spinner mdl-js-spinner vcenter_child margin_right3'></div>
+                <button id='btn_asset0_sell' class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised mdl-button--accent vcenter_child vcenter_parent'>sell<i class='material-icons vcenter_child margin_left4'>send</i></button>
               </div>
 
             </div>
 
           </div>
 
-          <!-- --------------------- -->
-          <div class='mdl-cell mdl-cell--6-col'>
+          <!-- ------------------------------------------------- -->
+          <div class='mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet flex_justify_center'>
+
+            <div class='mdl-tooltip' for='help_close_order' id='tooltip_close_order'>Close <b>open orders</b> for a given <b>account</b>.</div>
+            <div class='mdl-tooltip' for='help_close_order_id' id='tooltip_close_order_id'>The <b>order ID</b> is an identifier for the <b>open order</b>. The <i>order ID</i> is also called the <b>offer ID</b>.</div>
+            <div class='mdl-tooltip' for='help_close_order_asset_code' id='tooltip_close_order_price'>An <b>asset code</b> is a short identifier for an asset. By itself, it doesn't mean much, though. It needs to be paired with an asset issuer, since every asset on the Stellar network is issued by <i>some</i> account.</div>
+            <div class='mdl-tooltip' for='help_close_order_asset_issuer' id='tooltip_close_order_amount'>An <b>asset issuer</b> is an account that created and first sent an asset. Every asset issued by an account also has an asset code associated to it. Together, these 2 pieces of data serve to identify an asset.</div>
+            <div class='mdl-tooltip' for='help_close_order_secret_seed'>In order to cryptographically <b>sign</b> a <b>transaction</b> to <i>submit</i> to the Stellar network, you must use your <b>secret seed</b>. We <i>never</i> store your secret seed.</div>
+
+            <div class='mdl-card mdl-shadow--4dp width_100 mdl-color--grey-800'>
+
+              <div class='mdl-card__title mdl-color--black mdl-color-text--white vcenter_parent'>
+                <h2 id='card_title_close_order' class='mdl-typography--headline montserrat bold vcenter_child'>Close orders</h2>
+                <div class='mdl-layout-spacer'></div>
+                <button class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon' id='help_close_order'><i class='material-icons'>help_outline</i></button>
+              </div>
+
+              <div class='mdl-card__supporting-text width_100'>
+                <button class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white margin_right3' id='help_close_order_id'><i class='material-icons'>local_offer</i></button>
+                <div class='mdl-textfield mdl-js-textfield main_textfield'>
+                  <input class='mdl-textfield__input' type='text' id='input_close_order_id'/>
+                  <label class='mdl-textfield__label mdl-color-text--grey-500'>Order ID</label>
+                </div>
+              </div>
+
+              <!-- <div class='mdl-card__supporting-text width_100'>
+                <button class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white margin_right3' id='help_close_order_asset_code'><i class='material-icons'>group_work</i></button>
+                <div class='mdl-textfield mdl-js-textfield main_textfield'>
+                  <input class='mdl-textfield__input' type='text' id='input_close_order_price'/>
+                  <label class='mdl-textfield__label mdl-color-text--grey-500'>Asset code</label>
+                </div>
+              </div>
+
+              <div class='mdl-card__supporting-text width_100'>
+                <button class='mdl-button mdl-js-button mdl-js-button-ripple-effect mdl-button--icon mdl-color--white margin_right3' id='help_close_order_asset_issuer'><i class='material-icons'>gavel</i></button>
+                <div class='mdl-textfield mdl-js-textfield main_textfield'>
+                  <input class='mdl-textfield__input' type='text' id='input_close_order_amount'/>
+                  <label class='mdl-textfield__label mdl-color-text--grey-500'>Asset issuer</label>
+                </div>
+              </div> -->
+
+              <div class='mdl-card__supporting-text width_100'>
+                <button class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white margin_right3' id='help_close_order_secret_seed'><i class='material-icons'>lock_outline</i></button>
+                <div class='mdl-textfield mdl-js-textfield main_textfield'>
+                  <input class='mdl-textfield__input' type='text' id='input_close_order_secret_seed'/>
+                  <label class='mdl-textfield__label mdl-color-text--grey-500'>Secret seed</label>
+                </div>
+              </div>
+
+              <div class='mdl-layout-spacer'></div>
+              <div class='mdl-card__actions mdl-card--border vcenter_parent margin_top4'>
+                <div class='mdl-layout-spacer'></div>
+                <div id='spinner_close_order' class='mdl-spinner mdl-js-spinner vcenter_child margin_right3'></div>
+                <button id='btn_close_order' class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised mdl-button--accent vcenter_child vcenter_parent'>Close order<i class='material-icons vcenter_child margin_left4'>send</i></button>
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- ------------------------------------------------- -->
+          <div class='mdl-cell mdl-cell--4 text_center'>
+
+            <h2 class='mdl-typography--subhead montserrat bold text_center margin_top'>Open orders for account
+              <button id='help_account_open_orders' class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon'><i class='material-icons'>help_outline</i></button>
+              <div class='mdl-tooltip' for='help_account_open_orders'>This is the list of <i>most recent</i> <b>open orders</b> for the selected <b>account</b> across all markets.</div>
+            </h2>
+            <h2 id='account_open_orders_title' class='font_size_10px monospace'></h2>
+
+            <div id='spinner_open_orders_account_id' class='mdl-spinner mdl-js-spinner vcenter_child'></div>
+            <div class='mdl-textfield mdl-js-textfield width_80'>
+              <input class='mdl-textfield__input font_size_10px' type='text' id='input_open_orders_account_id'/>
+              <label class='mdl-textfield__label mdl-color-text--grey-500 font_size_10px'>Account ID. Press <b>ENTER</b> to search</label>
+            </div>
+
+            <table id='account_open_orders_table' class='mdl-data-table mdl-js-data-table mdl-shadow--2dp mdl-color--grey-900 hcenter'>
+              <thead><tr><th>Order ID</th><th>Amount</th><th>Price</th><th>Buy</th><th>Sell</th></tr></thead>
+              <tbody></tbody>
+            </table>
+
+          </div>
+
+          <!-- ------------------------------------------------- -->
+          <div class='mdl-cell mdl-cell--4 text_center'>
+
+            <h2 class='mdl-typography--subhead montserrat bold text_center margin_top'>Last trades for account
+              <button id='help_account_last_trades' class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon'><i class='material-icons'>help_outline</i></button>
+              <div class='mdl-tooltip' for='help_account_last_trades'>This is the list of <i>most recent</i> <b>trades</b> that the selected <b>account</b> has executed across all markets.</div>
+            </h2>
+            <h2 id='account_last_trades_title' class='font_size_10px monospace'></h2>
+
+            <div id='spinner_last_trades_account_id' class='mdl-spinner mdl-js-spinner vcenter_child'></div>
+            <div class='mdl-textfield mdl-js-textfield width_80'>
+              <input class='mdl-textfield__input font_size_10px' type='text' id='input_last_trades_account_id'/>
+              <label class='mdl-textfield__label mdl-color-text--grey-500 font_size_10px'>Account ID. Press <b>ENTER</b> to search</label>
+            </div>
+
+            <table id='account_last_trades_table' class='mdl-data-table mdl-js-data-table mdl-shadow--2dp mdl-color--grey-900 hcenter'>
+              <thead><tr><th>Amount</th><th>Price</th><th>Buy</th><th>Sell</th><th>Time</th></tr></thead>
+              <tbody></tbody>
+            </table>
+
+          </div>
+
+          <!-- ------------------------------------------------- -->
+          <div class='mdl-cell mdl-cell--4'>
 
             <h2 class='mdl-typography--subhead montserrat bold text_center margin_top'>Market components
-            <button id='help_market_components' class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon margin_bottom2'><i class='material-icons'>help_outline</i></button>
+            <button id='help_market_components' class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon'><i class='material-icons'>help_outline</i></button>
             <div class='mdl-tooltip' for='help_market_components'>This is the list of <b>anchors</b> that are being considered in this <b>market</b>. If you place a <b>trade</b>, it'll be against one of these accounts; make sure you <b>trust</b> them first! Click on a market component / participant to view its account profile on <b>Stellar Desk</b>.</div>
             </h2>
             <table id='market_components_table' class='mdl-data-table mdl-js-data-table mdl-shadow--2dp mdl-color--grey-900 hcenter'>
@@ -323,43 +429,47 @@
     // ---------------------------------------------------------------------------------------------------
     // ---------------------------------------------------------------------------------------------------
     // ---------------------------------------------------------------------------------------------------
-    function asset1_sell_execute(){
-      btn_disable('btn_buy')
-      spinner_enable('spinner_buy')
+    let ACCOUNT0_ID
+    let ACCOUNT0
+    let OFFERS = []
 
-      let account0_seed = doc.querySelector('#input_buy_secret_seed').value
-      let account0_id
+
+    // ---------------------------------------------------------------------------------------------------
+    function asset1_sell_execute(){
+      btn_disable('btn_asset1_sell')
+      spinner_enable('spinner_asset1_sell')
+
+      let account0_seed = doc.querySelector('#input_asset1_secret_seed').value
       try{
-        account0_id = StellarSdk.Keypair.fromSeed(account0_seed).accountId()
+        ACCOUNT0_ID = StellarSdk.Keypair.fromSeed(account0_seed).accountId()
       }catch(error){
         asset1_sell_error(error, 'Error: invalid secret seed')
         return
       }
       account0_seed = undefined
 
-      HORIZON.loadAccount(account0_id).then(asset1_sell_callback)
+      HORIZON.loadAccount(ACCOUNT0_ID).then(asset1_sell_callback)
     }
 
     function asset1_sell_callback(account){
       let account0 = new StellarSdk.Account(account.id, account.sequence)
-      let account0_seed = doc.querySelector('#input_buy_secret_seed').value
-
-      let price = doc.querySelector('#input_buy_price').value
-      let amount = doc.querySelector('#input_buy_amount').value
+      let account0_seed = doc.querySelector('#input_asset1_secret_seed').value
+      let price = doc.querySelector('#input_asset1_price').value
+      let amount = doc.querySelector('#input_asset1_amount').value
       let buying_asset = new StellarSdk.Asset(url_get('buying_asset_code'), url_get('buying_asset_issuer'))
       let selling_asset = new StellarSdk.Asset(url_get('selling_asset_code'), url_get('selling_asset_issuer'))
 
       if(!(price > 0)){
         generic_error_snackbar_show('Error: price must be a positive number.')
-        btn_enable('btn_buy')
-        spinner_disable('spinner_buy')
+        btn_enable('btn_asset1_sell')
+        spinner_disable('spinner_asset1_sell')
         account0_seed = undefined
         return
       }
       if(!(amount > 0)){
         generic_error_snackbar_show('Error: amount must be a positive number.')
-        btn_enable('btn_buy')
-        spinner_disable('spinner_buy')
+        btn_enable('btn_asset1_sell')
+        spinner_disable('spinner_asset1_sell')
         account0_seed = undefined
         return
       }
@@ -381,32 +491,34 @@
       let operation = StellarSdk.Operation.manageOffer(tx)
       let transaction = new StellarSdk.TransactionBuilder(account0).addOperation(operation).build()  // 1. Build transaction!
       transaction.sign(StellarSdk.Keypair.fromSeed(account0_seed))  // 2. Sign transaction!
-      HORIZON.submitTransaction(transaction).then(asset1_sell_success).catch(asset1_sell_error)  // 3. Submit transaction!
       account0_seed = undefined
+      return HORIZON.submitTransaction(transaction).then(asset1_sell_success).catch(asset1_sell_error)  // 3. Submit transaction!
     }
 
     // ---------------------
     function asset1_sell_success(operation){
-      btn_enable('btn_buy')
-      spinner_disable('spinner_buy')
+      btn_enable('btn_asset1_sell')
+      spinner_disable('spinner_asset1_sell')
 
       let snackbar_div = doc.querySelector('#snackbar_success')
-      let snackbar_data = {message: 'Buy order placed successfully!'}
+      let snackbar_data = {message: 'Sell order placed successfully!'}
       snackbar_div.MaterialSnackbar.showSnackbar(snackbar_data)
 
-      doc.querySelector('#input_buy_secret_seed').value = ''
+      doc.querySelector('#input_asset1_secret_seed').value = ''
 
       print(arguments.callee.name, operation)
 
-      trades_get(buying_asset, selling_asset)
+      init_account_open_orders(ACCOUNT0_ID)
+      init_account_last_trades(ACCOUNT0_ID)
+      // trades_get(buying_asset, selling_asset)
     }
 
     function asset1_sell_error(error, msg){
-      btn_enable('btn_buy')
-      spinner_disable('spinner_buy')
+      btn_enable('btn_asset1_sell')
+      spinner_disable('spinner_asset1_sell')
 
       let snackbar_div = doc.querySelector('#snackbar_error')
-      let snackbar_data = {message: msg}
+      let snackbar_data = snackbar_get_data(error, msg, 'Error in selling asset!')
       snackbar_div.MaterialSnackbar.showSnackbar(snackbar_data)
 
       print(error.detail ? error.detail : '', error)
@@ -415,42 +527,40 @@
 
     // ---------------------------------------------------------------------------------------------------
     function asset0_sell_execute(){
-      btn_disable('btn_sell')
-      spinner_enable('spinner_sell')
+      btn_disable('btn_asset0_sell')
+      spinner_enable('spinner_asset0_sell')
 
-      let account0_seed = doc.querySelector('#input_sell_secret_seed').value
-      let account0_id
+      let account0_seed = doc.querySelector('#input_asset0_secret_seed').value
       try{
-        account0_id = StellarSdk.Keypair.fromSeed(account0_seed).accountId()
+        ACCOUNT0_ID = StellarSdk.Keypair.fromSeed(account0_seed).accountId()
       }catch(error){
-        sell_asset_error(error, 'Error: invalid secret seed')
+        asset0_sell_error(error, 'Error: invalid secret seed')
         return
       }
       account0_seed = undefined
 
-      HORIZON.loadAccount(account0_id).then(asset0_sell_callback)
+      HORIZON.loadAccount(ACCOUNT0_ID).then(asset0_sell_callback).catch(asset0_sell_error)
     }
 
     function asset0_sell_callback(account){
       let account0 = new StellarSdk.Account(account.id, account.sequence)
-      let account0_seed = doc.querySelector('#input_sell_secret_seed').value
-
-      let price = doc.querySelector('#input_sell_price').value
-      let amount = doc.querySelector('#input_sell_amount').value
+      let account0_seed = doc.querySelector('#input_asset0_secret_seed').value
+      let price = doc.querySelector('#input_asset0_price').value
+      let amount = doc.querySelector('#input_asset0_amount').value
       let buying_asset = new StellarSdk.Asset(url_get('buying_asset_code'), url_get('buying_asset_issuer'))
       let selling_asset = new StellarSdk.Asset(url_get('selling_asset_code'), url_get('selling_asset_issuer'))
 
       if(!(price > 0)){
         generic_error_snackbar_show('Error: price must be a positive number.')
-        btn_enable('btn_sell')
-        spinner_disable('spinner_sell')
+        btn_enable('btn_asset0_sell')
+        spinner_disable('spinner_asset0_sell')
         account0_seed = undefined
         return
       }
       if(!(amount > 0)){
         generic_error_snackbar_show('Error: amount must be a positive number.')
-        btn_enable('btn_sell')
-        spinner_disable('spinner_sell')
+        btn_enable('btn_asset0_sell')
+        spinner_disable('spinner_asset0_sell')
         account0_seed = undefined
         return
       }
@@ -470,35 +580,129 @@
       let operation = StellarSdk.Operation.manageOffer(tx)
       let transaction = new StellarSdk.TransactionBuilder(account0).addOperation(operation).build()  // 1. Build transaction!
       transaction.sign(StellarSdk.Keypair.fromSeed(account0_seed))  // 2. Sign transaction!
-      HORIZON.submitTransaction(transaction).then(asset0_sell_success).catch(sell_asset_error)  // 3. Submit transaction!
       account0_seed = undefined
+      HORIZON.submitTransaction(transaction).then(asset0_sell_success).catch(asset0_sell_error)  // 3. Submit transaction!
     }
 
     // ---------------------
     function asset0_sell_success(operation){
-      btn_enable('btn_sell')
-      spinner_disable('spinner_sell')
+      btn_enable('btn_asset0_sell')
+      spinner_disable('spinner_asset0_sell')
 
       let snackbar_div = doc.querySelector('#snackbar_success')
-      let snackbar_data = {message: 'sell order placed successfully!'}
-      // snackbar_div.MaterialSnackbar.showSnackbar(snackbar_data)
+      let snackbar_data = {message: 'Sell order placed successfully!'}
+      snackbar_div.MaterialSnackbar.showSnackbar(snackbar_data)
 
-      doc.querySelector('#input_sell_secret_seed').value = ''
+      doc.querySelector('#input_asset0_secret_seed').value = ''
 
       print(arguments.callee.name, operation)
+
+      init_account_open_orders(ACCOUNT0_ID)
+      init_account_last_trades(ACCOUNT0_ID)
+      // trades_get(buying_asset, selling_asset)
     }
 
-    function sell_asset_error(error, msg){
-      btn_enable('btn_sell')
-      spinner_disable('spinner_sell')
+    function asset0_sell_error(error, msg){
+      btn_enable('btn_asset0_sell')
+      spinner_disable('spinner_asset0_sell')
 
       let snackbar_div = doc.querySelector('#snackbar_error')
-      let snackbar_data = {message: msg}
-      // snackbar_div.MaterialSnackbar.showSnackbar(snackbar_data)
+      let snackbar_data = snackbar_get_data(error, msg, 'Error in selling asset!')
+      snackbar_div.MaterialSnackbar.showSnackbar(snackbar_data)
 
       print(error.detail ? error.detail : '', error)
     }
 
+
+    // ---------------------------------------------------------------------------------------------------
+    function close_order_execute(){
+      btn_disable('btn_close_order')
+      spinner_enable('spinner_close_order')
+
+      let account0_seed = doc.querySelector('#input_close_order_secret_seed').value
+      try{
+        ACCOUNT0_ID = StellarSdk.Keypair.fromSeed(account0_seed).accountId()
+      }catch(error){
+        close_order_error(error, 'Error: invalid secret seed')
+        return
+      }
+      account0_seed = undefined
+
+      HORIZON.loadAccount(ACCOUNT0_ID).then(close_order_callback).catch(close_order_error)
+    }
+
+    function close_order_callback(account){
+      ACCOUNT0 = new StellarSdk.Account(account.id, account.sequence)
+      HORIZON.offers('accounts', ACCOUNT0_ID).order('desc').limit(200).call().then(close_order_get_offers)
+    }
+
+    function close_order_get_offers(response){
+      let offer_id = doc.querySelector('#input_close_order_id').value
+      let offer = find_offer(response.records, offer_id)
+      
+      if(!offer){
+        generic_error_snackbar_show('Error: cannot find order!')
+        btn_enable('btn_close_order')
+        spinner_disable('spinner_close_order')
+        return
+      }
+
+      let account0_seed = doc.querySelector('#input_close_order_secret_seed').value
+      let buying_asset = new StellarSdk.Asset(offer.buying.asset_code, offer.buying.asset_issuer)
+      let selling_asset = new StellarSdk.Asset(offer.selling.asset_code, offer.selling.asset_issuer)
+
+      close_order_operation_close_offer(ACCOUNT0, account0_seed, offer.id, buying_asset, selling_asset)
+      account0_seed = undefined
+    }
+
+    function find_offer(offers, offer_id){
+      let offer = undefined
+      for(let i=0; i<offers.length; ++i){
+        if(offers[i].id == parseFloat(offer_id))  offer = offers[i]
+      }
+      return offer
+    }
+
+    function close_order_operation_close_offer(account0, account0_seed, offer_id, buying_asset, selling_asset){
+      let tx = {offerId: offer_id,
+                buying: buying_asset,
+                selling: selling_asset,
+                price: '1',
+                amount: '0'}
+      let operation = StellarSdk.Operation.manageOffer(tx)
+      let transaction = new StellarSdk.TransactionBuilder(account0).addOperation(operation).build()  // 1. Build transaction!
+      transaction.sign(StellarSdk.Keypair.fromSeed(account0_seed))  // 2. Sign transaction!
+      account0_seed = undefined
+      HORIZON.submitTransaction(transaction).then(close_order_success).catch(close_order_error)  // 3. Submit transaction!
+    }
+
+    function close_order_success(operation){
+      btn_enable('btn_close_order')
+      spinner_disable('spinner_close_order')
+
+      let snackbar_div = doc.querySelector('#snackbar_success')
+      let snackbar_data = {message: 'Order closed successfully!'}
+      snackbar_div.MaterialSnackbar.showSnackbar(snackbar_data)
+
+      doc.querySelector('#input_close_order_secret_seed').value = ''
+
+      print(arguments.callee.name, operation)
+
+      init_account_open_orders(ACCOUNT0_ID)
+      init_account_last_trades(ACCOUNT0_ID)
+      // trades_get(buying_asset, selling_asset)
+    }
+
+    function close_order_error(error, msg){
+      btn_enable('btn_close_order')
+      spinner_disable('spinner_close_order')
+
+      let snackbar_div = doc.querySelector('#snackbar_error')
+      let snackbar_data = snackbar_get_data(error, msg, 'Error in closing order!')
+      snackbar_div.MaterialSnackbar.showSnackbar(snackbar_data)
+
+      print(error.detail ? error.detail : '', error)
+    }
 
 
 
@@ -520,12 +724,12 @@
     }
 
     function order_cards_tooltips(buying_asset_code, selling_asset_code){
-      doc.querySelector('#tooltip_sell_asset1_price').innerHTML = `<b>Price</b> for 1 unit of <b>${selling_asset_code}</b> in exchange for <b>${buying_asset_code}</b>.`
-      doc.querySelector('#tooltip_sell_asset0_price').innerHTML = `<b>Price</b> for 1 unit of <b>${buying_asset_code}</b> in exchange for <b>${selling_asset_code}</b>.`
-      doc.querySelector('#tooltip_sell_asset1_amount').innerHTML = `Amount of <b>${selling_asset_code}</b> to sell.`
-      doc.querySelector('#tooltip_sell_asset0_amount').innerHTML = `Amount of <b>${buying_asset_code}</b> to sell.`
-      doc.querySelector('#tooltip_sell_asset1').innerHTML = `<b>Sell</b> your <b>${selling_asset_code}</b> in exchange for <b>${buying_asset_code}</b>.<br><br>An <b>asset</b> is given by 2 pieces of data: 1) an <b>asset code</b> and 2) an <b>asset issuer</b>. All assets (except Lumens) have an issuer. Here, the <b>issuer</b> is <i>already selected</i>.`
-      doc.querySelector('#tooltip_sell_asset0').innerHTML = `<b>Sell</b> your <b>${buying_asset_code}</b> in exchange for <b>${selling_asset_code}</b>.<br><br>An <b>asset</b> is given by 2 pieces of data: 1) an <b>asset code</b> and 2) an <b>asset issuer</b>. All assets (except Lumens) have an issuer. Here, the <b>issuer</b> is <i>already selected</i>.`
+      doc.querySelector('#tooltip_asset1_sell_price').innerHTML = `<b>Price</b> for 1 unit of <b>${selling_asset_code}</b> in exchange for <b>${buying_asset_code}</b>.`
+      doc.querySelector('#tooltip_asset0_sell_price').innerHTML = `<b>Price</b> for 1 unit of <b>${buying_asset_code}</b> in exchange for <b>${selling_asset_code}</b>.`
+      doc.querySelector('#tooltip_asset1_sell_amount').innerHTML = `Amount of <b>${selling_asset_code}</b> to sell.`
+      doc.querySelector('#tooltip_asset0_sell_amount').innerHTML = `Amount of <b>${buying_asset_code}</b> to sell.`
+      doc.querySelector('#tooltip_asset1_sell').innerHTML = `<b>Sell</b> your <b>${selling_asset_code}</b> in exchange for <b>${buying_asset_code}</b>.<br><br>An <b>asset</b> is given by 2 pieces of data: 1) an <b>asset code</b> and 2) an <b>asset issuer</b>. All assets (except Lumens) have an issuer. Here, the <b>issuer</b> is <i>already selected</i>.`
+      doc.querySelector('#tooltip_asset0_sell').innerHTML = `<b>Sell</b> your <b>${buying_asset_code}</b> in exchange for <b>${selling_asset_code}</b>.<br><br>An <b>asset</b> is given by 2 pieces of data: 1) an <b>asset code</b> and 2) an <b>asset issuer</b>. All assets (except Lumens) have an issuer. Here, the <b>issuer</b> is <i>already selected</i>.`
     }
 
     function market_components(market){
@@ -585,22 +789,113 @@
 
     // ---------------------------------------------------------------------------------------------------
     // Buy/sell button control!
-    doc.querySelector('#btn_buy').onclick = asset1_sell_execute
-    doc.querySelector('#btn_sell').onclick = asset0_sell_execute
-    doc.querySelector('#input_buy_price').onkeypress = function(event){         if(event.keyCode == 13)  asset1_sell_execute() }
-    doc.querySelector('#input_buy_amount').onkeypress = function(event){        if(event.keyCode == 13)  asset1_sell_execute() }
-    doc.querySelector('#input_buy_secret_seed').onkeypress = function(event){   if(event.keyCode == 13)  asset1_sell_execute() }
-    doc.querySelector('#input_sell_price').onkeypress = function(event){        if(event.keyCode == 13)  asset0_sell_execute() }
-    doc.querySelector('#input_sell_amount').onkeypress = function(event){       if(event.keyCode == 13)  asset0_sell_execute() }
-    doc.querySelector('#input_sell_secret_seed').onkeypress = function(event){  if(event.keyCode == 13)  asset0_sell_execute() }
+    doc.querySelector('#btn_asset1_sell').onclick = asset1_sell_execute
+    doc.querySelector('#btn_asset0_sell').onclick = asset0_sell_execute
+    doc.querySelector('#btn_close_order').onclick = close_order_execute
+    doc.querySelector('#input_asset1_price').onkeypress = function(event){        if(event.keyCode == 13)  asset1_sell_execute()  }
+    doc.querySelector('#input_asset1_amount').onkeypress = function(event){       if(event.keyCode == 13)  asset1_sell_execute()  }
+    doc.querySelector('#input_asset1_secret_seed').onkeypress = function(event){  if(event.keyCode == 13)  asset1_sell_execute()  }
+    doc.querySelector('#input_asset0_price').onkeypress = function(event){        if(event.keyCode == 13)  asset0_sell_execute()  }
+    doc.querySelector('#input_asset0_amount').onkeypress = function(event){       if(event.keyCode == 13)  asset0_sell_execute()  }
+    doc.querySelector('#input_asset0_secret_seed').onkeypress = function(event){  if(event.keyCode == 13)  asset0_sell_execute()  }
+    doc.querySelector('#input_close_order_id').onkeypress = function(event){      if(event.keyCode == 13)  close_order_execute()  }
+    doc.querySelector('#input_close_order_secret_seed').onkeypress = function(event){   if(event.keyCode == 13)  close_order_execute()  }
 
 
     // ---------------------------------------------------------------------------------------------------
     // Set card titles!
-    doc.querySelector('#card_title_sell_asset1').innerText = `Sell ${selling_asset_code.toUpperCase()}`
-    doc.querySelector('#card_title_sell_asset0').innerText = `Sell ${buying_asset_code.toUpperCase()}`
-    doc.querySelector('#btn_buy').innerHTML = `Sell ${selling_asset_code.toUpperCase()} <i class='material-icons vcenter_child margin_left4'>send</i>`
-    doc.querySelector('#btn_sell').innerHTML = `Sell ${buying_asset_code.toUpperCase()} <i class='material-icons vcenter_child margin_left4'>send</i>`
+    doc.querySelector('#card_title_asset1_sell').innerText = `Sell ${selling_asset_code.toUpperCase()}`
+    doc.querySelector('#card_title_asset0_sell').innerText = `Sell ${buying_asset_code.toUpperCase()}`
+    doc.querySelector('#btn_asset1_sell').innerHTML = `Sell ${selling_asset_code.toUpperCase()} <i class='material-icons vcenter_child margin_left4'>send</i>`
+    doc.querySelector('#btn_asset0_sell').innerHTML = `Sell ${buying_asset_code.toUpperCase()} <i class='material-icons vcenter_child margin_left4'>send</i>`
+
+
+
+
+    // ---------------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------------
+    let PARAM_LIMIT = 8
+
+
+    // ---------------------------------------------------------------------------------------------------
+    function init_account_open_orders(account_id){
+      spinner_enable('spinner_open_orders_account_id')
+
+      doc.querySelector('#account_open_orders_title').innerText = account_id
+      doc.querySelector('#account_last_trades_title').innerText = account_id
+
+      HORIZON.offers('accounts', account_id).order('desc').limit(8 * PARAM_LIMIT).call().then(get_account_offers).catch(get_account_offers_error)
+    }
+
+    function get_account_offers(response){
+      let tbody = doc.querySelector('#account_open_orders_table').tBodies[0]
+      let tbody_html = ''
+
+      let offers = response.records
+      for(let offer of offers){
+        let id = offer.id
+        let amount = offer.amount
+        let price = offer.price
+        let buying_asset_code = native2xlm(offer.buying.asset_code, offer.buying.asset_type)
+        let selling_asset_code = native2xlm(offer.selling.asset_code, offer.selling.asset_type)
+        tbody_html += `<tr><td>${id}</td><td>${amount}</td><td>${price}</td><td>${buying_asset_code}</td><td>${selling_asset_code}</td></tr>`
+      }
+
+      tbody.innerHTML = tbody_html
+      spinner_disable('spinner_open_orders_account_id')
+    }
+
+    function get_account_offers_error(error){
+      spinner_disable('spinner_open_orders_account_id')
+    }
+
+
+    // ---------------------------------------------------------------------------------------------------
+    function init_account_last_trades(account_id){
+      spinner_enable('spinner_last_trades_account_id')
+      // HORIZON.trades().call().then(account_trades)
+      // HORIZON.orderbook(selling_asset, buying_asset).trades().forAccount(account_id).call().then(account_trades)
+      // HORIZON.trades().('accounts', account_id).order('desc').limit(8 * PARAM_LIMIT).call().then(account_trades)
+      // HORIZON.accounts().accountId(account_id).trades().call().then(get_account).then(get_account_trades)
+      get_request(`${HORIZON_URL}/accounts/${account_id}/trades?order=desc&limit=${8 * PARAM_LIMIT}`, get_account_trades)
+    }
+
+    function get_account_trades(){
+      let tbody = doc.querySelector('#account_last_trades_table').tBodies[0]
+      let tbody_html = ''
+
+      response = JSON.parse(this.response)
+      let trades = response._embedded ? response._embedded.records : []
+      for(let trade of trades){
+        let bought_amount = parseFloat(trade.bought_amount)
+        let price = parseFloat(trade.bought_amount) / parseFloat(trade.sold_amount)
+        let buying_asset_code = native2xlm(trade.bought_asset_code, trade.bought_asset_type)
+        let selling_asset_code = native2xlm(trade.sold_asset_code, trade.sold_asset_type)
+        let time = date_parse2(trade.created_at)
+        tbody_html += `<tr><td>${bought_amount.toFixed(7)}</td><td>${price.toFixed(7)}</td><td>${buying_asset_code}</td><td>${selling_asset_code}</td><td>${time}</td></tr>`
+      }
+
+      tbody.innerHTML = tbody_html
+      spinner_disable('spinner_last_trades_account_id')
+    }
+
+
+    // ---------------------------------------------------------------------------------------------------
+    let open_orders_account_id = doc.querySelector('#input_open_orders_account_id')
+    let last_trades_account_id = doc.querySelector('#input_last_trades_account_id')
+
+    open_orders_account_id.onkeypress = function(event){
+      if(event.keyCode != 13)  return
+      init_account_open_orders(open_orders_account_id.value)
+      init_account_last_trades(open_orders_account_id.value)
+    }
+
+    last_trades_account_id.onkeypress = function(event){
+      if(event.keyCode != 13)  return
+      init_account_open_orders(last_trades_account_id.value)
+      init_account_last_trades(last_trades_account_id.value)
+    }
   </script>
 
 </html>
