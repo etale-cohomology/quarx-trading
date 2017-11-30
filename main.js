@@ -268,12 +268,13 @@ function ledgers_stream(response){
 
 // ---------------------------------------------------------------------------------------------------
 function trades_get(buying_asset, selling_asset){
+  spinner_enable('spinner_charts')
   // let trade_eventsource = HORIZON.orderbook(buying_asset, selling_asset).trades().stream({onmessage: function(){ print('stream!') }}) // Doesn't work!
 
   TRADES = []  // Reset global TRADES!
   HORIZON.orderbook(selling_asset, buying_asset).trades().order('desc').limit(200).call()
-    // .then(trades_collect)  // It works!
-    // .then(trades_collect)  // It works!
+    .then(trades_collect)  // It works!
+    .then(trades_collect)  // It works!
     // .then(trades_collect)  // It works!
     // .then(trades_collect)  // It works!
     // .then(trades_collect)  // It works!
@@ -282,7 +283,6 @@ function trades_get(buying_asset, selling_asset){
 
 function trades_collect(response){
   Array.prototype.push.apply(TRADES, response.records)
-  print('response.records', response.records)
 
   let last_cursor = response.records[response.records.length - 1].paging_token
   return HORIZON.orderbook(selling_asset, buying_asset).trades().cursor(last_cursor).order('desc').limit(200).call()
@@ -317,6 +317,7 @@ function trades_table_build(response){
   trades_table.tBodies[0].innerHTML = trades_tbody_html
   // created_at bought_amount bought_asset_code bought_asset_issuer bought_asset_type sold_amount sold_asset_code sold_asset_issuer sold_asset_type
 
+  spinner_disable('spinner_charts')
   candlestick_integral(TRADES, CANDLESTICK_INTERVAL_SIZE_IN_SECS)
 }
 

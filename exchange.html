@@ -93,6 +93,7 @@
           <!-- ------------------------------------------------- -->
           <div class='mdl-cell mdl-cell--12-col vcenter_parent'>
             <h1 id='exchange' class='mdl-typography--headline montserrat bold margin_left inline_block vcenter_child'>Exchange</h1>
+            <div id='spinner_charts' class='mdl-spinner mdl-js-spinner margin_left vcenter_child'></div>
             <button id='btn_invert_market' class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised mdl-button--accent margin_left6 vcenter_child'>invert market<i class='material-icons margin_left4'>invert_colors</i></button>
           </div>
 
@@ -805,11 +806,11 @@
       print('selling_asset', selling_asset)
     }
 
-    // ---------------------
+    // ----------------------------------------------------------------------
     orderbook_get(buying_asset, selling_asset)
     trades_get(buying_asset, selling_asset)
 
-    // ---------------------
+    // ----------------------------------------------------------------------
     exchange_title(buying_asset_code, selling_asset_code)
     trades_title(buying_asset_code, selling_asset_code)
     bidask_title(buying_asset_code, selling_asset_code)
