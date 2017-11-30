@@ -122,7 +122,7 @@ function get_request(url, callback){
 }
 
 // Get the parameters from the URL!
-function url_get(param_name){
+function url_param_get(param_name){
   let url = new URL(window.location.href)
   let search_params = new URLSearchParams(url.search)
   return search_params.get(param_name)
@@ -162,6 +162,12 @@ function filter_binary_values(array, min, max){
   return result
 }
 
+// ----------------------------------------------------------------------
+function array_find(element){
+  return !(element === undefined)
+}
+
+
 // ------------------------------------------------------------------------------------------------
 // Return a value that goes into `asset_code`!
 function native2xlm(asset_code, asset_type){
@@ -189,6 +195,7 @@ let TRADES
 
 // ---------------------------------------------------------------------------------------------------
 function orderbook_get(buying_asset, selling_asset){
+  // print(arguments.callee.name, buying_asset, selling_asset)
   HORIZON.orderbook(selling_asset, buying_asset).limit(N_BIDS).stream({onmessage: orderbook_stream})  // .limit() doesn't work!
   HORIZON.ledgers().order('desc').limit(1).call().then(ledgers_callback).catch(error_show)
 }
@@ -198,19 +205,22 @@ function orderbook_stream(response){
   // print('asks', response.asks)
   let bids = response.bids.slice(0, N_BIDS)
   let asks = response.asks.slice(0, N_ASKS)
+  bids_table_make(bids)
+  asks_table_make(asks)
+
+  if(response.bids.length == 0 || response.asks.length == 0)  return
   let spread_absolute = asks[0].price - bids[0].price
   let spread_relative = 2 * spread_absolute / (parseFloat(asks[0].price) + parseFloat(bids[0].price))
 
   let date = new Date(Date.now())
   doc.querySelector('#spread_absolute').innerText = `${spread_absolute.toFixed(7)}`
   doc.querySelector('#spread_relative').innerText = `${spread_relative.toFixed(3)}`
-  doc.querySelector('#spread_absolute_title').innerText = `Spread (${url_get('buying_asset_code')})`
+  doc.querySelector('#spread_absolute_title').innerText = `Spread (${url_param_get('buying_asset_code')})`
 
-  bids_table_make(bids)
-  asks_table_make(asks)
 }
 
 function bids_table_make(bids){
+  if(bids.length == 0)  return
   let bids_table = doc.querySelector('#bids_table')
   let bids_html = ''
 
@@ -228,6 +238,7 @@ function bids_table_make(bids){
 }
 
 function asks_table_make(asks){
+  if(asks.length == 0)  return
   let asks_table = doc.querySelector('#asks_table')
   let asks_html = ''
 
@@ -263,11 +274,15 @@ function trades_get(buying_asset, selling_asset){
   HORIZON.orderbook(selling_asset, buying_asset).trades().order('desc').limit(200).call()
     // .then(trades_collect)  // It works!
     // .then(trades_collect)  // It works!
+    // .then(trades_collect)  // It works!
+    // .then(trades_collect)  // It works!
+    // .then(trades_collect)  // It works!
     .then(trades_table_build)  // It works!
 }
 
 function trades_collect(response){
   Array.prototype.push.apply(TRADES, response.records)
+  print('response.records', response.records)
 
   let last_cursor = response.records[response.records.length - 1].paging_token
   return HORIZON.orderbook(selling_asset, buying_asset).trades().cursor(last_cursor).order('desc').limit(200).call()
@@ -277,6 +292,7 @@ function trades_table_build(response){
   Array.prototype.push.apply(TRADES, response.records)
 
   TRADES = trades_purge_empty(TRADES)
+  print('TRADES', TRADES.length)
 
   // print('TRADES', TRADES)
   // for(let trade of TRADES) print(parseFloat(trade.bought_amount), parseFloat(trade.sold_amount), trade.bought_amount / trade.sold_amount)

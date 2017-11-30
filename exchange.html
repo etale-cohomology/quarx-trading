@@ -91,8 +91,9 @@
         <div class='mdl-grid mdl-grid--no-spacing mdl-color-text--white margin_top'>
 
           <!-- ------------------------------------------------- -->
-          <div class='mdl-cell mdl-cell--12-col'>
-            <h1 id='exchange' class='mdl-typography--headline montserrat bold margin_left'>Exchange</h1>
+          <div class='mdl-cell mdl-cell--12-col vcenter_parent'>
+            <h1 id='exchange' class='mdl-typography--headline montserrat bold margin_left inline_block vcenter_child'>Exchange</h1>
+            <button id='btn_invert_market' class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised mdl-button--accent margin_left6 vcenter_child'>invert market<i class='material-icons margin_left4'>invert_colors</i></button>
           </div>
 
           <!-- ------------------------------------------------- -->
@@ -101,6 +102,14 @@
             <!-- --------------------- -->
             <div class='mdl-grid flex_justify_center'>
               <div class='mdl-card mdl-shadow--4dp mdl-color--grey-900'><div id='chart0' class='mdl-cell mdl-cell--12-col'></div></div>
+              <!-- <button id='btn_interval_1min' class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised mdl-button--accent margin_left'>1min</button>
+              <button id='btn_interval_5min' class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised mdl-button--accent margin_left'>5min</button>
+              <button id='btn_interval_30min' class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised mdl-button--accent margin_left'>30min</button>
+              <button id='btn_interval_1h' class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised mdl-button--accent margin_left'>1h</button>
+              <button id='btn_interval_4h' class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised mdl-button--accent margin_left'>4h</button>
+              <button id='btn_interval_1D' class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised mdl-button--accent margin_left'>1D</button>
+              <button id='btn_interval_1W' class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised mdl-button--accent margin_left'>1W</button>
+              <button id='btn_interval_1M' class='mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised mdl-button--accent margin_left'>1M</button> -->
               <div class='mdl-card mdl-shadow--4dp mdl-color--grey-900'><div id='chart1' class='mdl-cell mdl-cell--12-col'></div></div>
               <div class='mdl-card mdl-shadow--4dp mdl-color--grey-900'><div id='chart2' class='mdl-cell mdl-cell--12-col'></div></div>
               <div class='mdl-card mdl-shadow--4dp mdl-color--grey-900'><div id='chart3' class='mdl-cell mdl-cell--12-col'></div></div>
@@ -456,8 +465,8 @@
       let account0_seed = doc.querySelector('#input_asset1_secret_seed').value
       let price = doc.querySelector('#input_asset1_price').value
       let amount = doc.querySelector('#input_asset1_amount').value
-      let buying_asset = new StellarSdk.Asset(url_get('buying_asset_code'), url_get('buying_asset_issuer'))
-      let selling_asset = new StellarSdk.Asset(url_get('selling_asset_code'), url_get('selling_asset_issuer'))
+      let buying_asset = new StellarSdk.Asset(url_param_get('buying_asset_code'), url_param_get('buying_asset_issuer'))
+      let selling_asset = new StellarSdk.Asset(url_param_get('selling_asset_code'), url_param_get('selling_asset_issuer'))
 
       if(!(price > 0)){
         generic_error_snackbar_show('Error: price must be a positive number.')
@@ -547,8 +556,8 @@
       let account0_seed = doc.querySelector('#input_asset0_secret_seed').value
       let price = doc.querySelector('#input_asset0_price').value
       let amount = doc.querySelector('#input_asset0_amount').value
-      let buying_asset = new StellarSdk.Asset(url_get('buying_asset_code'), url_get('buying_asset_issuer'))
-      let selling_asset = new StellarSdk.Asset(url_get('selling_asset_code'), url_get('selling_asset_issuer'))
+      let buying_asset = new StellarSdk.Asset(url_param_get('buying_asset_code'), url_param_get('buying_asset_issuer'))
+      let selling_asset = new StellarSdk.Asset(url_param_get('selling_asset_code'), url_param_get('selling_asset_issuer'))
 
       if(!(price > 0)){
         generic_error_snackbar_show('Error: price must be a positive number.')
@@ -732,11 +741,20 @@
       doc.querySelector('#tooltip_asset0_sell').innerHTML = `<b>Sell</b> your <b>${buying_asset_code}</b> in exchange for <b>${selling_asset_code}</b>.<br><br>An <b>asset</b> is given by 2 pieces of data: 1) an <b>asset code</b> and 2) an <b>asset issuer</b>. All assets (except Lumens) have an issuer. Here, the <b>issuer</b> is <i>already selected</i>.`
     }
 
+    function invert_market(){
+      let buying_asset_code     = url_param_get('buying_asset_code')
+      let buying_asset_issuer   = url_param_get('buying_asset_issuer')
+      let selling_asset_code    = url_param_get('selling_asset_code')
+      let selling_asset_issuer  = url_param_get('selling_asset_issuer')
+      window.location = `?buying_asset_code=${selling_asset_code}&buying_asset_issuer=${selling_asset_issuer}&selling_asset_code=${buying_asset_code}&selling_asset_issuer=${buying_asset_issuer}`
+    }
+
     function market_components(market){
       let table = doc.querySelector('#market_components_table')
       let tbody_html = ''
       for(let component of market)
-        tbody_html += `<tr><td><a href='https://stellardesk.org/accounts?server=pubnet&account=${component}'>${component}</a></td></tr>`
+        if(component)
+          tbody_html += `<tr><td><a href='https://stellardesk.org/accounts?server=pubnet&account=${component}'>${component}</a></td></tr>`
       table.tBodies[0].innerHTML = tbody_html
     }
 
@@ -757,23 +775,34 @@
     }
 
     // ----------------------------------------------------------------------
-    let buying_asset_code  = url_get('buying_asset_code')
-    let buying_asset_issuer  = url_get('buying_asset_issuer')
-    let selling_asset_code = url_get('selling_asset_code')
-    let selling_asset_issuer = url_get('selling_asset_issuer')
+    let buying_asset_code     = url_param_get('buying_asset_code')
+    let buying_asset_issuer   = url_param_get('buying_asset_issuer')
+    let selling_asset_code    = url_param_get('selling_asset_code')
+    let selling_asset_issuer  = url_param_get('selling_asset_issuer')
 
     let buying_asset
     let selling_asset
     if(buying_asset_issuer == 'mass' || selling_asset_issuer == 'mass'){
-      buying_asset  = new StellarSdk.Asset.native()
-      selling_asset = new StellarSdk.Asset(selling_asset_code, MARKETS[selling_asset_code][0])
-      market_components(MARKETS[selling_asset_code])
-      print('mass market')
+      buying_asset  = parse_xlm(buying_asset_code, MARKETS[buying_asset_code] ? MARKETS[buying_asset_code][0] : '')//new StellarSdk.Asset.native()
+      selling_asset = parse_xlm(selling_asset_code, MARKETS[selling_asset_code] ? MARKETS[selling_asset_code][0] : '')
+
+      anchors = Array.prototype.concat.apply([], [MARKETS[buying_asset_code], MARKETS[selling_asset_code]]).unique()
+      print('anchors', anchors)
+      market_components(anchors)
+
+      print('MASS market') 
+      print('buying_asset', buying_asset)
+      print('selling_asset', selling_asset)
     }else{
       buying_asset  = parse_xlm(buying_asset_code, buying_asset_issuer)
-      selling_asset = new parse_xlm(selling_asset_code, selling_asset_issuer)
-      market_components([buying_asset_issuer, selling_asset_issuer].unique())
-      print('single market')
+      selling_asset = parse_xlm(selling_asset_code, selling_asset_issuer)
+
+      let anchors = [buying_asset_issuer, selling_asset_issuer].unique()
+      market_components(anchors)
+
+      print('SINGLE market')
+      print('buying_asset', buying_asset)
+      print('selling_asset', selling_asset)
     }
 
     // ---------------------
@@ -789,16 +818,17 @@
 
     // ---------------------------------------------------------------------------------------------------
     // Buy/sell button control!
+    doc.querySelector('#btn_invert_market').onclick = invert_market
     doc.querySelector('#btn_asset1_sell').onclick = asset1_sell_execute
     doc.querySelector('#btn_asset0_sell').onclick = asset0_sell_execute
     doc.querySelector('#btn_close_order').onclick = close_order_execute
-    doc.querySelector('#input_asset1_price').onkeypress = function(event){        if(event.keyCode == 13)  asset1_sell_execute()  }
-    doc.querySelector('#input_asset1_amount').onkeypress = function(event){       if(event.keyCode == 13)  asset1_sell_execute()  }
-    doc.querySelector('#input_asset1_secret_seed').onkeypress = function(event){  if(event.keyCode == 13)  asset1_sell_execute()  }
-    doc.querySelector('#input_asset0_price').onkeypress = function(event){        if(event.keyCode == 13)  asset0_sell_execute()  }
-    doc.querySelector('#input_asset0_amount').onkeypress = function(event){       if(event.keyCode == 13)  asset0_sell_execute()  }
-    doc.querySelector('#input_asset0_secret_seed').onkeypress = function(event){  if(event.keyCode == 13)  asset0_sell_execute()  }
-    doc.querySelector('#input_close_order_id').onkeypress = function(event){      if(event.keyCode == 13)  close_order_execute()  }
+    doc.querySelector('#input_asset1_price').onkeypress = function(event){              if(event.keyCode == 13)  asset1_sell_execute()  }
+    doc.querySelector('#input_asset1_amount').onkeypress = function(event){             if(event.keyCode == 13)  asset1_sell_execute()  }
+    doc.querySelector('#input_asset1_secret_seed').onkeypress = function(event){        if(event.keyCode == 13)  asset1_sell_execute()  }
+    doc.querySelector('#input_asset0_price').onkeypress = function(event){              if(event.keyCode == 13)  asset0_sell_execute()  }
+    doc.querySelector('#input_asset0_amount').onkeypress = function(event){             if(event.keyCode == 13)  asset0_sell_execute()  }
+    doc.querySelector('#input_asset0_secret_seed').onkeypress = function(event){        if(event.keyCode == 13)  asset0_sell_execute()  }
+    doc.querySelector('#input_close_order_id').onkeypress = function(event){            if(event.keyCode == 13)  close_order_execute()  }
     doc.querySelector('#input_close_order_secret_seed').onkeypress = function(event){   if(event.keyCode == 13)  close_order_execute()  }
 
 
