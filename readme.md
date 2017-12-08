@@ -1,6 +1,6 @@
 # Quarx Trading. Client for the Stellar DEX.
 
-[Quarx Trading](http://quarx.space) is an [open source](https://github.com/etale-cohomology/quarx-trading) client for the [Stellar](https://www.stellar.org/) Descentralized Exchange. It features various markets, real-time updates, and a wealth of technical indicators.
+[Quarx Trading](http://quarx.space) is an [open source](https://github.com/etale-cohomology/quarx-trading) client for the [Stellar](https://www.stellar.org/) Decentralized Exchange. It features various markets, real-time updates, and a wealth of technical indicators.
 
 ## Capabilities
 

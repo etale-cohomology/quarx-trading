@@ -273,8 +273,8 @@ function trades_get(buying_asset, selling_asset){
 
   TRADES = []  // Reset global TRADES!
   HORIZON.orderbook(selling_asset, buying_asset).trades().order('desc').limit(200).call()
-    .then(trades_collect)  // It works!
-    .then(trades_collect)  // It works!
+    // .then(trades_collect)  // It works!
+    // .then(trades_collect)  // It works!
     // .then(trades_collect)  // It works!
     // .then(trades_collect)  // It works!
     // .then(trades_collect)  // It works!
@@ -291,11 +291,11 @@ function trades_collect(response){
 function trades_table_build(response){
   Array.prototype.push.apply(TRADES, response.records)
 
-  TRADES = trades_purge_empty(TRADES)
-  print('TRADES', TRADES.length)
+  // TRADES = trades_purge_empty(TRADES)
+  // print('TRADES', TRADES.length, TRADES)
 
-  // print('TRADES', TRADES)
-  // for(let trade of TRADES) print(parseFloat(trade.bought_amount), parseFloat(trade.sold_amount), trade.bought_amount / trade.sold_amount)
+  for(let trade of TRADES)  print(date_parse2(trade.ledger_close_time), trade.base_amount / trade.counter_amount, trade.base_amount, trade.base_asset_code, trade.base_asset_type, trade.base_asset_issuer, trade.counter_amount, trade.counter_asset_code, trade.counter_asset_type, trade.counter_asset_issuer)
+  // ledger_close_time base_amount base_asset_code base_asset_type base_asset_issuer counter_amount counter_asset_code counter_asset_type counter_asset_issuer
 
   let trades_table = doc.querySelector('#trades_table')
   let trades_tbody_html = ''
@@ -315,7 +315,6 @@ function trades_table_build(response){
   }
 
   trades_table.tBodies[0].innerHTML = trades_tbody_html
-  // created_at bought_amount bought_asset_code bought_asset_issuer bought_asset_type sold_amount sold_asset_code sold_asset_issuer sold_asset_type
 
   spinner_disable('spinner_charts')
   candlestick_integral(TRADES, CANDLESTICK_INTERVAL_SIZE_IN_SECS)
