@@ -156,7 +156,7 @@ h3{ font-size:12px; }
 
 .mdl-card { width:96%; margin:8px 0 8px 0; min-height:32px; }
 .mdl-card__title{ padding:4px 4px 4px 16px; }
-.mdl-card__title-text{ font-size:16px }
+.mdl-card__title-text{ font-size:14px; }
 .mdl-card__supporting-text{ font-size:10px; padding:4px 4px 4px 16px; }
 
 .spread_card{ width:48%; }

@@ -146,22 +146,6 @@ function filter_binary_indices(array, min, max){
   return result
 }
 
-// Filter an array and return the values!
-function filter_binary_values(array, min, max){
-  let up      = -1
-  let down    = array.length
-  let mid     = Math.floor(array.length / 2)
-  let result  = []
-
-  while(up++ < mid && down-- > mid){
-    if(array[down] < min || array[up] > max)  break
-    if(array[up] >= min)                      result.push(array[up])
-    if(array[down] < max)                     result.push(array[down])
-  }
-
-  return result
-}
-
 // ----------------------------------------------------------------------
 function array_find(element){
   return !(element === undefined)
@@ -188,7 +172,7 @@ let HORIZON = new StellarSdk.Server(HORIZON_URL)
 let N_BIDS = 24
 let N_ASKS = 24
 let N_TRADES = 64
-let CANDLESTICK_INTERVAL_SIZE_IN_SECS = 1 * 5 * 60
+let CANDLESTICK_RESOLUTION = 1 * 1 * 60 * 1000  // hours * minutes * seconds * milliseconds
 
 let TRADES
 
@@ -213,10 +197,19 @@ function orderbook_stream(response){
   let spread_relative = 2 * spread_absolute / (parseFloat(asks[0].price) + parseFloat(bids[0].price))
 
   let date = new Date(Date.now())
-  doc.querySelector('#spread_absolute').innerText = `${spread_absolute.toFixed(7)}`
-  doc.querySelector('#spread_relative').innerText = `${spread_relative.toFixed(3)}`
-  doc.querySelector('#spread_absolute_title').innerText = `Spread (${url_param_get('buying_asset_code')})`
+  doc.querySelector('#bid_card_title').innerText = `Bid (${url_param_get('buying_asset_code')})`
+  doc.querySelector('#bid_card_value').innerText = `${bids[0].price}`
 
+  doc.querySelector('#ask_card_title').innerText = `Ask (${url_param_get('buying_asset_code')})`
+  doc.querySelector('#ask_card_value').innerText = `${asks[0].price}`
+
+  doc.querySelector('#last_card_title').innerText = `Last (${url_param_get('buying_asset_code')})`
+  // doc.querySelector('#last_card_value').innerText = `${price}`
+
+  doc.querySelector('#spread_absolute_card_title').innerText = `Spread (${url_param_get('buying_asset_code')})`
+  doc.querySelector('#spread_absolute_card_value').innerText = `${spread_absolute.toFixed(7)}`
+
+  // doc.querySelector('#spread_relative').innerText = `${spread_relative.toFixed(3)}`
 }
 
 function bids_table_make(bids){
@@ -272,13 +265,17 @@ function trades_get(buying_asset, selling_asset){
   // let trade_eventsource = HORIZON.orderbook(buying_asset, selling_asset).trades().stream({onmessage: function(){ print('stream!') }}) // Doesn't work!
 
   TRADES = []  // Reset global TRADES!
-  HORIZON.orderbook(selling_asset, buying_asset).trades().order('desc').limit(200).call()
+
+  // https://horizon.stellar.org/trade_aggregations?base_asset_type=native&counter_asset_code=CNY&counter_asset_type=credit_alphanum4&counter_asset_issuer=GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX&resolution=300000&limit=200&order=desc
+  get_request(`${HORIZON_URL}/trade_aggregations?base_asset_type=native&counter_asset_code=${buying_asset.code}&counter_asset_type=${'credit_alphanum4'}&counter_asset_issuer=${buying_asset.issuer}&resolution=${CANDLESTICK_RESOLUTION}&limit=200&order=desc`, candlesticks_build)  // &start_timestamp=1512742740000&end_timestamp=1510743700000
+
+  // https://horizon.stellar.org/trades?base_asset_type=native&counter_asset_type=credit_alphanum4&counter_asset_code=CNY&counter_asset_issuer=GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX
+  get_request(`${HORIZON_URL}/trades?base_asset_type=native&counter_asset_code=${buying_asset.code}&counter_asset_type=${'credit_alphanum4'}&counter_asset_issuer=${buying_asset.issuer}&order=desc&limit=${N_TRADES}`, trades_table_build)
+
+  // HORIZON.orderbook(selling_asset, buying_asset).trades().order('desc').limit(200).call()
     // .then(trades_collect)  // It works!
     // .then(trades_collect)  // It works!
-    // .then(trades_collect)  // It works!
-    // .then(trades_collect)  // It works!
-    // .then(trades_collect)  // It works!
-    .then(trades_table_build)  // It works!
+    // .then(trades_table_build)  // It works!
 }
 
 function trades_collect(response){
@@ -289,14 +286,11 @@ function trades_collect(response){
 }
 
 function trades_table_build(response){
-  Array.prototype.push.apply(TRADES, response.records)
-
-  // TRADES = trades_purge_empty(TRADES)
-  // print('TRADES', TRADES.length, TRADES)
+  response = JSON.parse(this.response)
+  let TRADES = response._embedded ? response._embedded.records : []
+  print('TRADES', TRADES.length, TRADES)
 
   // for(let trade of TRADES)  print(date_parse2(trade.ledger_close_time), trade.counter_amount / trade.base_amount, trade.counter_asset_code, trade.counter_asset_type, trade.counter_asset_issuer, trade.counter_amount, trade.base_asset_code, trade.base_asset_type, trade.base_asset_issuer, trade.base_amount)
-  for(let trade of TRADES)  print(trade.ledger_close_time)
-  // for(let trade of TRADES)  print(trade.base_asset_code, trade.counter_asset_code)
   // ledger_close_time counter_amount base_asset_code base_asset_type base_asset_issuer base_amount counter_asset_code counter_asset_type counter_asset_issuer
 
   let trades_table = doc.querySelector('#trades_table')
@@ -312,111 +306,31 @@ function trades_table_build(response){
     let price_style = price >= price_prev ? 'mdl-color-text--green' : 'mdl-color-text--red'
 
     let href = `${HORIZON_URL}/order_book/trades?selling_asset_type=${TRADES[i+1].sold_asset_type}&selling_asset_code=${TRADES[i+1].sold_asset_code}&selling_asset_issuer=${TRADES[i+1].sold_asset_issuer}&buying_asset_type=${TRADES[i+1].base_asset_type}&buying_asset_code=${TRADES[i+1].base_asset_code}&buying_asset_issuer=${TRADES[i+1].base_asset_issuer}&cursor=${TRADES[i+1].id}&limit=1`
-    // print(href)
     trades_tbody_html += `<tr><td><a href='${href}' class='monospace'>${volume}</a></td><td class='${price_style}'><a href='${href}' class='monospace'>${price}</a></td><td><a href='${href}' class='monospace'>${date}</a></td></tr>`
   }
+
+  doc.querySelector('#last_card_value').innerText = `${(TRADES[0].counter_amount / TRADES[0].base_amount).toFixed(7)}`
 
   trades_table.tBodies[0].innerHTML = trades_tbody_html
 
   spinner_disable('spinner_charts')
-  candlestick_integral(TRADES, CANDLESTICK_INTERVAL_SIZE_IN_SECS)
 }
 
-// Purge empty trades (ie. trades with 0 counter_amount or 0 base_amount!
-function trades_purge_empty(trades){
-  let purged_trades = []
-  for(let i=0; i<trades.length; ++i)
-    if((trades[i].counter_amount > 0) && (trades[i].base_amount > 0))
-      purged_trades.push(trades[i])
-  return purged_trades
-}
+function candlesticks_build(response){
+  response = JSON.parse(this.response)
+  let CANDLESTICKS = response._embedded ? response._embedded.records : []
 
-// Compute the candlestick-integral of a sequence of trades (expected to be in DESCENDING order)!
-function candlestick_integral(trades, interval_size_in_secs){
-  trades.reverse()  // Now the trades are in ASCENDING order! =D
-  // print('trades', trades)
-  // for(let trade of trades) print(trade.counter_amount, trade.base_amount)
-
-  let dates = []
-  for(let trade of trades)  dates.push(date2secs(trade.ledger_close_time))
-  // print(dates.length, dates)
-
-  let first_date = dates[0]
-  let last_date = dates[dates.length - 1]
-  let n_intervals = Math.ceil((last_date - first_date) / interval_size_in_secs)
-  // print(n_intervals, dates)
-
-  // for(let i=1; i<dates.length; ++i)  print(dates[i-1] <= dates[i], dates[i])
-
-  let indices_master = []  // A 2-array!
-  for(let i=0; i < n_intervals; ++i){
-    let indices = filter_binary_indices(dates, first_date + i * interval_size_in_secs, first_date + (i+1) * interval_size_in_secs)
-    indices_master.push(indices)
-    // print('endpoints', first_date + i * interval_size_in_secs, first_date + (i+1) * interval_size_in_secs)
-    // print(indices)
+  let candlesticks = []
+  for(let i=0; i<CANDLESTICKS.length; ++i){
+    let candle = CANDLESTICKS[i]
+    candlesticks[i] = {date:new Date(candle.timestamp), open:parseFloat(candle.open), high:parseFloat(candle.high), low:parseFloat(candle.low), close:parseFloat(candle.close), volume:parseFloat(candle.counter_volume)}
   }
+  for(let candle of candlesticks)  print(`${candle.date}, ${candle.open}, ${candle.high}, ${candle.low}, ${candle.close}, ${candle.volume}`)
 
-  let CANDLESTICKS = []  // date, open, high, low, close, volume
-
-  // ------- First pass over `CANDLESTICKS`!
-  for(let indices of indices_master){
-
-    let candlestick = []
-    for(let index of indices){
-      let trade = trade_get(trades[index])
-      candlestick.push(trade)
-    }
-
-    candlestick = trade_integral(candlestick)  // Compute a single candlestick from a bunch of trades!
-    CANDLESTICKS.push(candlestick)
-  }
-
-  // ------- Second pass over `CANDLESTICKS`!
-  for(let i=0; i < CANDLESTICKS.length; ++i){
-    if(CANDLESTICKS[i].date == -1){
-      CANDLESTICKS[i].date = new Date(1000 * (date2secs(CANDLESTICKS[i-1].date) + interval_size_in_secs))
-      CANDLESTICKS[i].open = CANDLESTICKS[i-1].close
-      CANDLESTICKS[i].high = CANDLESTICKS[i-1].close
-      CANDLESTICKS[i].low  = CANDLESTICKS[i-1].close
-      CANDLESTICKS[i].close = CANDLESTICKS[i-1].close
-      CANDLESTICKS[i].volume = 0
-    }
-  }
-
-  // for(let candlestick of CANDLESTICKS)  print(`${candlestick.date.toISOString()}, ${candlestick.open.toFixed(7)}, ${candlestick.high.toFixed(7)}, ${candlestick.low.toFixed(7)}, ${candlestick.close.toFixed(7)}, ${candlestick.volume}`)
+  print('CANDLESTICKS', CANDLESTICKS.length, CANDLESTICKS)
 
   // ---------------------
-  charts_draw(CANDLESTICKS)
-}
-
-function trade_get(trade){
-  let date = new Date(trade.ledger_close_time)
-  let price = trade.counter_amount / trade.base_amount
-  let volume = parseFloat(trade.counter_amount)
-  return {date:date, price:price, volume:volume}
-}
-
-// Compute a single candlestick from a (short) sequence of trades!
-function trade_integral(trades){
-  // print(trades)
-  if(trades.length == 0)  return {date:-1, open:-1, high:-1, low:-1, close:-1, volume:-1}
-
-  let date    = trades[trades.length-1].date
-  let open    = trades[0].price
-  let close   = trades[trades.length-1].price
-
-  let high    = 0
-  let low     = Infinity
-  let volume  = 0
-  for(let trade of trades){
-    high = Math.max(trade.price, high)
-    low = Math.min(trade.price, low)
-    volume += trade.volume
-  }
-  if(isNaN(high))   high = open
-  if(isNaN(low))    low = open
-
-  return {date:date, open:open, high:high, low:low, close:close, volume:volume}
+  charts_draw(candlesticks)
 }
 
 
@@ -440,7 +354,7 @@ function candlestick_draw(div_id, candlesticks, name, width_box, height_box){
   let height = height_box - margin.top - margin.bottom
   let volumeHeight = height_box * .25
 
-  let parseDate = d3.timeParse('%Y-%m-%dT%H:%M:%S.%LZ')  // d3.isoFormat  // d3.timeParse('%d-%b-%y')
+  // let parseDate = d3.timeParse('%Y-%m-%dT%H:%M:%S.%LZ')  // d3.isoFormat  // d3.timeParse('%d-%b-%y')  // d3.timeFormat('%Q')
   let zoom = d3.zoom().on('zoom', zoomed)
 
   let x = techan.scale.financetime().range([0, width])
