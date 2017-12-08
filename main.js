@@ -158,6 +158,46 @@ function native2xlm(asset_code, asset_type){
   return undefined2na(asset_type == 'native' ? 'XLM' : asset_code)
 }
 
+// Return a value that goes into `asset_type`!
+function xlm2native(asset_type, asset_code){
+  return undefined2na(asset_code == 'XLM' ? 'native' : asset_type)
+}
+
+
+
+function asset_code_stellar_parse(asset_code, asset_type){
+  if(asset_code == 'XLM' || asset_type == 'native')
+    return undefined
+  else
+    return asset_code
+}
+
+function asset_type_stellar_parse(asset_type, asset_code){
+  if(asset_type == 'native' || asset_code == 'XLM')
+    return 'native'
+  else
+    return 'credit_alphanum4'
+}
+
+function asset_issuer_stellar_parse(asset_issuer, asset_code, asset_type){
+  if(asset_code == 'XLM' || asset_type == 'native')
+    return undefined
+  else
+    return asset_issuer
+}
+
+
+
+// A straightforward switcheroo!
+function native2xlm_direct(string){
+  return undefined2na(string == 'native' ? 'XLM' : string)
+}
+
+// A straightforward switcheroo!
+function xlm2native_direct(string){
+  return undefined2na(string == 'XLM' ? 'native' : string)
+}
+
 
 
 
@@ -178,9 +218,9 @@ let TRADES
 
 
 // ---------------------------------------------------------------------------------------------------
-function orderbook_get(buying_asset, selling_asset){
-  // print(arguments.callee.name, buying_asset, selling_asset)
-  HORIZON.orderbook(selling_asset, buying_asset).limit(N_BIDS).stream({onmessage: orderbook_stream})  // .limit() doesn't work!
+function orderbook_get(counter_asset, base_asset){
+  // print(arguments.callee.name, counter_asset, base_asset)
+  HORIZON.orderbook(base_asset, counter_asset).limit(N_BIDS).stream({onmessage: orderbook_stream})  // .limit() doesn't work!
   HORIZON.ledgers().order('desc').limit(1).call().then(ledgers_callback).catch(error_show)
 }
 
@@ -197,19 +237,17 @@ function orderbook_stream(response){
   let spread_relative = 2 * spread_absolute / (parseFloat(asks[0].price) + parseFloat(bids[0].price))
 
   let date = new Date(Date.now())
-  doc.querySelector('#bid_card_title').innerText = `Bid (${url_param_get('buying_asset_code')})`
+  doc.querySelector('#bid_card_title').innerText = `Bid (${native2xlm_direct(url_param_get('counter_asset_code'))})`
   doc.querySelector('#bid_card_value').innerText = `${bids[0].price}`
 
-  doc.querySelector('#ask_card_title').innerText = `Ask (${url_param_get('buying_asset_code')})`
+  doc.querySelector('#ask_card_title').innerText = `Ask (${native2xlm_direct(url_param_get('counter_asset_code'))})`
   doc.querySelector('#ask_card_value').innerText = `${asks[0].price}`
 
-  doc.querySelector('#last_card_title').innerText = `Last (${url_param_get('buying_asset_code')})`
+  doc.querySelector('#last_card_title').innerText = `Last (${native2xlm_direct(url_param_get('counter_asset_code'))})`
   // doc.querySelector('#last_card_value').innerText = `${price}`
 
-  doc.querySelector('#spread_absolute_card_title').innerText = `Spread (${url_param_get('buying_asset_code')})`
+  doc.querySelector('#spread_absolute_card_title').innerText = `Spread (${native2xlm_direct(url_param_get('counter_asset_code'))})`
   doc.querySelector('#spread_absolute_card_value').innerText = `${spread_absolute.toFixed(7)}`
-
-  // doc.querySelector('#spread_relative').innerText = `${spread_relative.toFixed(3)}`
 }
 
 function bids_table_make(bids){
@@ -260,19 +298,20 @@ function ledgers_stream(response){
 
 
 // ---------------------------------------------------------------------------------------------------
-function trades_get(buying_asset, selling_asset){
+function trades_get(counter_asset, base_asset){
   spinner_enable('spinner_charts')
-  // let trade_eventsource = HORIZON.orderbook(buying_asset, selling_asset).trades().stream({onmessage: function(){ print('stream!') }}) // Doesn't work!
+  // let trade_eventsource = HORIZON.orderbook(counter_asset, base_asset).trades().stream({onmessage: function(){ print('stream!') }}) // Doesn't work!
 
   TRADES = []  // Reset global TRADES!
 
   // https://horizon.stellar.org/trade_aggregations?base_asset_type=native&counter_asset_code=CNY&counter_asset_type=credit_alphanum4&counter_asset_issuer=GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX&resolution=300000&limit=200&order=desc
-  get_request(`${HORIZON_URL}/trade_aggregations?base_asset_type=native&counter_asset_code=${buying_asset.code}&counter_asset_type=${'credit_alphanum4'}&counter_asset_issuer=${buying_asset.issuer}&resolution=${CANDLESTICK_RESOLUTION}&limit=200&order=desc`, candlesticks_build)  // &start_timestamp=1512742740000&end_timestamp=1510743700000
+  print(`${HORIZON_URL}/trade_aggregations?base_asset_type=${asset_type_stellar_parse(base_asset.type, base_asset.code)}&base_asset_code=${asset_code_stellar_parse(base_asset.code, base_asset.type)}&base_asset_issuer=${asset_issuer_stellar_parse(base_asset.issuer, base_asset.code, base_asset.type)}&counter_asset_code=${asset_code_stellar_parse(counter_asset.code, counter_asset.type)}&counter_asset_type=${asset_type_stellar_parse(counter_asset.type, counter_asset.code)}&counter_asset_issuer=${asset_issuer_stellar_parse(counter_asset.issuer, counter_asset.code, counter_asset.type)}&resolution=${CANDLESTICK_RESOLUTION}&limit=200&order=desc`)
+  get_request(`${HORIZON_URL}/trade_aggregations?base_asset_type=${asset_type_stellar_parse(base_asset.type, base_asset.code)}&base_asset_code=${asset_code_stellar_parse(base_asset.code, base_asset.type)}&base_asset_issuer=${asset_issuer_stellar_parse(base_asset.issuer, base_asset.code, base_asset.type)}&counter_asset_code=${asset_code_stellar_parse(counter_asset.code, counter_asset.type)}&counter_asset_type=${asset_type_stellar_parse(counter_asset.type, counter_asset.code)}&counter_asset_issuer=${asset_issuer_stellar_parse(counter_asset.issuer, counter_asset.code, counter_asset.type)}&resolution=${CANDLESTICK_RESOLUTION}&limit=200&order=desc`, candlesticks_build)  // &start_timestamp=1512742740000&end_timestamp=1510743700000
 
   // https://horizon.stellar.org/trades?base_asset_type=native&counter_asset_type=credit_alphanum4&counter_asset_code=CNY&counter_asset_issuer=GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX
-  get_request(`${HORIZON_URL}/trades?base_asset_type=native&counter_asset_code=${buying_asset.code}&counter_asset_type=${'credit_alphanum4'}&counter_asset_issuer=${buying_asset.issuer}&order=desc&limit=${N_TRADES}`, trades_table_build)
+  get_request(`${HORIZON_URL}/trades?counter_asset_code=${asset_code_stellar_parse(counter_asset.code, counter_asset.type)}&counter_asset_type=${asset_type_stellar_parse(counter_asset.type, counter_asset.code)}&counter_asset_issuer=${asset_issuer_stellar_parse(counter_asset.issuer, counter_asset.code, counter_asset.type)}&base_asset_code=${asset_code_stellar_parse(base_asset.code, base_asset.type)}&base_asset_type=${asset_type_stellar_parse(base_asset.type, base_asset.code)}&base_asset_issuer=${asset_issuer_stellar_parse(base_asset.issuer, base_asset.code, base_asset.type)}&order=desc&limit=${N_TRADES}`, trades_table_build)
 
-  // HORIZON.orderbook(selling_asset, buying_asset).trades().order('desc').limit(200).call()
+  // HORIZON.orderbook(base_asset, counter_asset).trades().order('desc').limit(200).call()
     // .then(trades_collect)  // It works!
     // .then(trades_collect)  // It works!
     // .then(trades_table_build)  // It works!
@@ -282,7 +321,7 @@ function trades_collect(response){
   Array.prototype.push.apply(TRADES, response.records)
 
   let last_cursor = response.records[response.records.length - 1].paging_token
-  return HORIZON.orderbook(selling_asset, buying_asset).trades().cursor(last_cursor).order('desc').limit(200).call()
+  return HORIZON.orderbook(base_asset, counter_asset).trades().cursor(last_cursor).order('desc').limit(200).call()
 }
 
 function trades_table_build(response){
@@ -305,7 +344,7 @@ function trades_table_build(response){
     let price_prev = (TRADES[i+1].counter_amount / TRADES[i+1].base_amount).toFixed(7)
     let price_style = price >= price_prev ? 'mdl-color-text--green' : 'mdl-color-text--red'
 
-    let href = `${HORIZON_URL}/order_book/trades?selling_asset_type=${TRADES[i+1].sold_asset_type}&selling_asset_code=${TRADES[i+1].sold_asset_code}&selling_asset_issuer=${TRADES[i+1].sold_asset_issuer}&buying_asset_type=${TRADES[i+1].base_asset_type}&buying_asset_code=${TRADES[i+1].base_asset_code}&buying_asset_issuer=${TRADES[i+1].base_asset_issuer}&cursor=${TRADES[i+1].id}&limit=1`
+    let href = `${HORIZON_URL}/order_book/trades?base_asset_type=${TRADES[i+1].sold_asset_type}&base_asset_code=${TRADES[i+1].sold_asset_code}&base_asset_issuer=${TRADES[i+1].sold_asset_issuer}&counter_asset_type=${TRADES[i+1].base_asset_type}&counter_asset_code=${TRADES[i+1].base_asset_code}&counter_asset_issuer=${TRADES[i+1].base_asset_issuer}&cursor=${TRADES[i+1].id}&limit=1`
     trades_tbody_html += `<tr><td><a href='${href}' class='monospace'>${volume}</a></td><td class='${price_style}'><a href='${href}' class='monospace'>${price}</a></td><td><a href='${href}' class='monospace'>${date}</a></td></tr>`
   }
 
@@ -325,9 +364,9 @@ function candlesticks_build(response){
     let candle = CANDLESTICKS[i]
     candlesticks[i] = {date:new Date(candle.timestamp), open:parseFloat(candle.open), high:parseFloat(candle.high), low:parseFloat(candle.low), close:parseFloat(candle.close), volume:parseFloat(candle.counter_volume)}
   }
-  for(let candle of candlesticks)  print(`${candle.date}, ${candle.open}, ${candle.high}, ${candle.low}, ${candle.close}, ${candle.volume}`)
 
-  print('CANDLESTICKS', CANDLESTICKS.length, CANDLESTICKS)
+  // for(let candle of candlesticks)  print(`${candle.date}, ${candle.open}, ${candle.high}, ${candle.low}, ${candle.close}, ${candle.volume}`)
+  // print('CANDLESTICKS', CANDLESTICKS.length, CANDLESTICKS)
 
   // ---------------------
   charts_draw(candlesticks)

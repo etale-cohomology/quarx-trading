@@ -491,8 +491,8 @@
       let account0_seed = doc.querySelector('#input_asset1_secret_seed').value
       let price = doc.querySelector('#input_asset1_price').value
       let amount = doc.querySelector('#input_asset1_amount').value
-      let buying_asset = new StellarSdk.Asset(url_param_get('buying_asset_code'), url_param_get('buying_asset_issuer'))
-      let selling_asset = new StellarSdk.Asset(url_param_get('selling_asset_code'), url_param_get('selling_asset_issuer'))
+      let counter_asset_issuer = new StellarSdk.Asset(url_param_get('counter_asset_code'), url_param_get('counter_asset_issuer'))
+      let base_asset = new StellarSdk.Asset(url_param_get('base_asset_code'), url_param_get('base_asset_issuer'))
 
       if(!(price > 0)){
         generic_error_snackbar_show('Error: price must be a positive number.')
@@ -509,19 +509,19 @@
         return
       }
 
-      asset1_operation_sell(account0, account0_seed, buying_asset, selling_asset, price, amount)
+      asset1_operation_sell(account0, account0_seed, counter_asset, base_asset, price, amount)
       account0_seed = undefined
     }
 
     // If <= highest bid, SELL `selling` with amount by matching agains highest bid
     // If > highest bid, place limit order to SELL `selling` asset
-    function asset1_operation_sell(account0, account0_seed, buying_asset, selling_asset, price, amount){
-      let tx = {buying: buying_asset,
-                selling: selling_asset,
+    function asset1_operation_sell(account0, account0_seed, counter_asset, base_asset, price, amount){
+      let tx = {buying: counter_asset,
+                selling: base_asset,
                 price: price,//round(1 / parseFloat(price), 7),  // Price of 1 unit of `selling` in terms of `buying`!
                 amount: amount}//round(parseFloat(amount) / parseFloat(price)).toString()}//round(1 / parseFloat(amount), 7).toString()}  // Amount of `selling`!
-      print('buying_asset', buying_asset)
-      print('selling_asset', selling_asset)
+      print('counter_asset', counter_asset)
+      print('base_asset', base_asset)
       print('transaction', tx)
       let operation = StellarSdk.Operation.manageOffer(tx)
       let transaction = new StellarSdk.TransactionBuilder(account0).addOperation(operation).build()  // 1. Build transaction!
@@ -545,7 +545,7 @@
 
       init_account_open_orders(ACCOUNT0_ID)
       init_account_last_trades(ACCOUNT0_ID)
-      // trades_get(buying_asset, selling_asset)
+      // trades_get(counter_asset, base_asset)
     }
 
     function asset1_sell_error(error, msg){
@@ -582,8 +582,8 @@
       let account0_seed = doc.querySelector('#input_asset0_secret_seed').value
       let price = doc.querySelector('#input_asset0_price').value
       let amount = doc.querySelector('#input_asset0_amount').value
-      let buying_asset = new StellarSdk.Asset(url_param_get('buying_asset_code'), url_param_get('buying_asset_issuer'))
-      let selling_asset = new StellarSdk.Asset(url_param_get('selling_asset_code'), url_param_get('selling_asset_issuer'))
+      let counter_asset = new StellarSdk.Asset(url_param_get('counter_asset_code'), url_param_get('counter_asset_issuer'))
+      let base_asset = new StellarSdk.Asset(url_param_get('base_asset_code'), url_param_get('base_asset_issuer'))
 
       if(!(price > 0)){
         generic_error_snackbar_show('Error: price must be a positive number.')
@@ -600,17 +600,17 @@
         return
       }
 
-      asset0_operation_sell(account0, account0_seed, buying_asset, selling_asset, price, amount)
+      asset0_operation_sell(account0, account0_seed, counter_asset, base_asset, price, amount)
       account0_seed = undefined
     }
 
-    function asset0_operation_sell(account0, account0_seed, buying_asset, selling_asset, price, amount){
-      let tx = {buying: selling_asset,
-                selling: buying_asset,
+    function asset0_operation_sell(account0, account0_seed, counter_asset, base_asset, price, amount){
+      let tx = {buying: base_asset,
+                selling: counter_asset,
                 price: price,
                 amount: amount}
-      print('buying_asset', selling_asset)
-      print('selling_asset', buying_asset)
+      print('counter_asset', base_asset)
+      print('base_asset', counter_asset)
       print('transaction', tx)
       let operation = StellarSdk.Operation.manageOffer(tx)
       let transaction = new StellarSdk.TransactionBuilder(account0).addOperation(operation).build()  // 1. Build transaction!
@@ -634,7 +634,7 @@
 
       init_account_open_orders(ACCOUNT0_ID)
       init_account_last_trades(ACCOUNT0_ID)
-      // trades_get(buying_asset, selling_asset)
+      // trades_get(counter_asset, base_asset)
     }
 
     function asset0_sell_error(error, msg){
@@ -683,10 +683,10 @@
       }
 
       let account0_seed = doc.querySelector('#input_close_order_secret_seed').value
-      let buying_asset = new StellarSdk.Asset(offer.buying.asset_code, offer.buying.asset_issuer)
-      let selling_asset = new StellarSdk.Asset(offer.selling.asset_code, offer.selling.asset_issuer)
+      let counter_asset = new StellarSdk.Asset(offer.buying.asset_code, offer.buying.asset_issuer)
+      let base_asset = new StellarSdk.Asset(offer.selling.asset_code, offer.selling.asset_issuer)
 
-      close_order_operation_close_offer(ACCOUNT0, account0_seed, offer.id, buying_asset, selling_asset)
+      close_order_operation_close_offer(ACCOUNT0, account0_seed, offer.id, counter_asset, base_asset)
       account0_seed = undefined
     }
 
@@ -698,10 +698,10 @@
       return offer
     }
 
-    function close_order_operation_close_offer(account0, account0_seed, offer_id, buying_asset, selling_asset){
+    function close_order_operation_close_offer(account0, account0_seed, offer_id, counter_asset, base_asset){
       let tx = {offerId: offer_id,
-                buying: buying_asset,
-                selling: selling_asset,
+                buying: counter_asset,
+                selling: base_asset,
                 price: '1',
                 amount: '0'}
       let operation = StellarSdk.Operation.manageOffer(tx)
@@ -725,7 +725,7 @@
 
       init_account_open_orders(ACCOUNT0_ID)
       init_account_last_trades(ACCOUNT0_ID)
-      // trades_get(buying_asset, selling_asset)
+      // trades_get(counter_asset, base_asset)
     }
 
     function close_order_error(error, msg){
@@ -744,35 +744,35 @@
     // ---------------------------------------------------------------------------------------------------
     // ---------------------------------------------------------------------------------------------------
     // ---------------------------------------------------------------------------------------------------
-    function exchange_title(buying_asset_code, selling_asset_code){
-      doc.querySelector('#exchange').innerText = `Exchange ${buying_asset_code}/${selling_asset_code}`
+    function exchange_title(counter_asset_code, base_asset_code){
+      doc.querySelector('#exchange').innerText = `Exchange ${counter_asset_code}/${base_asset_code}`
     }
 
-    function trades_title(buying_asset_code, selling_asset_code){
-      doc.querySelector('#trades_last').innerText = `Last trades ${buying_asset_code}/${selling_asset_code}`
-      doc.querySelector('#trade_size_header').innerText = `Trade size (${buying_asset_code})`
+    function trades_title(counter_asset_code, base_asset_code){
+      doc.querySelector('#trades_last').innerText = `Last trades ${counter_asset_code}/${base_asset_code}`
+      doc.querySelector('#trade_size_header').innerText = `Trade size (${counter_asset_code})`
     }
 
-    function bidask_title(buying_asset_code, selling_asset_code){
-      doc.querySelector('#bids_title').innerText = `Bids ${buying_asset_code}/${selling_asset_code}`
-      doc.querySelector('#asks_title').innerText = `Asks ${buying_asset_code}/${selling_asset_code}`
+    function bidask_title(counter_asset_code, base_asset_code){
+      doc.querySelector('#bids_title').innerText = `Bids ${counter_asset_code}/${base_asset_code}`
+      doc.querySelector('#asks_title').innerText = `Asks ${counter_asset_code}/${base_asset_code}`
     }
 
-    function order_cards_tooltips(buying_asset_code, selling_asset_code){
-      doc.querySelector('#tooltip_asset1_sell_price').innerHTML = `<b>Price</b> for 1 unit of <b>${selling_asset_code}</b> in exchange for <b>${buying_asset_code}</b>.`
-      doc.querySelector('#tooltip_asset0_sell_price').innerHTML = `<b>Price</b> for 1 unit of <b>${buying_asset_code}</b> in exchange for <b>${selling_asset_code}</b>.`
-      doc.querySelector('#tooltip_asset1_sell_amount').innerHTML = `Amount of <b>${selling_asset_code}</b> to sell.`
-      doc.querySelector('#tooltip_asset0_sell_amount').innerHTML = `Amount of <b>${buying_asset_code}</b> to sell.`
-      doc.querySelector('#tooltip_asset1_sell').innerHTML = `<b>Sell</b> your <b>${selling_asset_code}</b> in exchange for <b>${buying_asset_code}</b>.<br><br>An <b>asset</b> is given by 2 pieces of data: 1) an <b>asset code</b> and 2) an <b>asset issuer</b>. All assets (except Lumens) have an issuer. Here, the <b>issuer</b> is <i>already selected</i>.`
-      doc.querySelector('#tooltip_asset0_sell').innerHTML = `<b>Sell</b> your <b>${buying_asset_code}</b> in exchange for <b>${selling_asset_code}</b>.<br><br>An <b>asset</b> is given by 2 pieces of data: 1) an <b>asset code</b> and 2) an <b>asset issuer</b>. All assets (except Lumens) have an issuer. Here, the <b>issuer</b> is <i>already selected</i>.`
+    function order_cards_tooltips(counter_asset_code, base_asset_code){
+      doc.querySelector('#tooltip_asset1_sell_price').innerHTML = `<b>Price</b> for 1 unit of <b>${base_asset_code}</b> in exchange for <b>${counter_asset_code}</b>.`
+      doc.querySelector('#tooltip_asset0_sell_price').innerHTML = `<b>Price</b> for 1 unit of <b>${counter_asset_code}</b> in exchange for <b>${base_asset_code}</b>.`
+      doc.querySelector('#tooltip_asset1_sell_amount').innerHTML = `Amount of <b>${base_asset_code}</b> to sell.`
+      doc.querySelector('#tooltip_asset0_sell_amount').innerHTML = `Amount of <b>${counter_asset_code}</b> to sell.`
+      doc.querySelector('#tooltip_asset1_sell').innerHTML = `<b>Sell</b> your <b>${base_asset_code}</b> in exchange for <b>${counter_asset_code}</b>.<br><br>An <b>asset</b> is given by 2 pieces of data: 1) an <b>asset code</b> and 2) an <b>asset issuer</b>. All assets (except Lumens) have an issuer. Here, the <b>issuer</b> is <i>already selected</i>.`
+      doc.querySelector('#tooltip_asset0_sell').innerHTML = `<b>Sell</b> your <b>${counter_asset_code}</b> in exchange for <b>${base_asset_code}</b>.<br><br>An <b>asset</b> is given by 2 pieces of data: 1) an <b>asset code</b> and 2) an <b>asset issuer</b>. All assets (except Lumens) have an issuer. Here, the <b>issuer</b> is <i>already selected</i>.`
     }
 
     function invert_market(){
-      let buying_asset_code     = url_param_get('buying_asset_code')
-      let buying_asset_issuer   = url_param_get('buying_asset_issuer')
-      let selling_asset_code    = url_param_get('selling_asset_code')
-      let selling_asset_issuer  = url_param_get('selling_asset_issuer')
-      window.location = `?buying_asset_code=${selling_asset_code}&buying_asset_issuer=${selling_asset_issuer}&selling_asset_code=${buying_asset_code}&selling_asset_issuer=${buying_asset_issuer}`
+      let counter_asset_code     = url_param_get('counter_asset_code')
+      let counter_asset_issuer   = url_param_get('counter_asset_issuer')
+      let base_asset_code    = url_param_get('base_asset_code')
+      let base_asset_issuer  = url_param_get('base_asset_issuer')
+      window.location = `?counter_asset_code=${base_asset_code}&counter_asset_issuer=${base_asset_issuer}&base_asset_code=${counter_asset_code}&base_asset_issuer=${counter_asset_issuer}`
     }
 
     function market_components(market){
@@ -796,50 +796,52 @@
 
     // ---------------------------------------------------------------------------------------------------
     function parse_xlm(asset_code, asset_issuer){
-      if(asset_code == 'XLM')   return new StellarSdk.Asset.native()
-      else                      return new StellarSdk.Asset(asset_code, asset_issuer)
+      if(asset_code == 'xlm' || asset_code == 'native')
+        return new StellarSdk.Asset.native()
+      else
+        return new StellarSdk.Asset(asset_code, asset_issuer)
     }
 
     // ----------------------------------------------------------------------
-    let buying_asset_code     = url_param_get('buying_asset_code')
-    let buying_asset_issuer   = url_param_get('buying_asset_issuer')
-    let selling_asset_code    = url_param_get('selling_asset_code')
-    let selling_asset_issuer  = url_param_get('selling_asset_issuer')
+    let counter_asset_code     = url_param_get('counter_asset_code')
+    let counter_asset_issuer   = url_param_get('counter_asset_issuer')
+    let base_asset_code    = url_param_get('base_asset_code')
+    let base_asset_issuer  = url_param_get('base_asset_issuer')
 
-    let buying_asset
-    let selling_asset
-    if(buying_asset_issuer == 'mass' || selling_asset_issuer == 'mass'){
-      buying_asset  = parse_xlm(buying_asset_code, MARKETS[buying_asset_code] ? MARKETS[buying_asset_code][0] : '')//new StellarSdk.Asset.native()
-      selling_asset = parse_xlm(selling_asset_code, MARKETS[selling_asset_code] ? MARKETS[selling_asset_code][0] : '')
+    let counter_asset
+    let base_asset
+    if(counter_asset_issuer == 'mass' || base_asset_issuer == 'mass'){
+      counter_asset  = parse_xlm(counter_asset_code, MARKETS[counter_asset_code] ? MARKETS[counter_asset_code][0] : '')//new StellarSdk.Asset.native()
+      base_asset = parse_xlm(base_asset_code, MARKETS[base_asset_code] ? MARKETS[base_asset_code][0] : '')
 
-      anchors = Array.prototype.concat.apply([], [MARKETS[buying_asset_code], MARKETS[selling_asset_code]]).unique()
+      anchors = Array.prototype.concat.apply([], [MARKETS[counter_asset_code], MARKETS[base_asset_code]]).unique()
       print('anchors', anchors)
       market_components(anchors)
 
       print('MASS market') 
-      print('buying_asset', buying_asset)
-      print('selling_asset', selling_asset)
+      print('counter_asset', counter_asset)
+      print('base_asset', base_asset)
     }else{
-      buying_asset  = parse_xlm(buying_asset_code, buying_asset_issuer)
-      selling_asset = parse_xlm(selling_asset_code, selling_asset_issuer)
+      counter_asset  = parse_xlm(counter_asset_code, counter_asset_issuer)
+      base_asset = parse_xlm(base_asset_code, base_asset_issuer)
 
-      let anchors = [buying_asset_issuer, selling_asset_issuer].unique()
+      let anchors = [counter_asset_issuer, base_asset_issuer].unique()
       market_components(anchors)
 
       print('SINGLE market')
-      print('buying_asset', buying_asset)
-      print('selling_asset', selling_asset)
+      print('counter_asset', counter_asset)
+      print('base_asset', base_asset)
     }
 
     // ----------------------------------------------------------------------
-    orderbook_get(buying_asset, selling_asset)
-    trades_get(buying_asset, selling_asset)
+    orderbook_get(counter_asset, base_asset)
+    trades_get(counter_asset, base_asset)
 
     // ----------------------------------------------------------------------
-    exchange_title(buying_asset_code, selling_asset_code)
-    trades_title(buying_asset_code, selling_asset_code)
-    bidask_title(buying_asset_code, selling_asset_code)
-    order_cards_tooltips(buying_asset_code, selling_asset_code)
+    exchange_title(counter_asset_code, base_asset_code)
+    trades_title(counter_asset_code, base_asset_code)
+    bidask_title(counter_asset_code, base_asset_code)
+    order_cards_tooltips(counter_asset_code, base_asset_code)
 
 
     // ---------------------------------------------------------------------------------------------------
@@ -860,10 +862,10 @@
 
     // ---------------------------------------------------------------------------------------------------
     // Set card titles!
-    doc.querySelector('#card_title_asset1_sell').innerText = `Sell ${selling_asset_code.toUpperCase()}`
-    doc.querySelector('#card_title_asset0_sell').innerText = `Sell ${buying_asset_code.toUpperCase()}`
-    doc.querySelector('#btn_asset1_sell').innerHTML = `Sell ${selling_asset_code.toUpperCase()} <i class='material-icons vcenter_child margin_left4'>send</i>`
-    doc.querySelector('#btn_asset0_sell').innerHTML = `Sell ${buying_asset_code.toUpperCase()} <i class='material-icons vcenter_child margin_left4'>send</i>`
+    doc.querySelector('#card_title_asset1_sell').innerText = `Sell ${base_asset_code.toUpperCase()}`
+    doc.querySelector('#card_title_asset0_sell').innerText = `Sell ${counter_asset_code.toUpperCase()}`
+    doc.querySelector('#btn_asset1_sell').innerHTML = `Sell ${base_asset_code.toUpperCase()} <i class='material-icons vcenter_child margin_left4'>send</i>`
+    doc.querySelector('#btn_asset0_sell').innerHTML = `Sell ${counter_asset_code.toUpperCase()} <i class='material-icons vcenter_child margin_left4'>send</i>`
 
 
 
@@ -893,9 +895,9 @@
         let id = offer.id
         let amount = offer.amount
         let price = offer.price
-        let buying_asset_code = native2xlm(offer.buying.asset_code, offer.buying.asset_type)
-        let selling_asset_code = native2xlm(offer.selling.asset_code, offer.selling.asset_type)
-        tbody_html += `<tr><td>${id}</td><td>${amount}</td><td>${price}</td><td>${buying_asset_code}</td><td>${selling_asset_code}</td></tr>`
+        let counter_asset_code = native2xlm(offer.buying.asset_code, offer.buying.asset_type)
+        let base_asset_code = native2xlm(offer.selling.asset_code, offer.selling.asset_type)
+        tbody_html += `<tr><td>${id}</td><td>${amount}</td><td>${price}</td><td>${counter_asset_code}</td><td>${base_asset_code}</td></tr>`
       }
 
       tbody.innerHTML = tbody_html
@@ -911,7 +913,7 @@
     function init_account_last_trades(account_id){
       spinner_enable('spinner_last_trades_account_id')
       // HORIZON.trades().call().then(account_trades)
-      // HORIZON.orderbook(selling_asset, buying_asset).trades().forAccount(account_id).call().then(account_trades)
+      // HORIZON.orderbook(base_asset, counter_asset).trades().forAccount(account_id).call().then(account_trades)
       // HORIZON.trades().('accounts', account_id).order('desc').limit(8 * PARAM_LIMIT).call().then(account_trades)
       // HORIZON.accounts().accountId(account_id).trades().call().then(get_account).then(get_account_trades)
       get_request(`${HORIZON_URL}/accounts/${account_id}/trades?order=desc&limit=${8 * PARAM_LIMIT}`, get_account_trades)
@@ -926,10 +928,10 @@
       for(let trade of trades){
         let bought_amount = parseFloat(trade.bought_amount)
         let price = parseFloat(trade.bought_amount) / parseFloat(trade.sold_amount)
-        let buying_asset_code = native2xlm(trade.bought_asset_code, trade.bought_asset_type)
-        let selling_asset_code = native2xlm(trade.sold_asset_code, trade.sold_asset_type)
+        let counter_asset_code = native2xlm(trade.bought_asset_code, trade.bought_asset_type)
+        let base_asset_code = native2xlm(trade.sold_asset_code, trade.sold_asset_type)
         let time = date_parse2(trade.created_at)
-        tbody_html += `<tr><td>${bought_amount.toFixed(7)}</td><td>${price.toFixed(7)}</td><td>${buying_asset_code}</td><td>${selling_asset_code}</td><td>${time}</td></tr>`
+        tbody_html += `<tr><td>${bought_amount.toFixed(7)}</td><td>${price.toFixed(7)}</td><td>${counter_asset_code}</td><td>${base_asset_code}</td><td>${time}</td></tr>`
       }
 
       tbody.innerHTML = tbody_html
