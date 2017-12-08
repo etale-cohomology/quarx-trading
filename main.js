@@ -230,7 +230,7 @@ function bids_table_make(bids){
 
   for(let bid of bids.reverse()){
     bid.market_depth = 1 - bid.amount_integral / bids[0].amount_integral
-    let style = `style='background:linear-gradient(to right, #222 ${100 * bid.market_depth}%, #93cf96 ${100 * bid.market_depth}%);'`
+    let style = `style='background:linear-gradient(to left, #222 ${100 * bid.market_depth}%, #93cf96 ${100 * bid.market_depth}%);'`
     bids_html += `<tr ${style}><td>${bid.amount_integral.toFixed(7)}</td><td>${bid.amount}</td><td class='mdl-color-text--green-800'>${bid.price}</td></tr>`
   }
 
@@ -248,7 +248,7 @@ function asks_table_make(asks){
 
   for(let ask of asks){
     ask.market_depth = 1 - ask.amount_integral / asks[asks.length - 1].amount_integral
-    let style = `style='background:linear-gradient(to right, #222 ${100 * ask.market_depth}%, #f88e86 ${100 * ask.market_depth}%);'`
+    let style = `style='background:linear-gradient(to left, #222 ${100 * ask.market_depth}%, #f88e86 ${100 * ask.market_depth}%);'`
     asks_html += `<tr ${style}><td>${ask.amount_integral.toFixed(7)}</td><td>${ask.amount}</td><td class='mdl-color-text--red-800'>${ask.price}</td></tr>`
   }
 
@@ -294,22 +294,24 @@ function trades_table_build(response){
   // TRADES = trades_purge_empty(TRADES)
   // print('TRADES', TRADES.length, TRADES)
 
-  for(let trade of TRADES)  print(date_parse2(trade.ledger_close_time), trade.base_amount / trade.counter_amount, trade.base_amount, trade.base_asset_code, trade.base_asset_type, trade.base_asset_issuer, trade.counter_amount, trade.counter_asset_code, trade.counter_asset_type, trade.counter_asset_issuer)
+  // for(let trade of TRADES)  print(date_parse2(trade.ledger_close_time), trade.base_amount / trade.counter_amount, trade.base_amount, trade.base_asset_code, trade.base_asset_type, trade.base_asset_issuer, trade.counter_amount, trade.counter_asset_code, trade.counter_asset_type, trade.counter_asset_issuer)
+  for(let trade of TRADES)  print(trade.ledger_close_time)
+  // for(let trade of TRADES)  print(trade.base_asset_code, trade.counter_asset_code)
   // ledger_close_time base_amount base_asset_code base_asset_type base_asset_issuer counter_amount counter_asset_code counter_asset_type counter_asset_issuer
 
   let trades_table = doc.querySelector('#trades_table')
   let trades_tbody_html = ''
 
   for(let i=0; i < Math.min(N_TRADES, TRADES.length - 1); i++){
-    let volume = TRADES[i].bought_amount
-    let price = (TRADES[i].bought_amount / TRADES[i].sold_amount).toFixed(7)
-    let date = date_parse2(TRADES[i].created_at)
+    let volume = TRADES[i].base_amount
+    let price = (TRADES[i].base_amount / TRADES[i].counter_amount).toFixed(7)
+    let date = date_parse2(TRADES[i].ledger_close_time)
     // print(i, volume, price, date)
 
-    let price_prev = (TRADES[i+1].bought_amount / TRADES[i+1].sold_amount).toFixed(7)
+    let price_prev = (TRADES[i+1].base_amount / TRADES[i+1].counter_amount).toFixed(7)
     let price_style = price >= price_prev ? 'mdl-color-text--green' : 'mdl-color-text--red'
 
-    let href = `${HORIZON_URL}/order_book/trades?selling_asset_type=${TRADES[i+1].sold_asset_type}&selling_asset_code=${TRADES[i+1].sold_asset_code}&selling_asset_issuer=${TRADES[i+1].sold_asset_issuer}&buying_asset_type=${TRADES[i+1].bought_asset_type}&buying_asset_code=${TRADES[i+1].bought_asset_code}&buying_asset_issuer=${TRADES[i+1].bought_asset_issuer}&cursor=${TRADES[i+1].id}&limit=1`
+    let href = `${HORIZON_URL}/order_book/trades?selling_asset_type=${TRADES[i+1].sold_asset_type}&selling_asset_code=${TRADES[i+1].sold_asset_code}&selling_asset_issuer=${TRADES[i+1].sold_asset_issuer}&buying_asset_type=${TRADES[i+1].base_asset_type}&buying_asset_code=${TRADES[i+1].base_asset_code}&buying_asset_issuer=${TRADES[i+1].base_asset_issuer}&cursor=${TRADES[i+1].id}&limit=1`
     // print(href)
     trades_tbody_html += `<tr><td><a href='${href}' class='monospace'>${volume}</a></td><td class='${price_style}'><a href='${href}' class='monospace'>${price}</a></td><td><a href='${href}' class='monospace'>${date}</a></td></tr>`
   }
@@ -320,11 +322,11 @@ function trades_table_build(response){
   candlestick_integral(TRADES, CANDLESTICK_INTERVAL_SIZE_IN_SECS)
 }
 
-// Purge empty trades (ie. trades with 0 bought_amount or 0 sold_amount!
+// Purge empty trades (ie. trades with 0 base_amount or 0 counter_amount!
 function trades_purge_empty(trades){
   let purged_trades = []
   for(let i=0; i<trades.length; ++i)
-    if((trades[i].bought_amount > 0) && (trades[i].sold_amount > 0))
+    if((trades[i].base_amount > 0) && (trades[i].counter_amount > 0))
       purged_trades.push(trades[i])
   return purged_trades
 }
@@ -333,10 +335,10 @@ function trades_purge_empty(trades){
 function candlestick_integral(trades, interval_size_in_secs){
   trades.reverse()  // Now the trades are in ASCENDING order! =D
   // print('trades', trades)
-  // for(let trade of trades) print(trade.bought_amount, trade.sold_amount)
+  // for(let trade of trades) print(trade.base_amount, trade.counter_amount)
 
   let dates = []
-  for(let trade of trades)  dates.push(date2secs(trade.created_at))
+  for(let trade of trades)  dates.push(date2secs(trade.ledger_close_time))
   // print(dates.length, dates)
 
   let first_date = dates[0]
@@ -388,9 +390,9 @@ function candlestick_integral(trades, interval_size_in_secs){
 }
 
 function trade_get(trade){
-  let date = new Date(trade.created_at)
-  let price = trade.bought_amount / trade.sold_amount
-  let volume = parseFloat(trade.bought_amount)
+  let date = new Date(trade.ledger_close_time)
+  let price = trade.base_amount / trade.counter_amount
+  let volume = parseFloat(trade.base_amount)
   return {date:date, price:price, volume:volume}
 }
 
