@@ -190,12 +190,12 @@ function asset_issuer_stellar_parse(asset_issuer, asset_code, asset_type){
 
 // A straightforward switcheroo!
 function native2xlm_direct(string){
-  return undefined2na(string == 'native' ? 'XLM' : string)
+  return string == 'native' ? 'XLM' : string
 }
 
 // A straightforward switcheroo!
 function xlm2native_direct(string){
-  return undefined2na(string == 'XLM' ? 'native' : string)
+  return string == 'XLM' ? 'native' : string
 }
 
 
@@ -233,12 +233,12 @@ function orderbook_stream(response){
   asks_table_make(asks)
 
   if(response.bids.length == 0 || response.asks.length == 0)  return
-  let spread_absolute = asks[0].price - bids[0].price
+  let spread_absolute = asks[0].price - bids[bids.length-1].price
   let spread_relative = 2 * spread_absolute / (parseFloat(asks[0].price) + parseFloat(bids[0].price))
 
   let date = new Date(Date.now())
   doc.querySelector('#bid_card_title').innerText = `Bid (${native2xlm_direct(url_param_get('counter_asset_code'))})`
-  doc.querySelector('#bid_card_value').innerText = `${bids[0].price}`
+  doc.querySelector('#bid_card_value').innerText = `${bids[bids.length-1].price}`
 
   doc.querySelector('#ask_card_title').innerText = `Ask (${native2xlm_direct(url_param_get('counter_asset_code'))})`
   doc.querySelector('#ask_card_value').innerText = `${asks[0].price}`
@@ -305,10 +305,10 @@ function trades_get(counter_asset, base_asset){
   TRADES = []  // Reset global TRADES!
 
   // https://horizon.stellar.org/trade_aggregations?base_asset_type=native&counter_asset_code=CNY&counter_asset_type=credit_alphanum4&counter_asset_issuer=GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX&resolution=300000&limit=200&order=desc
-  print(`${HORIZON_URL}/trade_aggregations?base_asset_type=${asset_type_stellar_parse(base_asset.type, base_asset.code)}&base_asset_code=${asset_code_stellar_parse(base_asset.code, base_asset.type)}&base_asset_issuer=${asset_issuer_stellar_parse(base_asset.issuer, base_asset.code, base_asset.type)}&counter_asset_code=${asset_code_stellar_parse(counter_asset.code, counter_asset.type)}&counter_asset_type=${asset_type_stellar_parse(counter_asset.type, counter_asset.code)}&counter_asset_issuer=${asset_issuer_stellar_parse(counter_asset.issuer, counter_asset.code, counter_asset.type)}&resolution=${CANDLESTICK_RESOLUTION}&limit=200&order=desc`)
   get_request(`${HORIZON_URL}/trade_aggregations?base_asset_type=${asset_type_stellar_parse(base_asset.type, base_asset.code)}&base_asset_code=${asset_code_stellar_parse(base_asset.code, base_asset.type)}&base_asset_issuer=${asset_issuer_stellar_parse(base_asset.issuer, base_asset.code, base_asset.type)}&counter_asset_code=${asset_code_stellar_parse(counter_asset.code, counter_asset.type)}&counter_asset_type=${asset_type_stellar_parse(counter_asset.type, counter_asset.code)}&counter_asset_issuer=${asset_issuer_stellar_parse(counter_asset.issuer, counter_asset.code, counter_asset.type)}&resolution=${CANDLESTICK_RESOLUTION}&limit=200&order=desc`, candlesticks_build)  // &start_timestamp=1512742740000&end_timestamp=1510743700000
 
   // https://horizon.stellar.org/trades?base_asset_type=native&counter_asset_type=credit_alphanum4&counter_asset_code=CNY&counter_asset_issuer=GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX
+  print(`${HORIZON_URL}/trades?counter_asset_code=${asset_code_stellar_parse(counter_asset.code, counter_asset.type)}&counter_asset_type=${asset_type_stellar_parse(counter_asset.type, counter_asset.code)}&counter_asset_issuer=${asset_issuer_stellar_parse(counter_asset.issuer, counter_asset.code, counter_asset.type)}&base_asset_code=${asset_code_stellar_parse(base_asset.code, base_asset.type)}&base_asset_type=${asset_type_stellar_parse(base_asset.type, base_asset.code)}&base_asset_issuer=${asset_issuer_stellar_parse(base_asset.issuer, base_asset.code, base_asset.type)}&order=desc&limit=${N_TRADES}`)
   get_request(`${HORIZON_URL}/trades?counter_asset_code=${asset_code_stellar_parse(counter_asset.code, counter_asset.type)}&counter_asset_type=${asset_type_stellar_parse(counter_asset.type, counter_asset.code)}&counter_asset_issuer=${asset_issuer_stellar_parse(counter_asset.issuer, counter_asset.code, counter_asset.type)}&base_asset_code=${asset_code_stellar_parse(base_asset.code, base_asset.type)}&base_asset_type=${asset_type_stellar_parse(base_asset.type, base_asset.code)}&base_asset_issuer=${asset_issuer_stellar_parse(base_asset.issuer, base_asset.code, base_asset.type)}&order=desc&limit=${N_TRADES}`, trades_table_build)
 
   // HORIZON.orderbook(base_asset, counter_asset).trades().order('desc').limit(200).call()

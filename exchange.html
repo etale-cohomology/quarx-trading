@@ -745,17 +745,17 @@
     // ---------------------------------------------------------------------------------------------------
     // ---------------------------------------------------------------------------------------------------
     function exchange_title(counter_asset_code, base_asset_code){
-      doc.querySelector('#exchange').innerText = `Exchange ${counter_asset_code}/${base_asset_code}`
+      doc.querySelector('#exchange').innerText = `Exchange ${native2xlm_direct(counter_asset_code)}/${native2xlm_direct(base_asset_code)}`
     }
 
     function trades_title(counter_asset_code, base_asset_code){
-      doc.querySelector('#trades_last').innerText = `Last trades ${counter_asset_code}/${base_asset_code}`
-      doc.querySelector('#trade_size_header').innerText = `Trade size (${counter_asset_code})`
+      doc.querySelector('#trades_last').innerText = `Last trades ${native2xlm_direct(counter_asset_code)}/${native2xlm_direct(base_asset_code)}`
+      doc.querySelector('#trade_size_header').innerText = `Trade size (${native2xlm_direct(counter_asset_code)})`
     }
 
     function bidask_title(counter_asset_code, base_asset_code){
-      doc.querySelector('#bids_title').innerText = `Bids ${counter_asset_code}/${base_asset_code}`
-      doc.querySelector('#asks_title').innerText = `Asks ${counter_asset_code}/${base_asset_code}`
+      doc.querySelector('#bids_title').innerText = `Bids ${native2xlm_direct(counter_asset_code)}/${native2xlm_direct(base_asset_code)}`
+      doc.querySelector('#asks_title').innerText = `Asks ${native2xlm_direct(counter_asset_code)}/${native2xlm_direct(base_asset_code)}`
     }
 
     function order_cards_tooltips(counter_asset_code, base_asset_code){
@@ -822,6 +822,7 @@
       print('counter_asset', counter_asset)
       print('base_asset', base_asset)
     }else{
+      print(123, base_asset_code, base_asset_issuer)
       counter_asset  = parse_xlm(counter_asset_code, counter_asset_issuer)
       base_asset = parse_xlm(base_asset_code, base_asset_issuer)
 
@@ -862,10 +863,10 @@
 
     // ---------------------------------------------------------------------------------------------------
     // Set card titles!
-    doc.querySelector('#card_title_asset1_sell').innerText = `Sell ${base_asset_code.toUpperCase()}`
-    doc.querySelector('#card_title_asset0_sell').innerText = `Sell ${counter_asset_code.toUpperCase()}`
-    doc.querySelector('#btn_asset1_sell').innerHTML = `Sell ${base_asset_code.toUpperCase()} <i class='material-icons vcenter_child margin_left4'>send</i>`
-    doc.querySelector('#btn_asset0_sell').innerHTML = `Sell ${counter_asset_code.toUpperCase()} <i class='material-icons vcenter_child margin_left4'>send</i>`
+    doc.querySelector('#card_title_asset1_sell').innerText = `Sell ${native2xlm_direct(base_asset_code).toUpperCase()}`
+    doc.querySelector('#card_title_asset0_sell').innerText = `Sell ${native2xlm_direct(counter_asset_code).toUpperCase()}`
+    doc.querySelector('#btn_asset1_sell').innerHTML = `Sell ${native2xlm_direct(base_asset_code).toUpperCase()} <i class='material-icons vcenter_child margin_left4'>send</i>`
+    doc.querySelector('#btn_asset0_sell').innerHTML = `Sell ${native2xlm_direct(counter_asset_code).toUpperCase()} <i class='material-icons vcenter_child margin_left4'>send</i>`
 
 
 
