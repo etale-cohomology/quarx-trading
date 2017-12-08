@@ -294,21 +294,21 @@ function trades_table_build(response){
   // TRADES = trades_purge_empty(TRADES)
   // print('TRADES', TRADES.length, TRADES)
 
-  // for(let trade of TRADES)  print(date_parse2(trade.ledger_close_time), trade.base_amount / trade.counter_amount, trade.base_amount, trade.base_asset_code, trade.base_asset_type, trade.base_asset_issuer, trade.counter_amount, trade.counter_asset_code, trade.counter_asset_type, trade.counter_asset_issuer)
+  // for(let trade of TRADES)  print(date_parse2(trade.ledger_close_time), trade.counter_amount / trade.base_amount, trade.counter_asset_code, trade.counter_asset_type, trade.counter_asset_issuer, trade.counter_amount, trade.base_asset_code, trade.base_asset_type, trade.base_asset_issuer, trade.base_amount)
   for(let trade of TRADES)  print(trade.ledger_close_time)
   // for(let trade of TRADES)  print(trade.base_asset_code, trade.counter_asset_code)
-  // ledger_close_time base_amount base_asset_code base_asset_type base_asset_issuer counter_amount counter_asset_code counter_asset_type counter_asset_issuer
+  // ledger_close_time counter_amount base_asset_code base_asset_type base_asset_issuer base_amount counter_asset_code counter_asset_type counter_asset_issuer
 
   let trades_table = doc.querySelector('#trades_table')
   let trades_tbody_html = ''
 
   for(let i=0; i < Math.min(N_TRADES, TRADES.length - 1); i++){
-    let volume = TRADES[i].base_amount
-    let price = (TRADES[i].base_amount / TRADES[i].counter_amount).toFixed(7)
+    let volume = TRADES[i].counter_amount
+    let price = (TRADES[i].counter_amount / TRADES[i].base_amount).toFixed(7)
     let date = date_parse2(TRADES[i].ledger_close_time)
     // print(i, volume, price, date)
 
-    let price_prev = (TRADES[i+1].base_amount / TRADES[i+1].counter_amount).toFixed(7)
+    let price_prev = (TRADES[i+1].counter_amount / TRADES[i+1].base_amount).toFixed(7)
     let price_style = price >= price_prev ? 'mdl-color-text--green' : 'mdl-color-text--red'
 
     let href = `${HORIZON_URL}/order_book/trades?selling_asset_type=${TRADES[i+1].sold_asset_type}&selling_asset_code=${TRADES[i+1].sold_asset_code}&selling_asset_issuer=${TRADES[i+1].sold_asset_issuer}&buying_asset_type=${TRADES[i+1].base_asset_type}&buying_asset_code=${TRADES[i+1].base_asset_code}&buying_asset_issuer=${TRADES[i+1].base_asset_issuer}&cursor=${TRADES[i+1].id}&limit=1`
@@ -322,11 +322,11 @@ function trades_table_build(response){
   candlestick_integral(TRADES, CANDLESTICK_INTERVAL_SIZE_IN_SECS)
 }
 
-// Purge empty trades (ie. trades with 0 base_amount or 0 counter_amount!
+// Purge empty trades (ie. trades with 0 counter_amount or 0 base_amount!
 function trades_purge_empty(trades){
   let purged_trades = []
   for(let i=0; i<trades.length; ++i)
-    if((trades[i].base_amount > 0) && (trades[i].counter_amount > 0))
+    if((trades[i].counter_amount > 0) && (trades[i].base_amount > 0))
       purged_trades.push(trades[i])
   return purged_trades
 }
@@ -335,7 +335,7 @@ function trades_purge_empty(trades){
 function candlestick_integral(trades, interval_size_in_secs){
   trades.reverse()  // Now the trades are in ASCENDING order! =D
   // print('trades', trades)
-  // for(let trade of trades) print(trade.base_amount, trade.counter_amount)
+  // for(let trade of trades) print(trade.counter_amount, trade.base_amount)
 
   let dates = []
   for(let trade of trades)  dates.push(date2secs(trade.ledger_close_time))
@@ -391,8 +391,8 @@ function candlestick_integral(trades, interval_size_in_secs){
 
 function trade_get(trade){
   let date = new Date(trade.ledger_close_time)
-  let price = trade.base_amount / trade.counter_amount
-  let volume = parseFloat(trade.base_amount)
+  let price = trade.counter_amount / trade.base_amount
+  let volume = parseFloat(trade.counter_amount)
   return {date:date, price:price, volume:volume}
 }
 
@@ -428,9 +428,9 @@ function trade_integral(trades){
 function charts_draw(candlesticks){
   let chart_width = doc.querySelector('#chart0').clientWidth
   candlestick_draw('chart0', candlesticks, 'Price', chart_width, 480)
-  rsi_draw('chart1', candlesticks, chart_width, 240)
-  stochastic_draw('chart2', candlesticks, chart_width, 240)
-  williams_draw('chart3', candlesticks, chart_width, 240)
+  rsi_draw('chart1', candlesticks, chart_width * .95, 240)
+  stochastic_draw('chart2', candlesticks, chart_width * .95, 240)
+  williams_draw('chart3', candlesticks, chart_width * .95, 240)
 }
 
 // chart0
