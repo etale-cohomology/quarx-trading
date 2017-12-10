@@ -238,10 +238,10 @@ function orderbook_stream(response){
 
   let date = new Date(Date.now())
   doc.querySelector('#bid_card_title').innerText = `Bid (${native2xlm_direct(url_param_get('counter_asset_code'))})`
-  doc.querySelector('#bid_card_value').innerText = `${bids[bids.length-1].price}`
+  doc.querySelector('#bid_card_value').innerText = `${bids[0].price}`
 
   doc.querySelector('#ask_card_title').innerText = `Ask (${native2xlm_direct(url_param_get('counter_asset_code'))})`
-  doc.querySelector('#ask_card_value').innerText = `${asks[0].price}`
+  doc.querySelector('#ask_card_value').innerText = `${asks[asks.length-1].price}`
 
   doc.querySelector('#last_card_title').innerText = `Last (${native2xlm_direct(url_param_get('counter_asset_code'))})`
   // doc.querySelector('#last_card_value').innerText = `${price}`
@@ -259,8 +259,8 @@ function bids_table_make(bids){
   for(let i=1; i<bids.length; ++i)  // Market size integral: inductive step!
     bids[i].amount_integral = bids[i-1].amount_integral + parseFloat(bids[i].amount)
 
-  for(let bid of bids.reverse()){
-    bid.market_depth = 1 - bid.amount_integral / bids[0].amount_integral
+  for(let bid of bids){
+    bid.market_depth = 1 - bid.amount_integral / bids[bids.length-1].amount_integral
     let style = `style='background:linear-gradient(to left, #222 ${100 * bid.market_depth}%, #93cf96 ${100 * bid.market_depth}%);'`
     bids_html += `<tr ${style}><td>${bid.amount_integral.toFixed(7)}</td><td>${bid.amount}</td><td class='mdl-color-text--green-800'>${bid.price}</td></tr>`
   }
@@ -277,8 +277,8 @@ function asks_table_make(asks){
   for(let i=1; i<asks.length; ++i)  // Market size integral: recursive step!
     asks[i].amount_integral = asks[i-1].amount_integral + parseFloat(asks[i].amount)
 
-  for(let ask of asks){
-    ask.market_depth = 1 - ask.amount_integral / asks[asks.length - 1].amount_integral
+  for(let ask of asks.reverse()){
+    ask.market_depth = 1 - ask.amount_integral / asks[0].amount_integral
     let style = `style='background:linear-gradient(to left, #222 ${100 * ask.market_depth}%, #f88e86 ${100 * ask.market_depth}%);'`
     asks_html += `<tr ${style}><td>${ask.amount_integral.toFixed(7)}</td><td>${ask.amount}</td><td class='mdl-color-text--red-800'>${ask.price}</td></tr>`
   }
